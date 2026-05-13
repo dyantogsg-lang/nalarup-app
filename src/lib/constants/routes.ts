@@ -1,0 +1,23 @@
+export const ROUTES = {
+  home: "/",
+  login: "/login",
+  register: "/register",
+  dashboard: "/dashboard",
+  tryouts: "/tryouts",
+  tryoutDetail: (slug: string) => `/tryouts/${slug}`,
+  exam: (attemptId: string) => `/exam/${attemptId}`,
+  result: (attemptId: string) => `/results/${attemptId}`,
+  review: (attemptId: string) => `/results/${attemptId}/review`,
+  history: "/history",
+  profile: "/profile",
+  saved: "/saved",
+  admin: {
+    root: "/admin",
+    packages: "/admin/packages",
+    packageNew: "/admin/packages/new",
+    packageEdit: (id: string) => `/admin/packages/${id}/edit`,
+    questions: "/admin/questions",
+    questionNew: "/admin/questions/new",
+    questionEdit: (id: string) => `/admin/questions/${id}/edit`,
+  },
+} as const;

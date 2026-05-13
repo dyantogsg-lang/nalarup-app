@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NalarUp
 
-## Getting Started
+Platform tryout dan simulasi CAT untuk persiapan seleksi CASN (CPNS / PPPK) Indonesia. Fokus utama: menyediakan paket tryout yang banyak dan mudah diakses, plus pengalaman simulasi ujian yang mirip aslinya sebelum menambah fitur AI lanjutan.
 
-First, run the development server:
+## Stack
+
+- Next.js 16.2.6 (App Router, Turbopack, React 19.2)
+- Tailwind CSS v4
+- Supabase (Auth + Postgres) via `@supabase/ssr`
+- Drizzle ORM + `postgres-js` driver
+- Zod + React Hook Form
+- Vitest (unit) + Playwright (E2E)
+- Deploy: Vercel (region `sin1`) + Supabase Cloud
+
+## Local development
+
+Prasyarat: Node 20+, Docker (buat Supabase lokal), `supabase` CLI opsional.
 
 ```bash
+npm install
+cp .env.local.example .env.local   # isi URL + anon key Supabase lokal / cloud
+npm run db:migrate
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App jalan di `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — dev server (Turbopack)
+- `npm run build` — production build
+- `npm test` — unit test (Vitest)
+- `npm run e2e` — E2E test (Playwright)
+- `npm run db:generate` / `db:migrate` / `db:studio` — Drizzle schema tooling
+- `npm run db:seed` — seed data tryout
 
-## Learn More
+## Struktur
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/
+    (public)/      # login, register
+    (app)/         # dashboard, tryouts (auth-required via proxy)
+    admin/         # admin MVP (questions, packages, reports)
+    exam/          # ruang ujian
+    api/           # route handlers
+  components/      # UI blocks
+  lib/
+    supabase/      # server + browser clients
+    db/            # drizzle schema & queries
+    scoring/       # scoring engine (unit-tested)
+    admin/         # publish validators
+  proxy.ts         # auth proxy (ex-middleware, Next.js 16)
+supabase/
+  migrations/      # initial schema, profile trigger, RLS policies
+tests/
+  e2e/             # Playwright specs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Lihat `docs/DEPLOY.md` untuk langkah lengkap Supabase Cloud + Vercel.
 
-## Deploy on Vercel
+## Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Phase A–G selesai. Phase H (prod-ready): RLS, unit tests, deploy config — done. E2E Playwright dan deploy Vercel sedang diselesaikan.
