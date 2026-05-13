@@ -31,7 +31,7 @@ test.describe("Exam flow", () => {
     // Answer the first 3 questions by clicking any option
     for (let i = 0; i < 3; i++) {
       // Click option A (first option button inside the question card)
-      await page.getByRole("button", { name: /^A\. / }).first().click();
+      await page.getByRole("button", { name: /^A\s/ }).first().click();
       // Allow autosave to flush
       await page.waitForTimeout(200);
       // Go to next question (except on the final answer)
@@ -42,7 +42,7 @@ test.describe("Exam flow", () => {
 
     // Navigate to the last question via the navigator grid to reach Submit
     // Soal 15 is the last — use the nav button with "15"
-    await page.getByTitle(/Soal 15/).click();
+    await page.getByTitle(/Soal 15/).first().click();
     await expect(page.getByText(/Soal #15/)).toBeVisible();
 
     // Click the green "Submit Tryout" in the bottom nav

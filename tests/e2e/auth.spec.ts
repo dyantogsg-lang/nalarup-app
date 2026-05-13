@@ -26,7 +26,7 @@ test.describe("Landing & auth", () => {
   test("logout works and blocks protected routes", async ({ page, registeredUser }) => {
     // Logged in via fixture; perform logout through the sidebar button.
     await page.getByRole("button", { name: /Keluar/i }).click();
-    await page.waitForURL(/\/(login|\/)$/, { timeout: 10_000 });
+    await page.waitForURL(/\/(login)?$/, { timeout: 10_000 });
 
     // Try to access dashboard — should bounce back to login.
     await page.goto("/dashboard");
