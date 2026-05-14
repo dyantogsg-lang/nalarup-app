@@ -9,6 +9,7 @@ import {
   modeLabel,
 } from "@/lib/packages/format";
 import { ROUTES } from "@/lib/constants/routes";
+import { SaveStar } from "./SaveStar";
 
 export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
   const modeC = modeColor(pkg.mode);
@@ -28,7 +29,7 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
       }}
     >
       {/* Top meta */}
-      <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
         {pkg.categoryName && (
           <span
             style={{
@@ -68,6 +69,9 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
           }}
         >
           {difficultyLabel(pkg.difficulty)}
+        </span>
+        <span style={{ marginLeft: "auto" }}>
+          <SaveStar slug={pkg.slug} />
         </span>
       </div>
 
