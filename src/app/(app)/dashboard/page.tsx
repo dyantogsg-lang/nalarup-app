@@ -5,6 +5,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { db } from "@/lib/db";
 import { attempts, tryoutPackages } from "@/lib/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
+import RadarChart from "@/components/dashboard/RadarChart";
 
 /* ===== SVG ICON COMPONENTS ===== */
 const IconClipboard = () => (
@@ -435,10 +436,10 @@ function ReturningUserDashboard({
         </Link>
       </div>
 
-      {/* ===== MAIN GRID: progress ring + history ===== */}
+      {/* ===== MAIN GRID: progress ring + radar + history ===== */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "clamp(240px, 28%, 300px) 1fr",
+        gridTemplateColumns: "clamp(240px, 28%, 300px) clamp(240px, 28%, 300px) 1fr",
         gap: "1rem",
       }}>
 
@@ -568,7 +569,32 @@ function ReturningUserDashboard({
           </Link>
         </div>
 
-        {/* History card */}
+        {/* Radar Chart card */}
+        <div className="glass-card" style={{
+          padding: "1.5rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+          <div style={{
+            fontSize: "0.68rem",
+            fontWeight: 700,
+            color: "var(--text-dim)",
+            marginBottom: "1rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.07em",
+            alignSelf: "flex-start",
+          }}>
+            Performance Radar
+          </div>
+          <RadarChart
+            twk={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.twk) : 0}
+            tiu={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tiu) : 0}
+            tkp={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tkp) : 0}
+          />
+        </div>
+
+        {/* History list card */}
         <div className="glass-card" style={{ padding: "1.5rem" }}>
           <div style={{
             display: "flex",

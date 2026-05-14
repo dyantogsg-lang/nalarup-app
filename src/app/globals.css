@@ -15,8 +15,8 @@
 
   /* Text */
   --text-primary: #0F172A;
-  --text-muted: #64748B;
-  --text-dim: #94A3B8;
+  --text-muted: #475569;
+  --text-dim: #64748B;
 
   /* Brand colors */
   --blue: #2563EB;
@@ -134,8 +134,12 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent);
   pointer-events: none;
+}
+
+[data-theme="dark"] .glass-card::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
 }
 
 .glass-card:hover {
@@ -365,7 +369,7 @@ body {
 /* ===================== DIVIDER ===================== */
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  background: var(--border);
   border: none;
   margin: 0;
 }
