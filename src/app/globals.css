@@ -317,6 +317,69 @@ body {
   outline-offset: 2px;
 }
 
+/* ===================== 3D TEXT ===================== */
+.text-3d-blue {
+  text-shadow:
+    1px 1px 0px rgba(37,99,235,0.6),
+    2px 2px 0px rgba(37,99,235,0.4),
+    3px 3px 0px rgba(37,99,235,0.25),
+    4px 4px 0px rgba(37,99,235,0.12),
+    5px 5px 8px rgba(0,0,0,0.5);
+}
+
+.text-3d-violet {
+  text-shadow:
+    1px 1px 0px rgba(124,58,237,0.6),
+    2px 2px 0px rgba(124,58,237,0.4),
+    3px 3px 0px rgba(124,58,237,0.25),
+    4px 4px 0px rgba(124,58,237,0.12),
+    5px 5px 8px rgba(0,0,0,0.5);
+}
+
+.text-3d-gradient {
+  text-shadow:
+    1px 1px 0px rgba(96,165,250,0.5),
+    2px 2px 0px rgba(124,58,237,0.35),
+    3px 3px 0px rgba(124,58,237,0.2),
+    4px 4px 0px rgba(37,99,235,0.1),
+    6px 6px 12px rgba(0,0,0,0.6);
+}
+
+/* ===================== SCORE SLIDER ===================== */
+.score-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: #1E293B;
+  outline: none;
+  cursor: pointer;
+}
+.score-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(37,99,235,0.5);
+  transition: box-shadow 150ms ease;
+}
+.score-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px rgba(37,99,235,0.7);
+}
+.score-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px rgba(37,99,235,0.5);
+}
+
 /* ===================== REDUCED MOTION ===================== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
