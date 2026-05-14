@@ -569,24 +569,13 @@ function ReturningUserDashboard({
           </Link>
         </div>
 
-        {/* Radar Chart card */}
+        {/* Performa Subtes card */}
         <div className="glass-card" style={{
           padding: "1.5rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}>
-          <div style={{
-            fontSize: "0.68rem",
-            fontWeight: 700,
-            color: "var(--text-dim)",
-            marginBottom: "1rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.07em",
-            alignSelf: "flex-start",
-          }}>
-            Performance Radar
-          </div>
           <RadarChart
             twk={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.twk) : 0}
             tiu={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tiu) : 0}
