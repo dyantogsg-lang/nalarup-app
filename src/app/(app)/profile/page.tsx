@@ -33,10 +33,10 @@ export default async function ProfilePage() {
     <div style={{ maxWidth: 680, margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: "1.75rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.02em", marginBottom: "0.25rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "0.25rem" }}>
           Profil
         </h1>
-        <p style={{ color: "#94A3B8", fontSize: "0.875rem" }}>Informasi akun dan statistik kamu.</p>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>Informasi akun dan statistik kamu.</p>
       </div>
 
       {/* Profile card */}
@@ -47,16 +47,16 @@ export default async function ProfilePage() {
             width: 64, height: 64, borderRadius: "50%",
             background: "linear-gradient(135deg, #2563EB, #7C3AED)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "1.25rem", fontWeight: 700, color: "#fff", flexShrink: 0,
+            fontSize: "1.25rem", fontWeight: 700, color: "#0A0F1E", flexShrink: 0,
           }}>
             {initials}
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "#F1F5F9", marginBottom: "0.25rem" }}>
+            <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-primary)", marginBottom: "0.25rem" }}>
               {profile.fullName}
             </div>
-            <div style={{ fontSize: "0.82rem", color: "#94A3B8" }}>{profile.email}</div>
-            <div style={{ fontSize: "0.72rem", color: "#475569", marginTop: "0.2rem" }}>
+            <div style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>{profile.email}</div>
+            <div style={{ fontSize: "0.72rem", color: "var(--text-dim)", marginTop: "0.2rem" }}>
               Bergabung {memberSince}
             </div>
           </div>
@@ -73,8 +73,8 @@ export default async function ProfilePage() {
             { label: "Streak Terpanjang", value: `${profile.longestStreak} hari` },
           ].map((row) => (
             <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: "0.82rem", color: "#94A3B8" }}>{row.label}</span>
-              <span style={{ fontSize: "0.875rem", color: "#F1F5F9", fontWeight: 500 }}>{row.value}</span>
+              <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>{row.label}</span>
+              <span style={{ fontSize: "0.875rem", color: "var(--text-primary)", fontWeight: 500 }}>{row.value}</span>
             </div>
           ))}
         </div>
@@ -82,7 +82,7 @@ export default async function ProfilePage() {
 
       {/* Stats card */}
       <div className="glass-card" style={{ padding: "1.5rem" }}>
-        <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#F1F5F9", marginBottom: "1.25rem" }}>
+        <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "1.25rem" }}>
           Statistik Tryout
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "1rem" }}>
@@ -93,10 +93,10 @@ export default async function ProfilePage() {
             { label: "Skor Terbaik", value: stats?.bestScore != null ? String(stats.bestScore) : "—", accent: "amber" },
           ].map((s) => (
             <div key={s.label} className={`glass-card stat-card-${s.accent}`} style={{ padding: "1rem 1rem 1rem 1.125rem" }}>
-              <div style={{ fontSize: "0.68rem", color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600, marginBottom: "0.375rem" }}>
+              <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600, marginBottom: "0.375rem" }}>
                 {s.label}
               </div>
-              <div className="num" style={{ fontSize: "1.4rem", fontWeight: 700, color: "#F1F5F9" }}>{s.value}</div>
+              <div className="num" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text-primary)" }}>{s.value}</div>
             </div>
           ))}
         </div>

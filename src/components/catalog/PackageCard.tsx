@@ -36,9 +36,9 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
               fontWeight: 600,
               padding: "0.2rem 0.55rem",
               borderRadius: "999px",
-              background: "rgba(255,255,255,0.05)",
-              color: "#CBD5E1",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "var(--bg-card2)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border)",
             }}
           >
             {pkg.categoryName}
@@ -77,7 +77,7 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
           style={{
             fontSize: "1rem",
             fontWeight: 600,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             marginBottom: "0.35rem",
             lineHeight: 1.35,
           }}
@@ -86,7 +86,7 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
         </h3>
         <p
           style={{
-            color: "#94A3B8",
+            color: "var(--text-muted)",
             fontSize: "0.8rem",
             lineHeight: 1.45,
             display: "-webkit-box",
@@ -104,7 +104,7 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
         style={{
           display: "flex",
           gap: "1rem",
-          color: "#94A3B8",
+          color: "var(--text-muted)",
           fontSize: "0.75rem",
           flexWrap: "wrap",
         }}
@@ -122,15 +122,15 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
           style={{
             padding: "0.5rem 0.65rem",
             borderRadius: "0.45rem",
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.06)",
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
             fontSize: "0.75rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <span style={{ color: "#94A3B8" }}>
+          <span style={{ color: "var(--text-muted)" }}>
             {pkg.lastAttemptStatus === "in_progress"
               ? "Sedang berjalan"
               : `Skor terakhir`}
@@ -174,9 +174,9 @@ export function PackageCard({ pkg }: { pkg: CatalogPackage }) {
               cursor: "pointer",
               ...(cta.variant === "ghost"
                 ? {
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#F1F5F9",
+                    background: "var(--bg-card2)",
+                    border: "1px solid var(--border)",
+                    color: "var(--text-primary)",
                   }
                 : {}),
             }}

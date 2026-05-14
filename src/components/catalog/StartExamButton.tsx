@@ -110,14 +110,14 @@ function Modal({
           maxWidth: 440,
           width: "100%",
           padding: "1.75rem",
-          background: "rgba(17,24,39,0.95)",
+          background: "var(--bg-card)",
         }}
       >
         <h2
           style={{
             fontSize: "1.15rem",
             fontWeight: 700,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             marginBottom: "0.75rem",
           }}
         >
@@ -158,9 +158,9 @@ function Modal({
               flex: 1,
               padding: "0.6rem 1rem",
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "0.5rem",
-              color: "#94A3B8",
+              border: "1px solid var(--border)",
+             borderRadius: "0.5rem",
+              color: "var(--text-muted)",
               fontSize: "0.85rem",
               cursor: pending ? "not-allowed" : "pointer",
             }}
@@ -192,15 +192,15 @@ function Stat({ label, value }: { label: string; value: string }) {
     <div
       style={{
         padding: "0.65rem 0.75rem",
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--bg-card2)",
+        border: "1px solid var(--border)",
         borderRadius: "0.5rem",
       }}
     >
       <div
         style={{
           fontSize: "0.7rem",
-          color: "#64748B",
+          color: "var(--text-muted)",
           textTransform: "uppercase",
           letterSpacing: "0.05em",
           marginBottom: "0.2rem",
@@ -208,7 +208,7 @@ function Stat({ label, value }: { label: string; value: string }) {
       >
         {label}
       </div>
-      <div style={{ fontSize: "0.95rem", color: "#F1F5F9", fontWeight: 600 }}>
+      <div style={{ fontSize: "0.95rem", color: "var(--text-primary)", fontWeight: 600 }}>
         {value}
       </div>
     </div>
@@ -222,7 +222,7 @@ function Warn({ text }: { text: string }) {
         display: "flex",
         gap: "0.5rem",
         fontSize: "0.78rem",
-        color: "#CBD5E1",
+        color: "var(--text-primary)",
       }}
     >
       <span aria-hidden style={{ color: "#FBBF24" }}>

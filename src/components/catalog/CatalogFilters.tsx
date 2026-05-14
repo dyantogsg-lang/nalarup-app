@@ -78,10 +78,10 @@ export function CatalogFilters({ categories }: FilterOptions) {
         style={{
           width: "100%",
           padding: "0.7rem 1rem",
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--bg-card2)",
+          border: "1px solid var(--border)",
           borderRadius: "0.6rem",
-          color: "#F1F5F9",
+          color: "var(--text-primary)",
           fontSize: "0.9rem",
           outline: "none",
         }}
@@ -125,8 +125,8 @@ export function CatalogFilters({ categories }: FilterOptions) {
               marginLeft: "auto",
               padding: "0.45rem 0.9rem",
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#94A3B8",
+              border: "1px solid var(--border)",
+              color: "var(--text-muted)",
               borderRadius: "0.45rem",
               fontSize: "0.8rem",
               cursor: "pointer",
@@ -157,10 +157,10 @@ function Chip({
         borderRadius: "999px",
         border: active
           ? "1px solid rgba(96,165,250,0.5)"
-          : "1px solid rgba(255,255,255,0.08)",
+          : "1px solid var(--border)",
         background: active
           ? "rgba(96,165,250,0.15)"
-          : "rgba(255,255,255,0.02)",
+          : "var(--bg-card2)",
         color: active ? "#BFDBFE" : "#94A3B8",
         fontSize: "0.8rem",
         fontWeight: active ? 600 : 400,
@@ -190,18 +190,18 @@ function Select({
         display: "inline-flex",
         alignItems: "center",
         gap: "0.4rem",
-        color: "#94A3B8",
-        fontSize: "0.8rem",
-      }}
-    >
-      <span style={{ color: "#64748B" }}>{label}:</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          color: "#F1F5F9",
+      color: "var(--text-muted)",
+      fontSize: "0.8rem",
+    }}
+  >
+    <span style={{ color: "var(--text-muted)" }}>{label}:</span>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      style={{
+        background: "var(--bg-card2)",
+        border: "1px solid var(--border)",
+        color: "var(--text-primary)",
           padding: "0.4rem 0.6rem",
           borderRadius: "0.4rem",
           fontSize: "0.8rem",
@@ -209,7 +209,7 @@ function Select({
         }}
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} style={{ background: "#0A0F1E" }}>
+          <option key={o.value} value={o.value} style={{ background: "var(--bg-base)" }}>
             {o.label}
           </option>
         ))}

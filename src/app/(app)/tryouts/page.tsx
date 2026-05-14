@@ -43,13 +43,13 @@ export default async function TryoutsPage({ searchParams }: Props) {
           style={{
             fontSize: "1.5rem",
             fontWeight: 600,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             marginBottom: "0.25rem",
           }}
         >
           Katalog Tryout
         </h1>
-        <p style={{ color: "#64748B", fontSize: "0.875rem" }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
           Pilih paket tryout sesuai target latihan. Semua paket open access.
         </p>
       </div>
@@ -60,7 +60,7 @@ export default async function TryoutsPage({ searchParams }: Props) {
       {/* Result count */}
       <div
         style={{
-          color: "#64748B",
+          color: "var(--text-muted)",
           fontSize: "0.78rem",
           marginBottom: "1rem",
         }}
@@ -81,7 +81,7 @@ export default async function TryoutsPage({ searchParams }: Props) {
           <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🔎</div>
           <h3
             style={{
-              color: "#F1F5F9",
+              color: "var(--text-primary)",
               fontSize: "1rem",
               fontWeight: 600,
               marginBottom: "0.4rem",
@@ -89,7 +89,7 @@ export default async function TryoutsPage({ searchParams }: Props) {
           >
             {activeFilters > 0 ? COPY.empty.filterResult : COPY.empty.catalog}
           </h3>
-          <p style={{ color: "#64748B", fontSize: "0.825rem" }}>
+          <p style={{ color: "var(--text-muted)", fontSize: "0.825rem" }}>
             {activeFilters > 0
               ? COPY.empty.filterResultSub
               : COPY.empty.catalogSub}

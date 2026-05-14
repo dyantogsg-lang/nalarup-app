@@ -29,12 +29,12 @@ export function SidebarNav() {
               gap: "0.75rem",
               padding: "0.625rem 0.75rem",
               borderRadius: "0.5rem",
-              color: isActive ? "#F1F5F9" : "#94A3B8",
+              color: isActive ? "var(--text-primary)" : "var(--text-muted)",
               background: isActive
-                ? "rgba(96,165,250,0.12)"
+                ? "var(--blue-subtle)"
                 : "transparent",
               border: isActive
-                ? "1px solid rgba(96,165,250,0.2)"
+                ? "1px solid rgba(37,99,235,0.2)"
                 : "1px solid transparent",
               textDecoration: "none",
               fontSize: "0.875rem",

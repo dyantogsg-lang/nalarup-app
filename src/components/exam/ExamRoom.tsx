@@ -80,7 +80,7 @@ export function ExamRoom({
       ? "#FCA5A5"
       : remainingSec <= 15 * 60
       ? "#FCD34D"
-      : "#F1F5F9";
+      : "var(--text-primary)";
   const timerPulse = remainingSec <= 60;
   const hh = Math.floor(remainingSec / 3600);
   const mm = Math.floor((remainingSec % 3600) / 60);
@@ -239,7 +239,7 @@ export function ExamRoom({
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#0A0F1E",
+        background: "var(--bg-base)",
       }}
     >
       {/* Top strip */}
@@ -249,8 +249,8 @@ export function ExamRoom({
           alignItems: "center",
           gap: "1rem",
           padding: "0.75rem 1.25rem",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(10,15,30,0.85)",
+          borderBottom: "1px solid var(--border)",
+          background: "var(--bg-card)",
           backdropFilter: "blur(8px)",
           position: "sticky",
           top: 0,
@@ -261,7 +261,7 @@ export function ExamRoom({
           <div
             style={{
               fontSize: "0.7rem",
-              color: "#64748B",
+              color: "var(--text-muted)",
               textTransform: "uppercase",
               letterSpacing: "0.05em",
             }}
@@ -270,7 +270,7 @@ export function ExamRoom({
           </div>
           <div
             style={{
-              color: "#F1F5F9",
+              color: "var(--text-primary)",
               fontSize: "0.9rem",
               fontWeight: 600,
               whiteSpace: "nowrap",
@@ -283,7 +283,7 @@ export function ExamRoom({
         </div>
 
         {/* Save indicator */}
-        <div style={{ fontSize: "0.75rem", color: "#94A3B8", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "0.4rem" }}>
           <StatusDot state={isOnline ? saveState : "error"} />
           <span>
             {!isOnline
@@ -307,8 +307,8 @@ export function ExamRoom({
             fontWeight: 700,
             fontSize: "1.15rem",
             color: timerColor,
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
             padding: "0.4rem 0.8rem",
             borderRadius: "0.5rem",
             minWidth: 90,
@@ -323,9 +323,9 @@ export function ExamRoom({
           style={{
             padding: "0.45rem 0.85rem",
             fontSize: "0.8rem",
-            color: "#CBD5E1",
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            color: "var(--text-primary)",
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
             borderRadius: "0.5rem",
             cursor: "pointer",
           }}
@@ -340,10 +340,10 @@ export function ExamRoom({
           display: "flex",
           gap: "0.75rem",
           padding: "0.55rem 1.25rem",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--border)",
           fontSize: "0.72rem",
-          color: "#94A3B8",
-          background: "rgba(17,24,39,0.4)",
+          color: "var(--text-muted)",
+          background: "var(--bg-card2)",
         }}
       >
         <span>Terjawab {summary.answered}/{summary.total}</span>
@@ -375,7 +375,7 @@ export function ExamRoom({
               onToggleDoubtful={toggleDoubtful}
             />
           ) : (
-            <div style={{ color: "#94A3B8" }}>Memuat soal...</div>
+            <div style={{ color: "var(--text-muted)" }}>Memuat soal...</div>
           )}
         </main>
 
@@ -398,8 +398,8 @@ export function ExamRoom({
           left: 0,
           right: 0,
           padding: "0.75rem 1rem",
-          background: "rgba(10,15,30,0.92)",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
+          background: "var(--bg-card)",
+          borderTop: "1px solid var(--border)",
           display: "flex",
           gap: "0.5rem",
           alignItems: "center",
@@ -412,9 +412,9 @@ export function ExamRoom({
           disabled={currentIndex === 0}
           style={{
             padding: "0.55rem 1rem",
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: "#CBD5E1",
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
+            color: "var(--text-primary)",
             borderRadius: "0.5rem",
             fontSize: "0.82rem",
             cursor: currentIndex === 0 ? "not-allowed" : "pointer",
@@ -423,7 +423,7 @@ export function ExamRoom({
         >
           ← Sebelumnya
         </button>
-        <div style={{ flex: 1, textAlign: "center", color: "#64748B", fontSize: "0.8rem" }}>
+        <div style={{ flex: 1, textAlign: "center", color: "var(--text-muted)", fontSize: "0.8rem" }}>
           Soal {currentIndex + 1} dari {questions.length}
         </div>
         {currentIndex < questions.length - 1 ? (
@@ -477,13 +477,13 @@ export function ExamRoom({
               right: 0,
               bottom: 0,
               width: "min(360px, 94vw)",
-              background: "#0F1629",
-              borderLeft: "1px solid rgba(255,255,255,0.08)",
+              background: "var(--bg-card)",
+              borderLeft: "1px solid var(--border)",
               padding: "1rem",
               overflowY: "auto",
             }}
           >
-            <h3 style={{ color: "#F1F5F9", fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+            <h3 style={{ color: "var(--text-primary)", fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem" }}>
               Daftar Soal
             </h3>
             <Legend />
@@ -605,7 +605,7 @@ function QuestionCard({
         >
           {q.subtest}
         </span>
-        <span style={{ color: "#64748B", fontSize: "0.75rem" }}>
+        <span style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
           Soal #{q.orderNumber}
         </span>
         <button
@@ -616,11 +616,11 @@ function QuestionCard({
             fontSize: "0.72rem",
             background: answer?.isMarkedDoubtful
               ? "rgba(245,158,11,0.15)"
-              : "rgba(255,255,255,0.03)",
-            color: answer?.isMarkedDoubtful ? "#FBBF24" : "#94A3B8",
+              : "var(--bg-card2)",
+            color: answer?.isMarkedDoubtful ? "#FBBF24" : "var(--text-muted)",
             border: answer?.isMarkedDoubtful
               ? "1px solid rgba(245,158,11,0.3)"
-              : "1px solid rgba(255,255,255,0.08)",
+              : "1px solid var(--border)",
             borderRadius: "0.35rem",
             cursor: "pointer",
           }}
@@ -631,7 +631,7 @@ function QuestionCard({
 
       <p
         style={{
-          color: "#F1F5F9",
+          color: "var(--text-primary)",
           fontSize: "1rem",
           lineHeight: 1.65,
           marginBottom: "1.5rem",
@@ -655,12 +655,12 @@ function QuestionCard({
                 padding: "0.75rem 1rem",
                 background: selected
                   ? "rgba(96,165,250,0.12)"
-                  : "rgba(255,255,255,0.03)",
+                  : "var(--bg-card2)",
                 border: selected
                   ? "1px solid rgba(96,165,250,0.45)"
-                  : "1px solid rgba(255,255,255,0.08)",
+                  : "1px solid var(--border)",
                 borderRadius: "0.55rem",
-                color: "#F1F5F9",
+                color: "var(--text-primary)",
                 fontSize: "0.88rem",
                 textAlign: "left",
                 cursor: "pointer",
@@ -674,14 +674,14 @@ function QuestionCard({
                   borderRadius: "50%",
                   border: selected
                     ? "2px solid #60A5FA"
-                    : "1px solid rgba(255,255,255,0.2)",
+                    : "1px solid var(--border)",
                   background: selected ? "rgba(96,165,250,0.25)" : "transparent",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "0.72rem",
                   fontWeight: 700,
-                  color: selected ? "#BFDBFE" : "#94A3B8",
+                  color: selected ? "#BFDBFE" : "var(--text-muted)",
                 }}
               >
                 {o.label}
@@ -738,7 +738,7 @@ function Navigator({
             : "#94A3B8";
         const border = isCurrent
           ? "1px solid #60A5FA"
-          : "1px solid rgba(255,255,255,0.06)";
+          : "1px solid var(--border)";
         return (
           <button
             key={q.id}
@@ -851,13 +851,13 @@ function ConfirmDialog({
           maxWidth: 420,
           width: "100%",
           padding: "1.5rem",
-          background: "rgba(17,24,39,0.95)",
+          background: "var(--bg-card)",
         }}
       >
-        <h2 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#F1F5F9", marginBottom: "0.6rem" }}>
+        <h2 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.6rem" }}>
           {title}
         </h2>
-        <p style={{ color: "#CBD5E1", fontSize: "0.85rem", lineHeight: 1.55, marginBottom: "1.25rem" }}>
+        <p style={{ color: "var(--text-primary)", fontSize: "0.85rem", lineHeight: 1.55, marginBottom: "1.25rem" }}>
           {body}
         </p>
         <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -868,9 +868,9 @@ function ConfirmDialog({
               flex: 1,
               padding: "0.6rem 1rem",
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.1)",
+              border: "1px solid var(--border)",
               borderRadius: "0.5rem",
-              color: "#94A3B8",
+              color: "var(--text-muted)",
               fontSize: "0.85rem",
               cursor: disabled ? "not-allowed" : "pointer",
             }}

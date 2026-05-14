@@ -44,7 +44,7 @@ export default async function TryoutDetailPage({ params }: Props) {
   return (
     <div style={{ maxWidth: 880, margin: "0 auto" }}>
       {/* Breadcrumb */}
-      <div style={{ marginBottom: "1.25rem", fontSize: "0.8rem", color: "#64748B" }}>
+      <div style={{ marginBottom: "1.25rem", fontSize: "0.8rem", color: "var(--text-muted)" }}>
         <Link href={ROUTES.tryouts} style={{ color: "#60A5FA", textDecoration: "none" }}>
           ← Katalog
         </Link>
@@ -91,14 +91,14 @@ export default async function TryoutDetailPage({ params }: Props) {
           style={{
             fontSize: "1.55rem",
             fontWeight: 700,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             marginBottom: "0.6rem",
             lineHeight: 1.3,
           }}
         >
           {pkg.title}
         </h1>
-        <p style={{ color: "#94A3B8", fontSize: "0.9rem", lineHeight: 1.6 }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.6 }}>
           {pkg.description}
         </p>
       </div>
@@ -126,7 +126,7 @@ export default async function TryoutDetailPage({ params }: Props) {
       {/* Subtest composition */}
       {pkg.subtests.length > 0 && (
         <section className="glass-card" style={{ padding: "1.25rem 1.5rem", marginBottom: "1rem" }}>
-          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#F1F5F9", marginBottom: "0.85rem" }}>
+          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.85rem" }}>
             Komposisi Subtes
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
@@ -138,15 +138,15 @@ export default async function TryoutDetailPage({ params }: Props) {
                   justifyContent: "space-between",
                   alignItems: "center",
                   padding: "0.6rem 0.85rem",
-                  background: "rgba(255,255,255,0.03)",
+                  background: "var(--bg-card2)",
                   borderRadius: "0.45rem",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  border: "1px solid var(--border)",
                 }}
               >
-                <span style={{ color: "#F1F5F9", fontWeight: 600, fontSize: "0.85rem" }}>
+                <span style={{ color: "var(--text-primary)", fontWeight: 600, fontSize: "0.85rem" }}>
                   {s.subtest}
                 </span>
-                <div style={{ display: "flex", gap: "1rem", color: "#94A3B8", fontSize: "0.78rem" }}>
+                <div style={{ display: "flex", gap: "1rem", color: "var(--text-muted)", fontSize: "0.78rem" }}>
                   <span>{s.questionCount} soal</span>
                   {s.passingGrade != null && <span>Passing {s.passingGrade}</span>}
                 </div>
@@ -159,7 +159,7 @@ export default async function TryoutDetailPage({ params }: Props) {
       {/* History */}
       {pkg.history.length > 0 && (
         <section className="glass-card" style={{ padding: "1.25rem 1.5rem", marginBottom: "1rem" }}>
-          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#F1F5F9", marginBottom: "0.85rem" }}>
+          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.85rem" }}>
             Riwayat Pengerjaan
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -172,7 +172,7 @@ export default async function TryoutDetailPage({ params }: Props) {
 
       {/* Rules */}
       <section className="glass-card" style={{ padding: "1.25rem 1.5rem", marginBottom: "1rem" }}>
-        <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#F1F5F9", marginBottom: "0.85rem" }}>
+        <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.85rem" }}>
           Aturan Ujian
         </h2>
         <ul
@@ -186,7 +186,7 @@ export default async function TryoutDetailPage({ params }: Props) {
           }}
         >
           {COPY.exam.rules.map((r, i) => (
-            <li key={i} style={{ display: "flex", gap: "0.6rem", color: "#CBD5E1", fontSize: "0.82rem" }}>
+            <li key={i} style={{ display: "flex", gap: "0.6rem", color: "var(--text-primary)", fontSize: "0.82rem" }}>
               <span aria-hidden style={{ color: "#60A5FA" }}>
                 ✓
               </span>
@@ -202,7 +202,7 @@ export default async function TryoutDetailPage({ params }: Props) {
           position: "sticky",
           bottom: 0,
           padding: "1rem 0",
-          background: "linear-gradient(to top, #0A0F1E 60%, transparent)",
+          background: "linear-gradient(to top, var(--bg-base) 60%, transparent)",
         }}
       >
         <StartExamButton
@@ -257,7 +257,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
       <div
         style={{
           fontSize: "0.7rem",
-          color: "#64748B",
+          color: "var(--text-muted)",
           textTransform: "uppercase",
           letterSpacing: "0.05em",
           marginBottom: "0.25rem",
@@ -265,7 +265,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
       >
         {label}
       </div>
-      <div style={{ color: "#F1F5F9", fontSize: "1.05rem", fontWeight: 600 }}>
+      <div style={{ color: "var(--text-primary)", fontSize: "1.05rem", fontWeight: 600 }}>
         {value}
       </div>
     </div>
@@ -302,14 +302,14 @@ function HistoryRow({
         justifyContent: "space-between",
         alignItems: "center",
         padding: "0.55rem 0.75rem",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.05)",
+        background: "var(--bg-card2)",
+        border: "1px solid var(--border)",
         borderRadius: "0.45rem",
         textDecoration: "none",
       }}
     >
       <div>
-        <div style={{ color: "#F1F5F9", fontSize: "0.82rem" }}>
+        <div style={{ color: "var(--text-primary)", fontSize: "0.82rem" }}>
           {new Date(date).toLocaleDateString("id-ID", {
             day: "2-digit",
             month: "short",
@@ -318,7 +318,7 @@ function HistoryRow({
             minute: "2-digit",
           })}
         </div>
-        <div style={{ color: "#64748B", fontSize: "0.72rem", marginTop: "0.15rem" }}>
+        <div style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginTop: "0.15rem" }}>
           {statusLabel}
         </div>
       </div>

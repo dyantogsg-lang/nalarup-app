@@ -66,14 +66,14 @@ export default async function ResultPage({ params }: Props) {
           style={{
             fontSize: "2.75rem",
             fontWeight: 700,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             lineHeight: 1.1,
             marginBottom: "0.25rem",
           }}
         >
           {totalScore}
         </div>
-        <div style={{ color: "#94A3B8", fontSize: "0.85rem" }}>
+        <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
           Skor total — {pkg.title}
         </div>
 
@@ -112,7 +112,7 @@ export default async function ResultPage({ params }: Props) {
             style={{
               fontSize: "0.95rem",
               fontWeight: 600,
-              color: "#F1F5F9",
+              color: "var(--text-primary)",
               marginBottom: "0.85rem",
             }}
           >
@@ -136,13 +136,13 @@ export default async function ResultPage({ params }: Props) {
             style={{
               fontSize: "0.95rem",
               fontWeight: 600,
-              color: "#F1F5F9",
+              color: "var(--text-primary)",
               marginBottom: "0.4rem",
             }}
           >
             Prioritas Belajar Kamu
           </h2>
-          <p style={{ color: "#94A3B8", fontSize: "0.78rem", marginBottom: "1rem" }}>
+          <p style={{ color: "var(--text-muted)", fontSize: "0.78rem", marginBottom: "1rem" }}>
             Topik dengan jawaban salah terbanyak. Fokus latihan di sini untuk naikkan skor cepat.
           </p>
           <ul
@@ -170,11 +170,11 @@ export default async function ResultPage({ params }: Props) {
                 }}
               >
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ color: "#F1F5F9", fontSize: "0.85rem", fontWeight: 600 }}>
+                  <div style={{ color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600 }}>
                     {t.subtest}
                     {t.topicName ? ` — ${t.topicName}` : ""}
                   </div>
-                  <div style={{ color: "#94A3B8", fontSize: "0.72rem", marginTop: "0.15rem" }}>
+                  <div style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginTop: "0.15rem" }}>
                     {t.totalQuestions} soal · benar {t.correctCount} · kosong {t.emptyCount}
                   </div>
                 </div>
@@ -233,10 +233,10 @@ const ghostStyle: React.CSSProperties = {
   padding: "0.8rem 1rem",
   fontSize: "0.88rem",
   fontWeight: 500,
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(255,255,255,0.08)",
+  background: "var(--bg-card2)",
+  border: "1px solid var(--border)",
   borderRadius: "0.5rem",
-  color: "#CBD5E1",
+  color: "var(--text-primary)",
   cursor: "pointer",
 };
 
@@ -255,15 +255,15 @@ function Mini({
     <div
       style={{
         padding: "0.65rem 0.85rem",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--bg-card2)",
+        border: "1px solid var(--border)",
         borderRadius: "0.5rem",
       }}
     >
       <div
         style={{
           fontSize: "0.7rem",
-          color: "#64748B",
+          color: "var(--text-muted)",
           textTransform: "uppercase",
           letterSpacing: "0.05em",
           marginBottom: "0.25rem",
@@ -304,10 +304,10 @@ function SafeScoreMeter({
           gap: "0.5rem",
         }}
       >
-        <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#F1F5F9" }}>
+        <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-primary)" }}>
           Skor Aman Meter
         </h2>
-        <span style={{ color: "#94A3B8", fontSize: "0.78rem" }}>
+        <span style={{ color: "var(--text-muted)", fontSize: "0.78rem" }}>
           {totalScore} / target {target}
         </span>
       </div>
@@ -333,7 +333,7 @@ function SafeScoreMeter({
         />
       </div>
 
-      <p style={{ color: "#CBD5E1", fontSize: "0.85rem", lineHeight: 1.55 }}>
+      <p style={{ color: "var(--text-primary)", fontSize: "0.85rem", lineHeight: 1.55 }}>
         {safe ? (
           <>
             🎯 Skor kamu sudah <strong>aman</strong>. Lebih {Math.abs(gap)} poin dari target {target}.
@@ -384,14 +384,14 @@ function SubtestRow({
           display: "flex",
           justifyContent: "space-between",
           fontSize: "0.78rem",
-          color: "#CBD5E1",
+          color: "var(--text-primary)",
           marginBottom: "0.35rem",
         }}
       >
         <span style={{ fontWeight: 600 }}>{s.subtest}</span>
         <span>
-          <strong style={{ color: "#F1F5F9" }}>{s.score}</strong>
-          <span style={{ color: "#64748B" }}> / {max}</span>
+          <strong style={{ color: "var(--text-primary)" }}>{s.score}</strong>
+            <span style={{ color: "var(--text-muted)" }}> / {max}</span>
           {s.passingGrade != null && (
             <span
               style={{
