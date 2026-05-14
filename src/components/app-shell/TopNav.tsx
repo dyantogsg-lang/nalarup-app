@@ -28,20 +28,19 @@ export function TopNav({ fullName }: { fullName: string }) {
         WebkitBackdropFilter: "blur(12px)",
       }}
     >
-      {/* Top row: logo + user */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
           padding: "0 1.5rem",
           height: 56,
           maxWidth: 1200,
           margin: "0 auto",
+          gap: "1.5rem",
         }}
       >
         {/* Logo */}
-        <Link href="/dashboard" style={{ textDecoration: "none" }}>
+        <Link href="/dashboard" style={{ textDecoration: "none", flexShrink: 0 }}>
           <span
             className="gradient-text"
             style={{
@@ -54,45 +53,71 @@ export function TopNav({ fullName }: { fullName: string }) {
           </span>
         </Link>
 
+        {/* Nav links — sejajar logo */}
+        <nav
+          style={{
+            display: "flex",
+            gap: "0.125rem",
+            flex: 1,
+            overflowX: "auto",
+          }}
+        >
+          {NAV_ITEMS.map((item) => {
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href + "/");
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  padding: "0.5rem 0.75rem",
+                  color: isActive ? "var(--text-primary)" : "var(--text-muted)",
+                  textDecoration: "none",
+                  fontSize: "0.82rem",
+                  fontWeight: isActive ? 600 : 400,
+                  borderRadius: "0.375rem",
+                  background: isActive ? "var(--blue-subtle, rgba(37,99,235,0.08))" : "transparent",
+                  transition: "color 150ms ease, background 150ms ease",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span style={{ fontSize: "0.85rem" }}>{item.icon}</span>
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
         {/* Right: theme toggle + user + logout */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "0.75rem",
+            flexShrink: 0,
           }}
         >
           <ThemeToggle />
 
           <div
+            aria-hidden
             style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #60A5FA, #A78BFA)",
               display: "flex",
               alignItems: "center",
-              gap: "0.5rem",
-              color: "var(--text-muted)",
+              justifyContent: "center",
+              color: "#0A0F1E",
+              fontWeight: 700,
               fontSize: "0.85rem",
             }}
           >
-            <span style={{ display: "none" }} className="topnav-name">
-              {fullName}
-            </span>
-            <div
-              aria-hidden
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #60A5FA, #A78BFA)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#0A0F1E",
-                fontWeight: 700,
-                fontSize: "0.85rem",
-              }}
-            >
-              {initial}
-            </div>
+            {initial}
           </div>
 
           <form action="/api/auth/logout" method="POST">
@@ -114,48 +139,6 @@ export function TopNav({ fullName }: { fullName: string }) {
           </form>
         </div>
       </div>
-
-      {/* Nav row */}
-      <nav
-        style={{
-          borderTop: "1px solid var(--border)",
-          padding: "0 1.5rem",
-          maxWidth: 1200,
-          margin: "0 auto",
-          display: "flex",
-          gap: "0.25rem",
-          overflowX: "auto",
-        }}
-      >
-        {NAV_ITEMS.map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.75rem 1rem",
-                color: isActive ? "var(--text-primary)" : "var(--text-muted)",
-                textDecoration: "none",
-                fontSize: "0.84rem",
-                fontWeight: isActive ? 600 : 400,
-                borderBottom: isActive
-                  ? "2px solid var(--blue)"
-                  : "2px solid transparent",
-                transition: "color 150ms ease, border-color 150ms ease",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <span style={{ fontSize: "0.9rem" }}>{item.icon}</span>
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
     </header>
   );
 }
