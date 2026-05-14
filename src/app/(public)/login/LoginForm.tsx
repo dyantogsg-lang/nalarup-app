@@ -54,10 +54,10 @@ export default function LoginForm() {
     <div style={{ width: "100%", maxWidth: 420 }}>
       {/* Header */}
       <div style={{ marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.02em", marginBottom: "0.375rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "0.375rem" }}>
           Selamat datang kembali
         </h1>
-        <p style={{ color: "#94A3B8", fontSize: "0.875rem" }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
           Masuk untuk lanjutkan latihan
         </p>
       </div>
@@ -99,7 +99,7 @@ export default function LoginForm() {
               position: "absolute", right: "0.875rem", top: "50%",
               transform: "translateY(-50%)",
               background: "none", border: "none",
-              color: "#475569", cursor: "pointer",
+              color: "var(--text-dim)", cursor: "pointer",
               display: "flex", alignItems: "center",
               padding: "0.25rem",
               transition: "color 150ms ease",
@@ -143,7 +143,7 @@ export default function LoginForm() {
         </button>
       </form>
 
-      <p style={{ textAlign: "center", marginTop: "1.5rem", color: "#475569", fontSize: "0.82rem" }}>
+      <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--text-dim)", fontSize: "0.82rem" }}>
         Belum punya akun?{" "}
         <Link href={ROUTES.register} style={{ color: "#60A5FA", textDecoration: "none", fontWeight: 500 }}>
           Daftar gratis

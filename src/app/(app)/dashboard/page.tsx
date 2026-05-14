@@ -65,13 +65,13 @@ export default async function DashboardPage() {
         <h1 style={{
           fontSize: "1.5rem",
           fontWeight: 800,
-          color: "#F1F5F9",
+          color: "var(--text-primary)",
           marginBottom: "0.3rem",
           letterSpacing: "-0.025em",
         }}>
           Hei, {firstName} 👋
         </h1>
-        <p style={{ color: "#64748B", fontSize: "0.875rem", lineHeight: 1.6 }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", lineHeight: 1.6 }}>
           {isNewUser
             ? "Mulai tryout pertama dan lihat posisimu vs passing grade SKD."
             : gap != null && gap > 0
@@ -85,9 +85,9 @@ export default async function DashboardPage() {
         <div className="glass-card" style={{
           padding: "1rem 1.25rem",
           marginBottom: "1.25rem",
-          background: "rgba(245,158,11,0.07)",
+          background: "var(--amber-subtle)",
           borderColor: "rgba(245,158,11,0.25)",
-          borderLeft: "3px solid #F59E0B",
+          borderLeft: "3px solid var(--amber)",
           display: "flex",
           alignItems: "center",
           gap: "1rem",
@@ -109,16 +109,16 @@ export default async function DashboardPage() {
                 width: 6,
                 height: 6,
                 borderRadius: "50%",
-                background: "#F59E0B",
+                background: "var(--amber)",
                 display: "inline-block",
-                boxShadow: "0 0 6px #F59E0B",
+                boxShadow: "0 0 6px var(--amber)",
               }} />
               Tryout sedang berjalan
             </div>
-            <div style={{ color: "#F1F5F9", fontSize: "0.9rem", fontWeight: 600 }}>
+            <div style={{ color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 }}>
               {active.packageTitle}
             </div>
-            <div style={{ color: "#64748B", fontSize: "0.75rem", marginTop: "0.2rem" }}>
+            <div style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginTop: "0.2rem" }}>
               {COPY.activeAttempt.banner}
             </div>
           </div>
@@ -154,7 +154,7 @@ function NewUserDashboard() {
       <div className="glass-card" style={{
         padding: "3.5rem 2rem",
         textAlign: "center",
-        background: "linear-gradient(160deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.05) 100%)",
+        background: "var(--blue-subtle)",
         borderColor: "rgba(37,99,235,0.2)",
         position: "relative",
         overflow: "hidden",
@@ -191,7 +191,7 @@ function NewUserDashboard() {
           <h2 style={{
             fontSize: "1.35rem",
             fontWeight: 800,
-            color: "#F1F5F9",
+            color: "var(--text-primary)",
             marginBottom: "0.625rem",
             letterSpacing: "-0.025em",
             lineHeight: 1.3,
@@ -199,7 +199,7 @@ function NewUserDashboard() {
             Ayo mulai tryout pertama kamu
           </h2>
           <p style={{
-            color: "#64748B",
+            color: "var(--text-muted)",
             fontSize: "0.9rem",
             maxWidth: 420,
             margin: "0 auto 2rem",
@@ -247,8 +247,8 @@ function NewUserDashboard() {
               width: 38,
               height: 38,
               borderRadius: "0.625rem",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid #1E293B",
+              background: "var(--bg-card2)",
+              border: "1px solid var(--border)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -261,7 +261,7 @@ function NewUserDashboard() {
               <div style={{ fontWeight: 700, fontSize: "0.875rem", color: item.accent, marginBottom: "0.3rem" }}>
                 {item.title}
               </div>
-              <div style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.6 }}>
+              <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
                 {item.desc}
               </div>
             </div>
@@ -305,10 +305,10 @@ function ReturningUserDashboard({
 
   // Ring color based on gap
   const ringColor =
-    gap == null ? "#334155" :
-    gap <= 0    ? "#22C55E" :
-    gap <= 30   ? "#F59E0B" :
-                  "#EF4444";
+    gap == null ? "var(--border-focus)" :
+    gap <= 0    ? "var(--green)" :
+    gap <= 30   ? "var(--amber)" :
+                  "var(--danger)";
 
   // Passing grade ring overlay
   const pgPercent = Math.min((PASSING_GRADE.total / MAX_SCORE) * 100, 100);
@@ -331,7 +331,7 @@ function ReturningUserDashboard({
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
               <span style={{
                 fontSize: "0.68rem",
-                color: "#64748B",
+                color: "var(--text-muted)",
                 textTransform: "uppercase",
                 letterSpacing: "0.07em",
                 fontWeight: 700,
@@ -343,14 +343,14 @@ function ReturningUserDashboard({
             <div className="num" style={{
               fontSize: "1.875rem",
               fontWeight: 700,
-              color: "#F1F5F9",
+              color: "var(--text-primary)",
               letterSpacing: "-0.025em",
               lineHeight: 1,
               marginBottom: "0.375rem",
             }}>
               {s.value}
             </div>
-            <div style={{ fontSize: "0.7rem", color: "#334155", fontWeight: 500 }}>
+            <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", fontWeight: 500 }}>
               {s.sub}
             </div>
           </div>
@@ -375,7 +375,7 @@ function ReturningUserDashboard({
           <div style={{
             fontSize: "0.68rem",
             fontWeight: 700,
-            color: "#64748B",
+            color: "var(--text-muted)",
             marginBottom: "1.5rem",
             textTransform: "uppercase",
             letterSpacing: "0.07em",
@@ -424,11 +424,11 @@ function ReturningUserDashboard({
               justifyContent: "center",
               gap: "0.1rem",
             }}>
-              <span style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F1F5F9", lineHeight: 1 }}>
+              <span style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1 }}>
                 {lastScore ?? "—"}
               </span>
               {lastScore != null && (
-                <span style={{ fontSize: "0.6rem", color: "#475569", fontWeight: 500 }}>
+                <span style={{ fontSize: "0.6rem", color: "var(--text-dim)", fontWeight: 500 }}>
                   / {MAX_SCORE}
                 </span>
               )}
@@ -453,7 +453,7 @@ function ReturningUserDashboard({
               }}>
                 {gap <= 0 ? "✓ Sudah aman passing grade" : `+${gap} poin lagi`}
               </div>
-              <div style={{ fontSize: "0.68rem", color: "#475569" }}>
+              <div style={{ fontSize: "0.68rem", color: "var(--text-dim)" }}>
                 {gap <= 0
                   ? "Pertahankan konsistensimu"
                   : gap <= 30
@@ -465,22 +465,22 @@ function ReturningUserDashboard({
             <div style={{
               padding: "0.5rem 0.875rem",
               borderRadius: "0.625rem",
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid #1E293B",
+              background: "var(--bg-card2)",
+              border: "1px solid var(--border)",
               marginBottom: "0.75rem",
               width: "100%",
             }}>
-              <div style={{ fontSize: "0.75rem", color: "#475569" }}>Belum ada skor</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>Belum ada skor</div>
             </div>
           )}
 
-          <div style={{ fontSize: "0.7rem", color: "#334155", lineHeight: 1.6, marginBottom: "1.25rem" }}>
+          <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", lineHeight: 1.6, marginBottom: "1.25rem" }}>
             Passing grade SKD:{" "}
-            <span className="num" style={{ color: "#475569", fontWeight: 600 }}>
+            <span className="num" style={{ color: "var(--text-muted)", fontWeight: 600 }}>
               {PASSING_GRADE.total}
             </span>
             <br />
-            <span style={{ color: "#1E293B" }}>TWK {PASSING_GRADE.twk} · TIU {PASSING_GRADE.tiu} · TKP {PASSING_GRADE.tkp}</span>
+            <span style={{ color: "var(--text-dim)" }}>TWK {PASSING_GRADE.twk} · TIU {PASSING_GRADE.tiu} · TKP {PASSING_GRADE.tkp}</span>
           </div>
 
           <Link href={ROUTES.tryouts} style={{ width: "100%" }}>
@@ -498,7 +498,7 @@ function ReturningUserDashboard({
             alignItems: "center",
             marginBottom: "1.25rem",
           }}>
-            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.01em" }}>
+            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
               Riwayat Tryout
             </h3>
             <Link href={ROUTES.history} style={{
@@ -529,7 +529,7 @@ function ReturningUserDashboard({
                 width: 48,
                 height: 48,
                 borderRadius: "0.875rem",
-                background: "rgba(37,99,235,0.08)",
+                background: "var(--blue-subtle)",
                 border: "1px solid rgba(37,99,235,0.15)",
                 display: "flex",
                 alignItems: "center",
@@ -539,10 +539,10 @@ function ReturningUserDashboard({
                 📋
               </div>
               <div>
-                <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#94A3B8", marginBottom: "0.375rem" }}>
+                <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "0.375rem" }}>
                   Belum ada riwayat
                 </div>
-                <div style={{ fontSize: "0.78rem", color: "#475569", lineHeight: 1.6, maxWidth: 260 }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--text-dim)", lineHeight: 1.6, maxWidth: 260 }}>
                   Selesaikan tryout pertama untuk melihat skor dan analisis kelemahan kamu.
                 </div>
               </div>
@@ -563,8 +563,8 @@ function ReturningUserDashboard({
                       justifyContent: "space-between",
                       alignItems: "center",
                       padding: "0.75rem 0.875rem",
-                      background: "rgba(255,255,255,0.02)",
-                      border: "1px solid #1E293B",
+                      background: "var(--bg-card2)",
+                      border: "1px solid var(--border)",
                       borderRadius: "0.75rem",
                       textDecoration: "none",
                       transition: "border-color 150ms ease, background 150ms ease",
@@ -577,13 +577,13 @@ function ReturningUserDashboard({
                           width: 26,
                           height: 26,
                           borderRadius: "0.375rem",
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid #1E293B",
+                          background: "var(--bg-card2)",
+                          border: "1px solid var(--border)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           fontSize: "0.65rem",
-                          color: "#475569",
+                          color: "var(--text-dim)",
                           fontWeight: 600,
                           flexShrink: 0,
                         }}>
@@ -591,7 +591,7 @@ function ReturningUserDashboard({
                         </div>
                         <div style={{ minWidth: 0 }}>
                           <div style={{
-                            color: "#F1F5F9",
+                            color: "var(--text-primary)",
                             fontSize: "0.82rem",
                             fontWeight: 600,
                             overflow: "hidden",
@@ -601,7 +601,7 @@ function ReturningUserDashboard({
                           }}>
                             {h.packageTitle}
                           </div>
-                          <div style={{ color: "#334155", fontSize: "0.68rem" }}>
+                          <div style={{ color: "var(--text-dim)", fontSize: "0.68rem" }}>
                             {h.submittedAt
                               ? new Date(h.submittedAt).toLocaleDateString("id-ID", {
                                   day: "2-digit",
@@ -620,7 +620,7 @@ function ReturningUserDashboard({
                           {h.isPassed ? " ✓" : " ✗"}
                         </span>
                         {scoreGap != null && !h.isPassed && (
-                          <span style={{ fontSize: "0.62rem", color: "#475569" }}>
+                          <span style={{ fontSize: "0.62rem", color: "var(--text-dim)" }}>
                             <span className="num">-{scoreGap}</span> dari PG
                           </span>
                         )}
@@ -642,7 +642,7 @@ function ReturningUserDashboard({
         justifyContent: "space-between",
         gap: "1rem",
         flexWrap: "wrap",
-        background: "linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(124,58,237,0.04) 100%)",
+        background: "var(--blue-subtle)",
         borderColor: "rgba(37,99,235,0.15)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
@@ -661,10 +661,10 @@ function ReturningUserDashboard({
             🚀
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "#F1F5F9", marginBottom: "0.2rem" }}>
+            <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "var(--text-primary)", marginBottom: "0.2rem" }}>
               Siap tryout berikutnya?
             </div>
-            <div style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.5 }}>
+            <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {COPY.empty.recommendation}
             </div>
           </div>

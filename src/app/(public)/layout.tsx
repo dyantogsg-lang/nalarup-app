@@ -34,7 +34,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   const q = ROTATING_QUOTES[quoteIndex];
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", background: "#020617" }}>
+    <div style={{ minHeight: "100vh", display: "flex", background: "var(--bg-base)" }}>
 
       {/* ===== LEFT PANEL — branding + dynamic content ===== */}
       <div style={{
@@ -43,8 +43,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "3rem",
-        background: "linear-gradient(160deg, #0E1223 0%, #020617 100%)",
-        borderRight: "1px solid #1E293B",
+        background: "var(--bg-card)",
+        borderRight: "1px solid var(--border)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -71,7 +71,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <span style={{ fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.02em" }} className="gradient-text">
             NalarUp
           </span>
-          <p style={{ color: "#475569", fontSize: "0.8rem", marginTop: "0.25rem" }}>
+          <p style={{ color: "var(--text-dim)", fontSize: "0.8rem", marginTop: "0.25rem" }}>
             Platform Tryout CASN
           </p>
         </div>
@@ -79,13 +79,13 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {/* Center content */}
         <div style={{ position: "relative", zIndex: 1 }}>
           <h2 style={{
-            fontSize: "1.75rem", fontWeight: 800, color: "#F1F5F9",
+            fontSize: "1.75rem", fontWeight: 800, color: "var(--text-primary)",
             letterSpacing: "-0.03em", lineHeight: 1.25, marginBottom: "1rem",
           }}>
             Naikkan skor CASN<br />
             <span className="gradient-text">sampai aman passing grade</span>
           </h2>
-          <p style={{ color: "#94A3B8", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "2rem" }}>
+          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "2rem" }}>
             Simulasi realistis, analisis kelemahan per subtes, dan loop perbaikan terarah.
           </p>
 
@@ -93,21 +93,21 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
             {LIVE_STATS.map((s) => (
               <div key={s.label}>
-                <div className="num" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#F1F5F9" }}>{s.value}</div>
-                <div style={{ fontSize: "0.7rem", color: "#475569", marginTop: "0.1rem" }}>{s.label}</div>
+                <div className="num" style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)" }}>{s.value}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", marginTop: "0.1rem" }}>{s.label}</div>
               </div>
             ))}
           </div>
 
           {/* Rotating testimonial */}
           <div style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid #1E293B",
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
             borderLeft: `3px solid ${q.color}`,
             borderRadius: "0.75rem",
             padding: "1.25rem",
           }}>
-            <p style={{ color: "#CBD5E1", fontSize: "0.85rem", lineHeight: 1.7, marginBottom: "1rem", fontStyle: "italic" }}>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.7, marginBottom: "1rem", fontStyle: "italic" }}>
               &ldquo;{q.quote}&rdquo;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
@@ -120,8 +120,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 {q.avatar}
               </div>
               <div>
-                <div style={{ fontWeight: 600, fontSize: "0.8rem", color: "#F1F5F9" }}>{q.name}</div>
-                <div style={{ fontSize: "0.7rem", color: "#94A3B8" }}>{q.role}</div>
+                <div style={{ fontWeight: 600, fontSize: "0.8rem", color: "var(--text-primary)" }}>{q.name}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>{q.role}</div>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
         {/* Footer */}
         <div style={{ position: "relative", zIndex: 1 }}>
-          <p style={{ fontSize: "0.72rem", color: "#334155" }}>
+          <p style={{ fontSize: "0.72rem", color: "var(--text-dim)" }}>
             © 2025 NalarUp · Gratis, tanpa kartu kredit
           </p>
         </div>
