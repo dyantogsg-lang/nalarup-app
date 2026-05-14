@@ -59,27 +59,34 @@ export default async function DashboardPage() {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto" }}>
-      {/* Header */}
+
+      {/* ===== HEADER ===== */}
       <div style={{ marginBottom: "1.75rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F1F5F9", marginBottom: "0.25rem", letterSpacing: "-0.02em" }}>
+        <h1 style={{
+          fontSize: "1.5rem",
+          fontWeight: 800,
+          color: "#F1F5F9",
+          marginBottom: "0.3rem",
+          letterSpacing: "-0.025em",
+        }}>
           Hei, {firstName} 👋
         </h1>
-        <p style={{ color: "#94A3B8", fontSize: "0.875rem" }}>
+        <p style={{ color: "#64748B", fontSize: "0.875rem", lineHeight: 1.6 }}>
           {isNewUser
-            ? "Mulai tryout pertama dan lihat hasilnya langsung."
+            ? "Mulai tryout pertama dan lihat posisimu vs passing grade SKD."
             : gap != null && gap > 0
             ? `Kamu butuh ${gap} poin lagi untuk aman passing grade SKD.`
             : "Skor kamu sudah aman passing grade. Pertahankan!"}
         </p>
       </div>
 
-      {/* Active attempt banner */}
+      {/* ===== ACTIVE ATTEMPT BANNER ===== */}
       {active && (
         <div className="glass-card" style={{
           padding: "1rem 1.25rem",
           marginBottom: "1.25rem",
-          background: "rgba(245,158,11,0.08)",
-          borderColor: "rgba(245,158,11,0.3)",
+          background: "rgba(245,158,11,0.07)",
+          borderColor: "rgba(245,158,11,0.25)",
           borderLeft: "3px solid #F59E0B",
           display: "flex",
           alignItems: "center",
@@ -87,16 +94,36 @@ export default async function DashboardPage() {
           flexWrap: "wrap",
         }}>
           <div style={{ flex: 1, minWidth: 220 }}>
-            <div style={{ color: "#FBBF24", fontSize: "0.75rem", fontWeight: 600, marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              ⏱ Tryout sedang berjalan
+            <div style={{
+              color: "#FCD34D",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              marginBottom: "0.25rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.07em",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.375rem",
+            }}>
+              <span style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "#F59E0B",
+                display: "inline-block",
+                boxShadow: "0 0 6px #F59E0B",
+              }} />
+              Tryout sedang berjalan
             </div>
-            <div style={{ color: "#F1F5F9", fontSize: "0.9rem", fontWeight: 500 }}>{active.packageTitle}</div>
-            <div style={{ color: "#94A3B8", fontSize: "0.75rem", marginTop: "0.2rem" }}>
+            <div style={{ color: "#F1F5F9", fontSize: "0.9rem", fontWeight: 600 }}>
+              {active.packageTitle}
+            </div>
+            <div style={{ color: "#64748B", fontSize: "0.75rem", marginTop: "0.2rem" }}>
               {COPY.activeAttempt.banner}
             </div>
           </div>
           <Link href={ROUTES.exam(active.id)}>
-            <button className="btn-primary" style={{ padding: "0.55rem 1.1rem", fontSize: "0.85rem" }}>
+            <button className="btn-primary" style={{ padding: "0.55rem 1.1rem", fontSize: "0.82rem", cursor: "pointer" }}>
               Lanjutkan →
             </button>
           </Link>
@@ -122,46 +149,72 @@ export default async function DashboardPage() {
 function NewUserDashboard() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+
       {/* Big onboarding CTA */}
       <div className="glass-card" style={{
-        padding: "3rem 2rem",
+        padding: "3.5rem 2rem",
         textAlign: "center",
-        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.06) 100%)",
-        borderColor: "rgba(37,99,235,0.25)",
+        background: "linear-gradient(160deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.05) 100%)",
+        borderColor: "rgba(37,99,235,0.2)",
         position: "relative",
         overflow: "hidden",
       }}>
         {/* Subtle glow */}
         <div style={{
-          position: "absolute", top: "50%", left: "50%",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           transform: "translate(-50%,-50%)",
-          width: 300, height: 200,
-          background: "radial-gradient(ellipse, rgba(37,99,235,0.12), transparent 70%)",
+          width: 320,
+          height: 220,
+          background: "radial-gradient(ellipse, rgba(37,99,235,0.1), transparent 70%)",
           pointerEvents: "none",
         }} />
+
         <div style={{ position: "relative", zIndex: 1 }}>
+          {/* Icon */}
           <div style={{
-            width: 64, height: 64,
-            background: "linear-gradient(135deg, rgba(37,99,235,0.2), rgba(124,58,237,0.2))",
-            borderRadius: "1rem",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 1.25rem",
-            fontSize: "1.75rem",
+            width: 68,
+            height: 68,
+            background: "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(124,58,237,0.18))",
+            borderRadius: "1.25rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 1.5rem",
+            fontSize: "1.875rem",
             border: "1px solid rgba(37,99,235,0.2)",
           }}>
             🎯
           </div>
-          <h2 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#F1F5F9", marginBottom: "0.625rem", letterSpacing: "-0.02em" }}>
+
+          <h2 style={{
+            fontSize: "1.35rem",
+            fontWeight: 800,
+            color: "#F1F5F9",
+            marginBottom: "0.625rem",
+            letterSpacing: "-0.025em",
+            lineHeight: 1.3,
+          }}>
             Ayo mulai tryout pertama kamu
           </h2>
-          <p style={{ color: "#94A3B8", fontSize: "0.9rem", maxWidth: 420, margin: "0 auto 2rem", lineHeight: 1.7 }}>
+          <p style={{
+            color: "#64748B",
+            fontSize: "0.9rem",
+            maxWidth: 420,
+            margin: "0 auto 2rem",
+            lineHeight: 1.75,
+          }}>
             Selesai dalam 100 menit — langsung tahu posisimu vs passing grade SKD.
             Gratis, tanpa batas pengulangan.
           </p>
+
           <Link href={ROUTES.tryouts}>
-            <button className="btn-primary" style={{ fontSize: "0.95rem", padding: "0.8rem 2rem" }}>
+            <button className="btn-primary" style={{ fontSize: "0.95rem", padding: "0.8rem 2rem", cursor: "pointer" }}>
               Pilih Paket Tryout
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </Link>
         </div>
@@ -170,15 +223,47 @@ function NewUserDashboard() {
       {/* Info cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
         {[
-          { icon: "⏱", title: "100 menit", desc: "Durasi simulasi SKD penuh" },
-          { icon: "📊", title: "Analisis langsung", desc: "Breakdown skor per subtes setelah selesai" },
-          { icon: "🔁", title: "Ulang bebas", desc: "Semua paket bisa diulang tanpa batas" },
+          {
+            icon: "⏱",
+            title: "100 menit",
+            desc: "Durasi simulasi SKD penuh — identik dengan ujian asli",
+            accent: "#60A5FA",
+          },
+          {
+            icon: "📊",
+            title: "Analisis langsung",
+            desc: "Breakdown skor per subtes setelah selesai. Tahu persis di mana bocornya.",
+            accent: "#A78BFA",
+          },
+          {
+            icon: "🔁",
+            title: "Ulang bebas",
+            desc: "Semua paket bisa diulang tanpa batas. Skor naik terukur.",
+            accent: "#4ADE80",
+          },
         ].map((item, i) => (
-          <div key={i} className="glass-card" style={{ padding: "1.25rem", display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
-            <span style={{ fontSize: "1.25rem", flexShrink: 0 }}>{item.icon}</span>
+          <div key={i} className="glass-card" style={{ padding: "1.375rem", display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
+            <div style={{
+              width: 38,
+              height: 38,
+              borderRadius: "0.625rem",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid #1E293B",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "1.1rem",
+              flexShrink: 0,
+            }}>
+              {item.icon}
+            </div>
             <div>
-              <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#F1F5F9", marginBottom: "0.25rem" }}>{item.title}</div>
-              <div style={{ fontSize: "0.78rem", color: "#94A3B8", lineHeight: 1.5 }}>{item.desc}</div>
+              <div style={{ fontWeight: 700, fontSize: "0.875rem", color: item.accent, marginBottom: "0.3rem" }}>
+                {item.title}
+              </div>
+              <div style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.6 }}>
+                {item.desc}
+              </div>
             </div>
           </div>
         ))}
@@ -214,53 +299,114 @@ function ReturningUserDashboard({
   // Progress ring calc (max score ~500 for SKD)
   const MAX_SCORE = 500;
   const scorePercent = lastScore != null ? Math.min((lastScore / MAX_SCORE) * 100, 100) : 0;
-  const RADIUS = 36;
+  const RADIUS = 38;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
   const dashOffset = CIRCUMFERENCE - (scorePercent / 100) * CIRCUMFERENCE;
-  const ringColor = gap == null ? "#94A3B8" : gap <= 0 ? "#22C55E" : gap <= 30 ? "#F59E0B" : "#EF4444";
+
+  // Ring color based on gap
+  const ringColor =
+    gap == null ? "#334155" :
+    gap <= 0    ? "#22C55E" :
+    gap <= 30   ? "#F59E0B" :
+                  "#EF4444";
+
+  // Passing grade ring overlay
+  const pgPercent = Math.min((PASSING_GRADE.total / MAX_SCORE) * 100, 100);
+  const pgDashOffset = CIRCUMFERENCE - (pgPercent / 100) * CIRCUMFERENCE;
 
   const statCards = [
-    { label: "Tryout Selesai", value: String(totalAttempts), accent: "blue" as const, icon: "📋" },
-    { label: "Skor Terakhir",  value: lastScore != null ? String(lastScore) : "—", accent: "violet" as const, icon: "🎯" },
-    { label: "Streak",         value: currentStreak > 0 ? `${currentStreak}h` : "0h", accent: "green" as const, icon: "🔥" },
-    { label: "Pass Rate",      value: passRate != null ? `${passRate}%` : "—", accent: "amber" as const, icon: "✅" },
+    { label: "Tryout Selesai", value: String(totalAttempts), accent: "blue" as const,  icon: "📋", sub: "total sesi" },
+    { label: "Skor Terakhir",  value: lastScore != null ? String(lastScore) : "—", accent: "violet" as const, icon: "🎯", sub: `PG: ${PASSING_GRADE.total}` },
+    { label: "Streak",         value: currentStreak > 0 ? `${currentStreak}h` : "0h", accent: "green" as const,  icon: "🔥", sub: "hari berturut" },
+    { label: "Pass Rate",      value: passRate != null ? `${passRate}%` : "—", accent: "amber" as const, icon: "✅", sub: `${passedCount} dari ${history.length}` },
   ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-      {/* Stat cards */}
+
+      {/* ===== STAT CARDS ===== */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem" }}>
         {statCards.map((s) => (
           <div key={s.label} className={`glass-card stat-card-${s.accent}`} style={{ padding: "1.25rem 1.25rem 1.25rem 1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.625rem" }}>
-              <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+              <span style={{
+                fontSize: "0.68rem",
+                color: "#64748B",
+                textTransform: "uppercase",
+                letterSpacing: "0.07em",
+                fontWeight: 700,
+              }}>
                 {s.label}
               </span>
               <span style={{ fontSize: "1rem" }}>{s.icon}</span>
             </div>
-            <div className="num" style={{ fontSize: "1.75rem", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.02em" }}>
+            <div className="num" style={{
+              fontSize: "1.875rem",
+              fontWeight: 700,
+              color: "#F1F5F9",
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+              marginBottom: "0.375rem",
+            }}>
               {s.value}
+            </div>
+            <div style={{ fontSize: "0.7rem", color: "#334155", fontWeight: 500 }}>
+              {s.sub}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Main grid: progress + history */}
-      <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: "1rem" }}>
+      {/* ===== MAIN GRID: progress ring + history ===== */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "clamp(240px, 28%, 300px) 1fr",
+        gap: "1rem",
+      }}>
 
         {/* Progress ring card */}
-        <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-          <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#94A3B8", marginBottom: "1.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <div className="glass-card" style={{
+          padding: "1.75rem 1.5rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        }}>
+          <div style={{
+            fontSize: "0.68rem",
+            fontWeight: 700,
+            color: "#64748B",
+            marginBottom: "1.5rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.07em",
+          }}>
             Skor Terakhir
           </div>
 
           {/* SVG Ring */}
-          <div style={{ position: "relative", width: 100, height: 100, marginBottom: "1rem" }}>
-            <svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: "rotate(-90deg)" }}>
-              <circle className="progress-ring-track" cx="50" cy="50" r={RADIUS} fill="none" strokeWidth="8" />
+          <div style={{ position: "relative", width: 108, height: 108, marginBottom: "1.25rem" }}>
+            <svg width="108" height="108" viewBox="0 0 108 108" style={{ transform: "rotate(-90deg)" }} aria-hidden="true">
+              {/* Track */}
+              <circle
+                className="progress-ring-track"
+                cx="54" cy="54" r={RADIUS}
+                fill="none"
+                strokeWidth="8"
+              />
+              {/* Passing grade marker — subtle dashed */}
+              <circle
+                cx="54" cy="54" r={RADIUS}
+                fill="none"
+                strokeWidth="2"
+                stroke="rgba(34,197,94,0.25)"
+                strokeDasharray={`2 ${(CIRCUMFERENCE - 2)}`}
+                strokeDashoffset={pgDashOffset}
+                strokeLinecap="round"
+              />
+              {/* Score fill */}
               <circle
                 className="progress-ring-fill"
-                cx="50" cy="50" r={RADIUS}
+                cx="54" cy="54" r={RADIUS}
                 fill="none"
                 strokeWidth="8"
                 stroke={ringColor}
@@ -268,108 +414,268 @@ function ReturningUserDashboard({
                 strokeDashoffset={lastScore != null ? dashOffset : CIRCUMFERENCE}
               />
             </svg>
+            {/* Center label */}
             <div className="num" style={{
-              position: "absolute", inset: 0,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "1.4rem", fontWeight: 700, color: "#F1F5F9",
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.1rem",
             }}>
-              {lastScore ?? "—"}
+              <span style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F1F5F9", lineHeight: 1 }}>
+                {lastScore ?? "—"}
+              </span>
+              {lastScore != null && (
+                <span style={{ fontSize: "0.6rem", color: "#475569", fontWeight: 500 }}>
+                  / {MAX_SCORE}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Gap context */}
-          {gap != null && (
+          {/* Gap context label */}
+          {gap != null ? (
             <div style={{
               padding: "0.5rem 0.875rem",
-              borderRadius: "0.5rem",
-              background: gap <= 0 ? "rgba(34,197,94,0.1)" : "rgba(245,158,11,0.1)",
-              border: `1px solid ${gap <= 0 ? "rgba(34,197,94,0.2)" : "rgba(245,158,11,0.2)"}`,
+              borderRadius: "0.625rem",
+              background: gap <= 0 ? "rgba(34,197,94,0.08)" : gap <= 30 ? "rgba(245,158,11,0.08)" : "rgba(239,68,68,0.08)",
+              border: `1px solid ${gap <= 0 ? "rgba(34,197,94,0.2)" : gap <= 30 ? "rgba(245,158,11,0.2)" : "rgba(239,68,68,0.2)"}`,
               marginBottom: "0.75rem",
+              width: "100%",
             }}>
-              <div className="num" style={{ fontSize: "0.8rem", fontWeight: 600, color: gap <= 0 ? "#4ADE80" : "#FCD34D" }}>
-                {gap <= 0 ? "✓ Sudah aman passing grade" : `+${gap} poin lagi untuk aman`}
+              <div className="num" style={{
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                color: gap <= 0 ? "#4ADE80" : gap <= 30 ? "#FCD34D" : "#FCA5A5",
+                marginBottom: "0.2rem",
+              }}>
+                {gap <= 0 ? "✓ Sudah aman passing grade" : `+${gap} poin lagi`}
               </div>
+              <div style={{ fontSize: "0.68rem", color: "#475569" }}>
+                {gap <= 0
+                  ? "Pertahankan konsistensimu"
+                  : gap <= 30
+                  ? "Hampir sampai — fokus satu subtes lagi"
+                  : "Identifikasi subtes yang paling bocor"}
+              </div>
+            </div>
+          ) : (
+            <div style={{
+              padding: "0.5rem 0.875rem",
+              borderRadius: "0.625rem",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid #1E293B",
+              marginBottom: "0.75rem",
+              width: "100%",
+            }}>
+              <div style={{ fontSize: "0.75rem", color: "#475569" }}>Belum ada skor</div>
             </div>
           )}
 
-          <div style={{ fontSize: "0.72rem", color: "#475569", lineHeight: 1.5 }}>
-            Passing grade SKD: <span className="num" style={{ color: "#94A3B8" }}>{PASSING_GRADE.total}</span>
+          <div style={{ fontSize: "0.7rem", color: "#334155", lineHeight: 1.6, marginBottom: "1.25rem" }}>
+            Passing grade SKD:{" "}
+            <span className="num" style={{ color: "#475569", fontWeight: 600 }}>
+              {PASSING_GRADE.total}
+            </span>
+            <br />
+            <span style={{ color: "#1E293B" }}>TWK {PASSING_GRADE.twk} · TIU {PASSING_GRADE.tiu} · TKP {PASSING_GRADE.tkp}</span>
           </div>
 
-          <Link href={ROUTES.tryouts} style={{ marginTop: "1.25rem", width: "100%" }}>
-            <button className="btn-primary" style={{ width: "100%", padding: "0.6rem", fontSize: "0.82rem" }}>
+          <Link href={ROUTES.tryouts} style={{ width: "100%" }}>
+            <button className="btn-primary" style={{ width: "100%", padding: "0.625rem", fontSize: "0.82rem", cursor: "pointer" }}>
               Tryout Lagi
             </button>
           </Link>
         </div>
 
-        {/* History */}
+        {/* History card */}
         <div className="glass-card" style={{ padding: "1.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-            <h3 style={{ fontSize: "0.9rem", fontWeight: 600, color: "#F1F5F9" }}>Riwayat Tryout</h3>
-            <Link href={ROUTES.history} style={{ fontSize: "0.75rem", color: "#60A5FA", textDecoration: "none" }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1.25rem",
+          }}>
+            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.01em" }}>
+              Riwayat Tryout
+            </h3>
+            <Link href={ROUTES.history} style={{
+              fontSize: "0.72rem",
+              color: "#60A5FA",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.25rem",
+              transition: "color 150ms ease",
+            }}>
               Lihat semua →
             </Link>
           </div>
 
           {history.length === 0 ? (
-            <p style={{ color: "#475569", fontSize: "0.8rem" }}>Belum ada tryout submitted.</p>
+            /* Empty state */
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "2.5rem 1rem",
+              textAlign: "center",
+              gap: "0.75rem",
+            }}>
+              <div style={{
+                width: 48,
+                height: 48,
+                borderRadius: "0.875rem",
+                background: "rgba(37,99,235,0.08)",
+                border: "1px solid rgba(37,99,235,0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.375rem",
+              }}>
+                📋
+              </div>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#94A3B8", marginBottom: "0.375rem" }}>
+                  Belum ada riwayat
+                </div>
+                <div style={{ fontSize: "0.78rem", color: "#475569", lineHeight: 1.6, maxWidth: 260 }}>
+                  Selesaikan tryout pertama untuk melihat skor dan analisis kelemahan kamu.
+                </div>
+              </div>
+              <Link href={ROUTES.tryouts}>
+                <button className="btn-ghost" style={{ fontSize: "0.78rem", padding: "0.45rem 1rem", cursor: "pointer", marginTop: "0.25rem" }}>
+                  Mulai Tryout
+                </button>
+              </Link>
+            </div>
           ) : (
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-              {history.slice(0, 5).map((h) => (
-                <li key={h.id}>
-                  <Link href={ROUTES.result(h.id)} style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "0.625rem 0.875rem",
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid #1E293B",
-                    borderRadius: "0.625rem",
-                    textDecoration: "none",
-                    transition: "border-color 150ms ease, background 150ms ease",
-                    cursor: "pointer",
-                  }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ color: "#F1F5F9", fontSize: "0.82rem", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {h.packageTitle}
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {history.slice(0, 5).map((h, idx) => {
+                const scoreGap = h.totalScore != null ? PASSING_GRADE.total - h.totalScore : null;
+                return (
+                  <li key={h.id}>
+                    <Link href={ROUTES.result(h.id)} style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "0.75rem 0.875rem",
+                      background: "rgba(255,255,255,0.02)",
+                      border: "1px solid #1E293B",
+                      borderRadius: "0.75rem",
+                      textDecoration: "none",
+                      transition: "border-color 150ms ease, background 150ms ease",
+                      cursor: "pointer",
+                      gap: "0.75rem",
+                    }}>
+                      {/* Left: rank + title */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
+                        <div className="num" style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: "0.375rem",
+                          background: "rgba(255,255,255,0.04)",
+                          border: "1px solid #1E293B",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "0.65rem",
+                          color: "#475569",
+                          fontWeight: 600,
+                          flexShrink: 0,
+                        }}>
+                          {idx + 1}
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{
+                            color: "#F1F5F9",
+                            fontSize: "0.82rem",
+                            fontWeight: 600,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            marginBottom: "0.15rem",
+                          }}>
+                            {h.packageTitle}
+                          </div>
+                          <div style={{ color: "#334155", fontSize: "0.68rem" }}>
+                            {h.submittedAt
+                              ? new Date(h.submittedAt).toLocaleDateString("id-ID", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })
+                              : "—"}
+                          </div>
+                        </div>
                       </div>
-                      <div style={{ color: "#475569", fontSize: "0.7rem", marginTop: "0.15rem" }}>
-                        {h.submittedAt
-                          ? new Date(h.submittedAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })
-                          : "—"}
+
+                      {/* Right: score badge */}
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.2rem", flexShrink: 0 }}>
+                        <span className={`badge ${h.isPassed ? "badge-green" : "badge-red"}`}>
+                          <span className="num">{h.totalScore ?? "—"}</span>
+                          {h.isPassed ? " ✓" : " ✗"}
+                        </span>
+                        {scoreGap != null && !h.isPassed && (
+                          <span style={{ fontSize: "0.62rem", color: "#475569" }}>
+                            <span className="num">-{scoreGap}</span> dari PG
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
-                      <span className={`badge ${h.isPassed ? "badge-green" : "badge-red"}`}>
-                        <span className="num">{h.totalScore ?? "—"}</span>
-                        {h.isPassed ? " ✓" : " ✗"}
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
       </div>
 
-      {/* Recommendation */}
-      <div className="glass-card" style={{ padding: "1.25rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-        <div>
-          <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#F1F5F9", marginBottom: "0.25rem" }}>
-            Siap tryout berikutnya?
+      {/* ===== RECOMMENDATION CARD ===== */}
+      <div className="glass-card" style={{
+        padding: "1.25rem 1.5rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "1rem",
+        flexWrap: "wrap",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(124,58,237,0.04) 100%)",
+        borderColor: "rgba(37,99,235,0.15)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
+          <div style={{
+            width: 40,
+            height: 40,
+            borderRadius: "0.75rem",
+            background: "linear-gradient(135deg, rgba(37,99,235,0.15), rgba(124,58,237,0.15))",
+            border: "1px solid rgba(37,99,235,0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "1.1rem",
+            flexShrink: 0,
+          }}>
+            🚀
           </div>
-          <div style={{ fontSize: "0.8rem", color: "#94A3B8" }}>
-            {COPY.empty.recommendation}
+          <div>
+            <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "#F1F5F9", marginBottom: "0.2rem" }}>
+              Siap tryout berikutnya?
+            </div>
+            <div style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.5 }}>
+              {COPY.empty.recommendation}
+            </div>
           </div>
         </div>
         <Link href={ROUTES.tryouts}>
-          <button className="btn-ghost" style={{ padding: "0.55rem 1.1rem", fontSize: "0.82rem", whiteSpace: "nowrap" }}>
+          <button className="btn-ghost" style={{ padding: "0.55rem 1.1rem", fontSize: "0.82rem", whiteSpace: "nowrap", cursor: "pointer" }}>
             {COPY.cta.viewCatalog} →
           </button>
         </Link>
       </div>
+
     </div>
   );
 }
