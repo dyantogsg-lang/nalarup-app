@@ -29,9 +29,7 @@ const LIVE_STATS = [
 ];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
-  // Pick a quote deterministically (SSR-safe, rotates by hour)
-  const quoteIndex = Math.floor(Date.now() / 1000 / 3600) % ROTATING_QUOTES.length;
-  const q = ROTATING_QUOTES[quoteIndex];
+  const q = ROTATING_QUOTES[0];
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", background: "var(--bg-base)" }}>

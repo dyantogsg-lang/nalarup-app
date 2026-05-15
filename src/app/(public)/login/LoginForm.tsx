@@ -25,6 +25,7 @@ export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? ROUTES.dashboard;
+  const hasRedirect = searchParams.has("redirect");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,10 +63,17 @@ export default function LoginForm() {
         </p>
       </div>
 
+      {hasRedirect && (
+        <div className="glass-card" style={{ padding: "0.75rem 1rem", marginBottom: "1rem", borderColor: "rgba(37,99,235,0.25)", background: "var(--blue-subtle)", color: "var(--text-muted)", fontSize: "0.82rem", lineHeight: 1.55 }}>
+          Masuk dulu untuk melanjutkan tryout atau halaman yang kamu buka.
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {/* Email */}
         <div className="float-label-wrap">
           <input
+            id="login-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -73,14 +81,17 @@ export default function LoginForm() {
             placeholder=" "
             autoComplete="email"
             className="input-field"
+            aria-invalid={!!error}
+            aria-describedby={error ? "login-error" : undefined}
           />
-          <label>Email</label>
+          <label htmlFor="login-email">Email</label>
         </div>
 
         {/* Password */}
         <div style={{ position: "relative" }}>
           <div className="float-label-wrap">
             <input
+              id="login-password"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -89,8 +100,10 @@ export default function LoginForm() {
               autoComplete="current-password"
               className="input-field"
               style={{ paddingRight: "3rem" }}
+              aria-invalid={!!error}
+              aria-describedby={error ? "login-error" : undefined}
             />
-            <label>Password</label>
+            <label htmlFor="login-password">Password</label>
           </div>
           <button
             type="button"
@@ -112,7 +125,7 @@ export default function LoginForm() {
 
         {/* Error */}
         {error && (
-          <div style={{
+          <div id="login-error" role="alert" style={{
             background: "rgba(239,68,68,0.08)",
             border: "1px solid rgba(239,68,68,0.25)",
             borderRadius: "0.625rem",
@@ -123,7 +136,7 @@ export default function LoginForm() {
             gap: "0.5rem",
             alignItems: "flex-start",
           }}>
-            <span style={{ flexShrink: 0 }}>⚠</span>
+            <span aria-hidden="true" style={{ flexShrink: 0 }}>⚠</span>
             {error}
           </div>
         )}

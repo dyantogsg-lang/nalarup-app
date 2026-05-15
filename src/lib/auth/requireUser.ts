@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
@@ -22,7 +23,9 @@ export async function requireUser() {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    redirect("/login");
+    const h = await headers();
+    const pathname = h.get("x-pathname") || h.get("x-invoke-path") || "/dashboard";
+    redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
   }
 
   let profile = await db.query.profiles.findFirst({
@@ -50,8 +53,7 @@ export async function requireUser() {
     });
 
     if (!profile) {
-      // Something is seriously wrong (e.g. DB down). Bounce to login.
-      redirect("/login");
+      redirect("/login?redirect=%2Fdashboard");
     }
   }
 

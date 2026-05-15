@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "nalarup-saved-packages";
+const STORAGE_EVENT = "nalarup-saved-packages-change";
 
 function getSavedPackages(): string[] {
   if (typeof window === "undefined") return [];
@@ -13,32 +14,60 @@ function getSavedPackages(): string[] {
   }
 }
 
+function getSavedPackagesFromSnapshot(snapshot: string): string[] {
+  try {
+    return JSON.parse(snapshot);
+  } catch {
+    return [];
+  }
+}
+
+function getSavedSnapshot(): string {
+  if (typeof window === "undefined") return "[]";
+  return localStorage.getItem(STORAGE_KEY) || "[]";
+}
+
+function subscribeToSavedPackages(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(STORAGE_EVENT, onStoreChange);
+  window.addEventListener("focus", onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(STORAGE_EVENT, onStoreChange);
+    window.removeEventListener("focus", onStoreChange);
+  };
+}
+
+function writeSavedPackages(saved: string[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+  window.dispatchEvent(new Event(STORAGE_EVENT));
+}
+
 function toggleSaved(slug: string): boolean {
   const saved = getSavedPackages();
   const idx = saved.indexOf(slug);
   if (idx >= 0) {
     saved.splice(idx, 1);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    writeSavedPackages(saved);
     return false;
   } else {
     saved.push(slug);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    writeSavedPackages(saved);
     return true;
   }
 }
 
 export function SaveStar({ slug }: { slug: string }) {
-  const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    setIsSaved(getSavedPackages().includes(slug));
-  }, [slug]);
+  const savedSnapshot = useSyncExternalStore(subscribeToSavedPackages, getSavedSnapshot, () => "[]");
+  const isSaved = getSavedPackagesFromSnapshot(savedSnapshot).includes(slug);
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    const next = toggleSaved(slug);
-    setIsSaved(next);
+    toggleSaved(slug);
   }
 
   return (

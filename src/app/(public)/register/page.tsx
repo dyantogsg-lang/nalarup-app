@@ -55,7 +55,10 @@ export default function RegisterPage() {
     });
 
     if (authError) {
-      setError(authError.message);
+      const message = authError.message.toLowerCase().includes("already")
+        ? "Email ini sudah terdaftar. Masuk atau gunakan email lain."
+        : "Pendaftaran belum berhasil. Cek email/password lalu coba lagi.";
+      setError(message);
       setLoading(false);
       return;
     }
@@ -80,6 +83,7 @@ export default function RegisterPage() {
         {/* Nama */}
         <div className="float-label-wrap">
           <input
+            id="register-name"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -87,13 +91,16 @@ export default function RegisterPage() {
             placeholder=" "
             autoComplete="name"
             className="input-field"
+            aria-invalid={!!error}
+            aria-describedby={error ? "register-error" : undefined}
           />
-          <label>Nama Lengkap</label>
+          <label htmlFor="register-name">Nama Lengkap</label>
         </div>
 
         {/* Email */}
         <div className="float-label-wrap">
           <input
+            id="register-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -101,8 +108,10 @@ export default function RegisterPage() {
             placeholder=" "
             autoComplete="email"
             className="input-field"
+            aria-invalid={!!error}
+            aria-describedby={error ? "register-error" : undefined}
           />
-          <label>Email</label>
+          <label htmlFor="register-email">Email</label>
         </div>
 
         {/* Password + strength */}
@@ -110,6 +119,7 @@ export default function RegisterPage() {
           <div style={{ position: "relative" }}>
             <div className="float-label-wrap">
               <input
+                id="register-password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -118,8 +128,10 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 className="input-field"
                 style={{ paddingRight: "3rem" }}
+                aria-invalid={!!error}
+                aria-describedby={error ? "register-error register-password-strength" : "register-password-strength"}
               />
-              <label>Password</label>
+              <label htmlFor="register-password">Password</label>
             </div>
             <button
               type="button"
@@ -141,7 +153,7 @@ export default function RegisterPage() {
 
           {/* Password strength bar */}
           {passwordStrength && (
-            <div style={{ marginTop: "0.5rem" }}>
+            <div id="register-password-strength" style={{ marginTop: "0.5rem" }}>
               <div style={{ display: "flex", gap: "0.25rem", marginBottom: "0.3rem" }}>
                 {[0, 1, 2].map((i) => (
                   <div key={i} style={{
@@ -158,7 +170,7 @@ export default function RegisterPage() {
 
         {/* Error */}
         {error && (
-          <div style={{
+          <div id="register-error" role="alert" style={{
             background: "rgba(239,68,68,0.08)",
             border: "1px solid rgba(239,68,68,0.25)",
             borderRadius: "0.625rem",
@@ -169,7 +181,7 @@ export default function RegisterPage() {
             gap: "0.5rem",
             alignItems: "flex-start",
           }}>
-            <span style={{ flexShrink: 0 }}>⚠</span>
+            <span aria-hidden="true" style={{ flexShrink: 0 }}>⚠</span>
             {error}
           </div>
         )}

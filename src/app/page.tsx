@@ -3,42 +3,42 @@ import { ROUTES } from "@/lib/constants/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const STATS = [
-  { value: "120rb+", label: "Pengguna" },
-  { value: "15.400", label: "Soal" },
-  { value: "320", label: "Paket" },
-  { value: "87%", label: "Lulus" },
+  { value: "TWK", label: "Skor 0–150" },
+  { value: "TIU", label: "Skor 0–175" },
+  { value: "TKP", label: "Skor 45–225" },
+  { value: "311", label: "Target PG SKD" },
 ];
 
 const PACKAGES = [
   {
-    title: "SKD CPNS Paket A",
+    title: "SKD CPNS Paket Dasar",
     badge: "SKD",
     badgeColor: "badge-blue",
-    tag: "Gratis",
+    tag: "Open access",
     tagColor: "badge-green",
     duration: "100 menit",
     soal: "110 soal",
-    count: "24.500+ dikerjakan",
+    count: "Cocok untuk baseline pertama",
   },
   {
-    title: "SKD CPNS Paket B",
-    badge: "SKD",
+    title: "TWK Fokus Nasionalisme",
+    badge: "TWK",
     badgeColor: "badge-blue",
-    tag: "Gratis",
+    tag: "Open access",
     tagColor: "badge-green",
-    duration: "100 menit",
-    soal: "110 soal",
-    count: "18.200+ dikerjakan",
+    duration: "15 menit",
+    soal: "15 soal",
+    count: "Latihan pendek setelah tahu gap",
   },
   {
-    title: "SKB Administrasi",
-    badge: "SKB",
+    title: "TIU Logika Dasar",
+    badge: "TIU",
     badgeColor: "badge-violet",
-    tag: "Premium",
-    tagColor: "badge-amber",
-    duration: "90 menit",
-    soal: "100 soal",
-    count: "9.800+ dikerjakan",
+    tag: "Open access",
+    tagColor: "badge-green",
+    duration: "20 menit",
+    soal: "20 soal",
+    count: "Prioritas umum untuk menaikkan skor",
   },
 ];
 
@@ -64,8 +64,8 @@ const FEATURES = [
     ),
     color: "var(--violet)",
     bg: "var(--violet-subtle)",
-    title: "Pembahasan AI",
-    desc: "Penjelasan detail setiap soal — pahami pola, bukan hafal jawaban.",
+    title: "Pembahasan setelah submit",
+    desc: "Lihat alasan jawaban benar/salah setelah tryout selesai.",
   },
   {
     icon: (
@@ -86,8 +86,8 @@ const FEATURES = [
     ),
     color: "var(--amber)",
     bg: "var(--amber-subtle)",
-    title: "Tryout live",
-    desc: "Kerjakan bareng ribuan peserta — lihat peringkat real-time.",
+    title: "Score Safe Meter",
+    desc: "Pantau total skor dan jarakmu dari passing grade SKD.",
   },
   {
     icon: (
@@ -97,8 +97,8 @@ const FEATURES = [
     ),
     color: "var(--pink)",
     bg: "rgba(244,114,182,0.1)",
-    title: "Notifikasi jadwal",
-    desc: "Reminder tryout live dan deadline pendaftaran CASN.",
+    title: "Review salah dulu",
+    desc: "Fokus bahas jawaban salah agar sesi belajar lebih efisien.",
   },
   {
     icon: (
@@ -108,8 +108,8 @@ const FEATURES = [
     ),
     color: "var(--teal)",
     bg: "rgba(20,184,166,0.1)",
-    title: "Bisa offline",
-    desc: "Download paket soal — latihan kapan saja tanpa koneksi.",
+    title: "Open access fase awal",
+    desc: "Semua paket utama bisa dicoba tanpa badge berbayar atau paywall.",
   },
 ];
 
@@ -125,12 +125,12 @@ export default function LandingPage() {
         WebkitBackdropFilter: "blur(20px)",
         position: "sticky", top: 0, zIndex: 50,
       }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 1.5rem", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+        <div className="landing-nav-inner" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 1.5rem", minHeight: 60, display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "2rem", minWidth: 0 }}>
             <span style={{ fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em" }} className="gradient-text">
               NalarUp
             </span>
-            <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+            <div className="landing-nav-links" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
               <Link href={ROUTES.tryouts} style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500 }}>
                 Tryout
               </Link>
@@ -139,20 +139,20 @@ export default function LandingPage() {
               </a>
             </div>
           </div>
-          <div style={{ display: "flex", gap: "0.625rem", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "0.625rem", alignItems: "center", flexShrink: 0 }}>
             <ThemeToggle />
-            <Link href={ROUTES.login}>
+            <Link href={ROUTES.login} className="landing-login-link">
               <button className="btn-ghost" style={{ padding: "0.45rem 1rem", fontSize: "0.85rem", cursor: "pointer" }}>Masuk</button>
             </Link>
             <Link href={ROUTES.register}>
-              <button className="btn-primary" style={{ padding: "0.45rem 1.1rem", fontSize: "0.85rem", cursor: "pointer" }}>Coba Tryout</button>
+              <button className="btn-primary" style={{ padding: "0.45rem 1.1rem", fontSize: "0.85rem", cursor: "pointer" }}>Mulai</button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* ===== HERO ===== */}
-      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "6rem 1.5rem 4rem", position: "relative" }}>
+      <section className="landing-hero" style={{ maxWidth: 1200, margin: "0 auto", padding: "6rem 1.5rem 4rem", position: "relative" }}>
         <div className="glow-blob" style={{ width: 500, height: 400, background: "radial-gradient(circle, var(--green), transparent)", top: "0%", left: "10%" }} />
         <div className="glow-blob" style={{ width: 420, height: 350, background: "radial-gradient(circle, var(--violet), transparent)", top: "5%", right: "10%", animationDelay: "4s" }} />
 
@@ -170,9 +170,9 @@ export default function LandingPage() {
           </div>
 
           {/* Headline */}
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.12, letterSpacing: "-0.035em", color: "var(--text-primary)", marginBottom: "1.5rem" }}>
-            Latihan lebih cerdas,{" "}
-            <span className="gradient-text">lulus lebih cepat</span>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.035em", color: "var(--text-primary)", marginBottom: "1.5rem" }}>
+            Naikkan skor SKD sampai{" "}
+            <span className="gradient-text">aman passing grade</span>
           </h1>
 
           {/* Subtitle */}
@@ -193,7 +193,7 @@ export default function LandingPage() {
             </Link>
             <Link href={ROUTES.login}>
               <button className="btn-ghost" style={{ padding: "0.9rem 1.5rem", fontSize: "0.95rem", cursor: "pointer", borderRadius: "0.75rem" }}>
-                Sudah punya akun
+                Lihat contoh hasil
               </button>
             </Link>
           </div>
@@ -201,9 +201,9 @@ export default function LandingPage() {
           {/* Mini stat cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", maxWidth: 560, margin: "0 auto" }}>
             {[
-              { label: "Skor TWK", value: "95/100", pct: 95, color: "var(--blue)" },
-              { label: "Peringkat", value: "#12", pct: 88, color: "var(--violet)" },
-              { label: "Soal dikerjakan", value: "108/110", pct: 98, color: "var(--green)" },
+              { label: "Skor total", value: "287/311", pct: 92, color: "var(--blue)" },
+              { label: "Gap PG", value: "-24", pct: 68, color: "var(--amber)" },
+              { label: "Fokus", value: "TIU", pct: 74, color: "var(--violet)" },
             ].map((s) => (
               <div key={s.label} className="glass-card" style={{ padding: "1rem", textAlign: "left" }}>
                 <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", fontWeight: 600, marginBottom: "0.4rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
@@ -241,14 +241,14 @@ export default function LandingPage() {
       <section style={{ maxWidth: 1200, margin: "0 auto", padding: "5rem 1.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <h2 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.03em", lineHeight: 1.25, marginBottom: "0.75rem" }}>
-            Mulai dari yang gratis
+            Mulai dari baseline yang jelas
           </h2>
           <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
-            Pilih paket tryout dan langsung kerjakan. Tanpa daftar bimbel, tanpa bayar.
+            Ambil tryout pertama, lihat gap passing grade, lalu lanjut latihan terarah.
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "1.25rem" }}>
           {PACKAGES.map((pkg) => (
             <div key={pkg.title} className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
               <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
@@ -289,7 +289,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "1.25rem" }}>
           {FEATURES.map((f) => (
             <div key={f.title} className="glass-card" style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
               <div style={{
@@ -345,6 +345,14 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .landing-nav-inner { padding: 0 1rem !important; }
+          .landing-nav-links, .landing-login-link { display: none !important; }
+          .landing-hero { padding-top: 3.25rem !important; }
+        }
+      `}</style>
 
       {/* ===== FOOTER ===== */}
       <footer style={{ borderTop: "1px solid var(--border)", padding: "2rem 1.5rem" }}>

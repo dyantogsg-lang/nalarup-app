@@ -11,7 +11,7 @@ test.describe("Landing & auth", () => {
   test("unauthenticated access to dashboard redirects to login", async ({ page }) => {
     await page.goto("/dashboard");
     await page.waitForURL(/\/login/);
-    await expect(page.getByPlaceholder("kamu@email.com")).toBeVisible();
+    await expect(page.locator('form input[type="email"]')).toBeVisible();
   });
 
   test("register → dashboard", async ({ page, registeredUser }) => {
@@ -33,8 +33,9 @@ test.describe("Landing & auth", () => {
     await page.waitForURL(/\/login/);
 
     // Re-login should work.
-    await page.getByPlaceholder("kamu@email.com").fill(registeredUser.email);
-    await page.getByPlaceholder("••••••••").fill(registeredUser.password);
+    const inputs = page.locator("form input");
+    await inputs.nth(0).fill(registeredUser.email);
+    await inputs.nth(1).fill(registeredUser.password);
     await page.getByRole("button", { name: /Masuk/i }).click();
     await page.waitForURL(/\/dashboard/);
   });

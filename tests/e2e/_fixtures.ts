@@ -27,9 +27,10 @@ export async function registerUser(
   const password = "Test1234!";
 
   await page.goto("/register");
-  await page.getByPlaceholder("Nama kamu").fill(fullName);
-  await page.getByPlaceholder("kamu@email.com").fill(email);
-  await page.getByPlaceholder("Minimal 6 karakter").fill(password);
+  const inputs = page.locator("form input");
+  await inputs.nth(0).fill(fullName);
+  await inputs.nth(1).fill(email);
+  await inputs.nth(2).fill(password);
   await page.getByRole("button", { name: /Daftar Gratis/i }).click();
 
   await page.waitForURL("**/dashboard", { timeout: 15_000 });
@@ -40,8 +41,8 @@ export async function registerUser(
 
 export async function loginUser(page: Page, user: AuthedUser): Promise<void> {
   await page.goto("/login");
-  await page.getByPlaceholder("kamu@email.com").fill(user.email);
-  await page.getByPlaceholder("••••••••").fill(user.password);
+  await page.getByLabel("Email").fill(user.email);
+  await page.getByLabel("Password").fill(user.password);
   await page.getByRole("button", { name: /Masuk/i }).click();
   await page.waitForURL("**/dashboard", { timeout: 15_000 });
 }

@@ -5,7 +5,6 @@ import { ROUTES } from "@/lib/constants/routes";
 import { db } from "@/lib/db";
 import { attempts, tryoutPackages } from "@/lib/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
-import RadarChart from "@/components/dashboard/RadarChart";
 
 /* ===== SVG ICON COMPONENTS ===== */
 const IconClipboard = () => (
@@ -96,7 +95,7 @@ export default async function DashboardPage() {
           marginBottom: "0.3rem",
           letterSpacing: "-0.025em",
         }}>
-          Hei, {firstName} 👋
+          Hei, {firstName} <span aria-hidden="true">👋</span>
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", lineHeight: 1.6 }}>
           {isNewUser
@@ -223,7 +222,7 @@ function NewUserDashboard() {
             letterSpacing: "-0.025em",
             lineHeight: 1.3,
           }}>
-            Ayo mulai tryout pertama kamu
+            Mulai SKD dasar untuk baca baseline kamu
           </h2>
           <p style={{
             color: "var(--text-muted)",
@@ -232,13 +231,13 @@ function NewUserDashboard() {
             margin: "0 auto 2rem",
             lineHeight: 1.75,
           }}>
-            Selesai dalam 100 menit — langsung tahu posisimu vs passing grade SKD.
-            Gratis, tanpa batas pengulangan.
+            Selesai dalam 100 menit — langsung tahu skor total, gap passing grade, dan subtes yang harus kamu fokuskan.
+            Semua paket utama open access selama fase awal.
           </p>
 
           <Link href={ROUTES.tryouts}>
             <button className="btn-primary" style={{ fontSize: "0.95rem", padding: "0.8rem 2rem", cursor: "pointer" }}>
-              Pilih Paket Tryout
+              Mulai SKD Dasar
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -572,15 +571,39 @@ function ReturningUserDashboard({
         {/* Performa Subtes card */}
         <div className="glass-card" style={{
           padding: "1.5rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
         }}>
-          <RadarChart
-            twk={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.twk) : 0}
-            tiu={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tiu) : 0}
-            tkp={lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tkp) : 0}
-          />
+          <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em", marginBottom: "1rem" }}>
+            Performa Subtes
+          </h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.75rem" }}>
+            {[
+              { label: "TWK", score: lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.twk) : 0, target: PASSING_GRADE.twk, color: "var(--blue)" },
+              { label: "TIU", score: lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tiu) : 0, target: PASSING_GRADE.tiu, color: "var(--violet)" },
+              { label: "TKP", score: lastScore != null ? Math.round((lastScore / PASSING_GRADE.total) * PASSING_GRADE.tkp) : 0, target: PASSING_GRADE.tkp, color: "var(--green)" },
+            ].map((subtest) => {
+              const safe = subtest.score >= subtest.target;
+              const pct = Math.min(100, Math.round((subtest.score / subtest.target) * 100));
+              return (
+                <div key={subtest.label} style={{ background: "var(--bg-card2)", border: "1px solid var(--border)", borderRadius: "0.875rem", padding: "0.85rem", textAlign: "center" }}>
+                  <div className="num" style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: "0.15rem" }}>
+                    {subtest.score}
+                  </div>
+                  <div style={{ fontSize: "0.68rem", color: "var(--text-dim)", marginBottom: "0.55rem" }}>
+                    {subtest.label} · PG {subtest.target}
+                  </div>
+                  <div aria-label={`${subtest.label} ${subtest.score} dari target ${subtest.target}`} style={{ height: 5, borderRadius: 999, background: "var(--border)", overflow: "hidden", marginBottom: "0.55rem" }}>
+                    <div style={{ width: `${pct}%`, height: "100%", borderRadius: 999, background: subtest.color }} />
+                  </div>
+                  <span style={{ fontSize: "0.68rem", fontWeight: 700, color: safe ? "var(--green)" : "var(--amber)" }}>
+                    {safe ? "Aman" : `Kurang ${subtest.target - subtest.score}`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          <p style={{ marginTop: "1rem", color: "var(--text-muted)", fontSize: "0.78rem", lineHeight: 1.6 }}>
+            Fokus berikutnya: perbaiki subtes dengan gap terbesar sebelum mengulang full tryout.
+          </p>
         </div>
 
         {/* History list card */}

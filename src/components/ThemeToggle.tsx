@@ -1,18 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const THEME_EVENT = "nalarup-theme-change";
+
+function getThemeSnapshot(): string {
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+}
+
+function subscribeToTheme(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener(THEME_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(THEME_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme");
-    setDark(current === "dark");
-  }, []);
+  const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, () => "light");
+  const dark = theme === "dark";
 
   function toggle() {
     const next = !dark;
-    setDark(next);
     if (next) {
       document.documentElement.setAttribute("data-theme", "dark");
       localStorage.setItem("nalarup-theme", "dark");
@@ -20,6 +32,7 @@ export default function ThemeToggle() {
       document.documentElement.removeAttribute("data-theme");
       localStorage.setItem("nalarup-theme", "light");
     }
+    window.dispatchEvent(new Event(THEME_EVENT));
   }
 
   return (

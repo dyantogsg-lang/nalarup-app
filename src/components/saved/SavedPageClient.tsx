@@ -1,47 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { SaveStar } from "@/components/catalog/SaveStar";
 
 const STORAGE_KEY = "nalarup-saved-packages";
+const STORAGE_EVENT = "nalarup-saved-packages-change";
 
-function getSavedSlugs(): string[] {
-  if (typeof window === "undefined") return [];
+function getSavedSnapshot(): string {
+  if (typeof window === "undefined") return "[]";
+  return localStorage.getItem(STORAGE_KEY) || "[]";
+}
+
+function getSavedSlugsFromSnapshot(snapshot: string): string[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return JSON.parse(snapshot);
   } catch {
     return [];
   }
 }
 
+function subscribeToSavedSlugs(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(STORAGE_EVENT, onStoreChange);
+  window.addEventListener("focus", onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(STORAGE_EVENT, onStoreChange);
+    window.removeEventListener("focus", onStoreChange);
+  };
+}
+
 export function SavedPageClient() {
-  const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const savedSnapshot = useSyncExternalStore(subscribeToSavedSlugs, getSavedSnapshot, () => "[]");
+  const savedSlugs = getSavedSlugsFromSnapshot(savedSnapshot);
 
-  useEffect(() => {
-    setMounted(true);
-    setSavedSlugs(getSavedSlugs());
-
-    // Listen for storage changes (from other tabs or SaveStar clicks)
-    function onStorage() {
-      setSavedSlugs(getSavedSlugs());
-    }
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
-
-  // Re-check on focus (user might unsave from catalog page)
-  useEffect(() => {
-    function onFocus() {
-      setSavedSlugs(getSavedSlugs());
-    }
-    window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
-  }, []);
-
-  if (!mounted) {
+  if (typeof window === "undefined") {
     return (
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
         <div style={{ marginBottom: "1.75rem" }}>
