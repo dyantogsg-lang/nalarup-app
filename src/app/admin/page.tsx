@@ -41,6 +41,13 @@ export default async function AdminDashboardPage() {
     })
     .from(attempts);
 
+  const [reviewStats] = await db
+    .select({
+      unverified: sql<number>`count(*) filter (where ${questions.verified} = false and ${questions.status} != 'archived')::int`,
+      verifiedCount: sql<number>`count(*) filter (where ${questions.verified} = true)::int`,
+    })
+    .from(questions);
+
   return (
     <div style={{ maxWidth: 1000 }}>
       <h1 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#F1F5F9", marginBottom: "0.25rem" }}>
@@ -69,6 +76,13 @@ export default async function AdminDashboardPage() {
           value={qStats?.total ?? 0}
           sub={`${qStats?.published ?? 0} published · ${qStats?.draft ?? 0} draft`}
           href="/admin/questions"
+        />
+        <Card
+          title="Review Queue"
+          value={reviewStats?.unverified ?? 0}
+          sub={`${reviewStats?.verifiedCount ?? 0} verified · butuh review`}
+          href="/admin/review-queue"
+          alert={(reviewStats?.unverified ?? 0) > 0}
         />
         <Card
           title="Laporan terbuka"

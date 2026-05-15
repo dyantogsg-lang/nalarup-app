@@ -43,6 +43,7 @@ export default async function AdminLayout({
 
         <nav style={{ padding: "0.75rem 0.5rem", flex: 1 }}>
           <AdminLink href="/admin">Dashboard</AdminLink>
+          <AdminLink href="/admin/review-queue">⚠️ Review Queue</AdminLink>
           <AdminLink href="/admin/packages">Paket Tryout</AdminLink>
           <AdminLink href="/admin/questions">Bank Soal</AdminLink>
           <AdminLink href="/admin/reports">Laporan Soal</AdminLink>

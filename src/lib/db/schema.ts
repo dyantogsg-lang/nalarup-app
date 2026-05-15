@@ -230,6 +230,12 @@ export const questions = pgTable(
     explanationShort: text("explanation_short"),
     sourceNote: text("source_note"),
     status: questionStatusEnum("status").notNull().default("draft"),
+    verified: boolean("verified").notNull().default(false),
+    reviewedBy: uuid("reviewed_by").references(() => profiles.id, {
+      onDelete: "set null",
+    }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    reviewNotes: text("review_notes"),
     createdBy: uuid("created_by").references(() => profiles.id, {
       onDelete: "set null",
     }),
