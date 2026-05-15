@@ -5,6 +5,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { db } from "@/lib/db";
 import { attempts, tryoutPackages } from "@/lib/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
+import DailyMotivationBanner from "@/components/motivation/DailyMotivationBanner";
 
 /* ===== SVG ICON COMPONENTS ===== */
 const IconClipboard = () => (
@@ -167,6 +168,11 @@ export default async function DashboardPage() {
           gap={gap}
         />
       )}
+
+      {/* Daily motivation — selalu hadir di bawah, kontekstual harian */}
+      <div style={{ marginTop: "1.25rem" }}>
+        <DailyMotivationBanner />
+      </div>
     </div>
   );
 }

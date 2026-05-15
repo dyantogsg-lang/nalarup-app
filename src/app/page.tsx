@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import ThemeToggle from "@/components/ThemeToggle";
+import MotivationGrid from "@/components/motivation/MotivationGrid";
+import MotivationMarquee from "@/components/motivation/MotivationMarquee";
 
 const STATS = [
   { value: "TWK", label: "Skor 0–150" },
@@ -137,6 +139,9 @@ export default function LandingPage() {
               <a href="#fitur" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500 }}>
                 Fitur
               </a>
+              <a href="#motivasi" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500 }}>
+                Motivasi
+              </a>
             </div>
           </div>
           <div style={{ display: "flex", gap: "0.625rem", alignItems: "center", flexShrink: 0 }}>
@@ -237,6 +242,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ===== MOTIVATION MARQUEE — running reminders ===== */}
+      <MotivationMarquee />
+
       {/* ===== PAKET TRYOUT ===== */}
       <section style={{ maxWidth: 1200, margin: "0 auto", padding: "5rem 1.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -315,6 +323,41 @@ export default function LandingPage() {
 
       <hr className="divider" />
 
+      {/* ===== MOTIVASI — kalimat penyemangat dari proses, bukan testimoni ===== */}
+      <section id="motivasi" style={{ maxWidth: 1200, margin: "0 auto", padding: "5rem 1.5rem", position: "relative" }}>
+        <div className="glow-blob" style={{ width: 380, height: 300, background: "radial-gradient(circle, var(--blue), transparent)", top: "10%", left: "5%" }} />
+        <div className="glow-blob" style={{ width: 320, height: 260, background: "radial-gradient(circle, var(--violet), transparent)", top: "30%", right: "8%", animationDelay: "3s" }} />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              background: "var(--violet-subtle)", border: "1px solid rgba(124,58,237,0.25)",
+              borderRadius: "9999px", padding: "0.3rem 0.9rem", marginBottom: "1.25rem",
+            }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3l1.9 5.5L19 10l-5.1 1.5L12 17l-1.9-5.5L5 10l5.1-1.5L12 3z"/>
+              </svg>
+              <span style={{ fontSize: "0.72rem", color: "var(--violet)", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                Catatan untuk kamu
+              </span>
+            </div>
+            <h2 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.03em", lineHeight: 1.25, marginBottom: "0.75rem" }}>
+              Pengingat kecil supaya{" "}
+              <span className="gradient-text">tetap konsisten</span>
+            </h2>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", maxWidth: 540, margin: "0 auto", lineHeight: 1.7 }}>
+              Bukan janji manis dari orang lain — ini prinsip sederhana yang kepakai
+              setiap kamu mengerjakan tryout di sini.
+            </p>
+          </div>
+
+          <MotivationGrid />
+        </div>
+      </section>
+
+      <hr className="divider" />
+
       {/* ===== CTA FINAL ===== */}
       <section style={{ maxWidth: 720, margin: "0 auto", padding: "6rem 1.5rem 7rem", textAlign: "center", position: "relative" }}>
         <div className="glow-blob" style={{ width: 400, height: 300, background: "radial-gradient(circle, var(--violet), transparent)", top: "20%", left: "50%", transform: "translateX(-50%)" }} />
@@ -363,6 +406,7 @@ export default function LandingPage() {
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             <Link href={ROUTES.tryouts} style={{ color: "var(--text-dim)", textDecoration: "none", fontSize: "0.8rem" }}>Tryout</Link>
             <a href="#fitur" style={{ color: "var(--text-dim)", textDecoration: "none", fontSize: "0.8rem" }}>Fitur</a>
+            <a href="#motivasi" style={{ color: "var(--text-dim)", textDecoration: "none", fontSize: "0.8rem" }}>Motivasi</a>
             <Link href={ROUTES.login} style={{ color: "var(--text-dim)", textDecoration: "none", fontSize: "0.8rem" }}>Masuk</Link>
           </div>
           <p style={{ color: "var(--text-dim)", fontSize: "0.72rem", margin: 0 }}>© 2025 NalarUp · Platform Tryout CASN Indonesia</p>

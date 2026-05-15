@@ -1,36 +1,12 @@
-const ROTATING_QUOTES = [
-  {
-    quote: "Skor TWK saya naik dari 65 ke 112 setelah 2 bulan rutin tryout di NalarUp.",
-    name: "Rizky A.",
-    role: "Lulus CPNS Kemenkeu 2024",
-    avatar: "RA",
-    color: "#2563EB",
-  },
-  {
-    quote: "Analisis per subtes bikin saya tahu harus fokus ke mana. Bukan cuma latihan buta.",
-    name: "Siti N.",
-    role: "Lulus CPNS Kemenkes 2024",
-    avatar: "SN",
-    color: "#7C3AED",
-  },
-  {
-    quote: "Fitur review pembahasan yang paling membantu. Langsung tahu kenapa jawaban saya salah.",
-    name: "Bagas P.",
-    role: "Lulus CPNS BPS 2024",
-    avatar: "BP",
-    color: "#22C55E",
-  },
-];
+import RotatingMotivation from "@/components/motivation/RotatingMotivation";
 
 const LIVE_STATS = [
-  { value: "8.500+", label: "Peserta aktif" },
-  { value: "12.000+", label: "Soal terverifikasi" },
-  { value: "94%", label: "Lulus passing grade" },
+  { value: "TWK", label: "Wawasan Kebangsaan" },
+  { value: "TIU", label: "Intelegensia Umum" },
+  { value: "TKP", label: "Karakteristik Pribadi" },
 ];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
-  const q = ROTATING_QUOTES[0];
-
   return (
     <div style={{ minHeight: "100vh", display: "flex", background: "var(--bg-base)" }}>
 
@@ -87,42 +63,18 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             Simulasi realistis, analisis kelemahan per subtes, dan loop perbaikan terarah.
           </p>
 
-          {/* Live stats */}
-          <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+          {/* Subtes legend (replaces vanity stats) */}
+          <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
             {LIVE_STATS.map((s) => (
               <div key={s.label}>
-                <div className="num" style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)" }}>{s.value}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", marginTop: "0.1rem" }}>{s.label}</div>
+                <div className="num gradient-text" style={{ fontSize: "1.05rem", fontWeight: 800, letterSpacing: "-0.02em" }}>{s.value}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-dim)", marginTop: "0.15rem" }}>{s.label}</div>
               </div>
             ))}
           </div>
 
-          {/* Rotating testimonial */}
-          <div style={{
-            background: "var(--bg-card2)",
-            border: "1px solid var(--border)",
-            borderLeft: `3px solid ${q.color}`,
-            borderRadius: "0.75rem",
-            padding: "1.25rem",
-          }}>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.7, marginBottom: "1rem", fontStyle: "italic" }}>
-              &ldquo;{q.quote}&rdquo;
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: "50%",
-                background: `linear-gradient(135deg, ${q.color}, ${q.color}88)`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "0.7rem", fontWeight: 700, color: "#fff", flexShrink: 0,
-              }}>
-                {q.avatar}
-              </div>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: "0.8rem", color: "var(--text-primary)" }}>{q.name}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>{q.role}</div>
-              </div>
-            </div>
-          </div>
+          {/* Rotating motivation (replaces testimoni) */}
+          <RotatingMotivation intervalMs={6000} />
         </div>
 
         {/* Footer */}

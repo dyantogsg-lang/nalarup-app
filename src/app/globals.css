@@ -451,6 +451,95 @@ body {
   box-shadow: 0 0 8px rgba(37,99,235,0.5);
 }
 
+/* ===================== MOTIVATION MARQUEE ===================== */
+.motivation-marquee-track {
+  display: inline-flex;
+  gap: 2.5rem;
+  white-space: nowrap;
+  animation: motivation-marquee-scroll 60s linear infinite;
+  will-change: transform;
+}
+
+.motivation-marquee:hover .motivation-marquee-track {
+  animation-play-state: paused;
+}
+
+.motivation-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: -0.005em;
+}
+
+.motivation-marquee-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+@keyframes motivation-marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===================== MOTIVATION GRID CARD HOVER ===================== */
+.motivation-grid-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="dark"] .motivation-grid-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================== MOTIVATION ENTRY ANIMATIONS ===================== */
+@keyframes motivation-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.motivation-fade-in {
+  animation: motivation-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Subtle pulse for streak/score-safe indicator */
+@keyframes motivation-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1;   }
+  50%      { transform: scale(1.08); opacity: 0.85; }
+}
+
+.motivation-pulse {
+  animation: motivation-pulse 2.4s ease-in-out infinite;
+}
+
+/* Daily banner gradient sheen */
+.daily-motivation::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  pointer-events: none;
+  animation: motivation-sheen 8s ease-in-out infinite;
+}
+
+[data-theme="dark"] .daily-motivation::after {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+}
+
+@keyframes motivation-sheen {
+  0%   { left: -100%; }
+  60%  { left: 130%; }
+  100% { left: 130%; }
+}
+
 /* ===================== REDUCED MOTION ===================== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
