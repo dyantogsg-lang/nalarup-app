@@ -3,44 +3,40 @@ import { ROUTES } from "@/lib/constants/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 import MotivationGrid from "@/components/motivation/MotivationGrid";
 import MotivationMarquee from "@/components/motivation/MotivationMarquee";
+import { getLandingStats } from "@/lib/landing/stats";
 
-const STATS = [
-  { value: "TWK", label: "Skor 0–150" },
-  { value: "TIU", label: "Skor 0–175" },
-  { value: "TKP", label: "Skor 45–225" },
-  { value: "311", label: "Target PG SKD" },
-];
+export const revalidate = 60;
 
-const PACKAGES = [
+const PACKAGES_PREVIEW = [
   {
-    title: "SKD CPNS Paket Dasar",
+    title: "SKD CPNS Simulasi Penuh",
     badge: "SKD",
     badgeColor: "badge-blue",
-    tag: "Open access",
+    tag: "Format BKN asli",
     tagColor: "badge-green",
     duration: "100 menit",
     soal: "110 soal",
-    count: "Cocok untuk baseline pertama",
+    count: "TWK 30 · TIU 35 · TKP 45",
   },
   {
-    title: "TWK Fokus Nasionalisme",
+    title: "Practice TWK Fokus",
     badge: "TWK",
     badgeColor: "badge-blue",
     tag: "Open access",
     tagColor: "badge-green",
     duration: "15 menit",
     soal: "15 soal",
-    count: "Latihan pendek setelah tahu gap",
+    count: "Pancasila · UUD · NKRI · Sejarah",
   },
   {
-    title: "TIU Logika Dasar",
+    title: "Practice TIU Logika",
     badge: "TIU",
     badgeColor: "badge-violet",
     tag: "Open access",
     tagColor: "badge-green",
-    duration: "20 menit",
-    soal: "20 soal",
-    count: "Prioritas umum untuk menaikkan skor",
+    duration: "15 menit",
+    soal: "15 soal",
+    count: "Verbal · Numerik · Figural",
   },
 ];
 
@@ -115,7 +111,17 @@ const FEATURES = [
   },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const stats = await getLandingStats();
+
+  // Bank soal stats untuk hero & stats bar
+  const STATS = [
+    { value: stats.totalPackages.toString(), label: "Paket Tryout" },
+    { value: stats.totalQuestions.toLocaleString("id-ID"), label: "Total Soal Bank" },
+    { value: stats.twkCount.toString(), label: "Soal TWK" },
+    { value: stats.tiuCount.toString(), label: "Soal TIU" },
+    { value: stats.tkpCount.toString(), label: "Soal TKP" },
+  ];
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-base)", overflowX: "hidden" }}>
 
@@ -226,9 +232,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ===== STATS BAR ===== */}
+      {/* ===== STATS BAR — live data dari DB ===== */}
       <section style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", background: "var(--bg-card)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "1.5rem", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", textAlign: "center" }}>
+        <div className="landing-stats-grid" style={{ maxWidth: 1200, margin: "0 auto", padding: "1.5rem", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1rem", textAlign: "center" }}>
           {STATS.map((s) => (
             <div key={s.label}>
               <div className="num" style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
@@ -257,7 +263,7 @@ export default function LandingPage() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "1.25rem" }}>
-          {PACKAGES.map((pkg) => (
+          {PACKAGES_PREVIEW.map((pkg) => (
             <div key={pkg.title} className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
               <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
                 <span className={`badge ${pkg.badgeColor}`}>{pkg.badge}</span>
@@ -390,10 +396,14 @@ export default function LandingPage() {
       </section>
 
       <style>{`
+        @media (max-width: 768px) {
+          .landing-stats-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
         @media (max-width: 640px) {
           .landing-nav-inner { padding: 0 1rem !important; }
           .landing-nav-links, .landing-login-link { display: none !important; }
           .landing-hero { padding-top: 3.25rem !important; }
+          .landing-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
 
