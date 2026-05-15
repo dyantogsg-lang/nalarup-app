@@ -318,8 +318,9 @@ async function main() {
     questionIds: [...takeTWK(10), ...takeTIU(10), ...takeTKP(10)],
   });
 
-  // 2-4. SKD Simulasi Penuh (3 paket, format BKN asli 110 soal / 100 menit)
-  for (let i = 1; i <= 3; i++) {
+  // 2-5. SKD Simulasi Penuh (4 paket, format BKN asli 110 soal / 100 menit)
+  // Total budget: TWK 30*4=120 (sisa 49), TIU 35*4=140 (sisa 29), TKP 45*4=180 (sisa 381)
+  for (let i = 1; i <= 4; i++) {
     packages.push({
       title: `SKD CPNS Simulasi Penuh — Paket ${i}`,
       slug: `skd-simulasi-penuh-${i}`,
@@ -340,12 +341,13 @@ async function main() {
     });
   }
 
-  // 5-7. Practice TWK (3 paket, 15 soal each)
-  for (let i = 1; i <= 3; i++) {
+  // 7-9. Practice TWK (3 paket, sisa 49 TWK setelah SKD = 3 × 15)
+  const twkPracticeCount = Math.min(3, Math.floor((TWK.length - twkCursor) / 15));
+  for (let i = 1; i <= twkPracticeCount; i++) {
     packages.push({
       title: `Practice TWK — Set ${i}`,
       slug: `practice-twk-${i}`,
-      description: `Latihan fokus TWK (Tes Wawasan Kebangsaan): Pancasila, UUD 1945, Bhinneka, NKRI, Sejarah, Bela Negara. 15 soal, durasi 15 menit. Mode practice — pembahasan langsung.`,
+      description: `Latihan fokus TWK: Pancasila, UUD 1945, Bhinneka, NKRI, Sejarah, Bela Negara. 15 soal, durasi 15 menit.`,
       mode: "practice",
       durationMinutes: 15,
       difficulty: i === 1 ? "easy" : i === 2 ? "medium" : "hard",
@@ -355,33 +357,36 @@ async function main() {
     });
   }
 
-  // 8-10. Practice TIU (3 paket, 15 soal each)
-  for (let i = 1; i <= 3; i++) {
+  // 10. Practice TIU (1 paket, sisa 29 TIU)
+  if (TIU.length - tiuCursor >= 15) {
     packages.push({
-      title: `Practice TIU — Set ${i}`,
-      slug: `practice-tiu-${i}`,
-      description: `Latihan fokus TIU (Tes Intelegensia Umum): verbal (analogi, sinonim, silogisme), numerik (deret, aritmatika, soal cerita), figural. 15 soal, durasi 15 menit.`,
+      title: `Practice TIU — Set 1`,
+      slug: `practice-tiu-1`,
+      description: `Latihan fokus TIU: verbal (analogi, sinonim, silogisme), numerik (deret, aritmatika, soal cerita), figural. 15 soal, durasi 15 menit.`,
       mode: "practice",
       durationMinutes: 15,
-      difficulty: i === 1 ? "easy" : i === 2 ? "medium" : "hard",
+      difficulty: "medium",
       categorySlug: "tiu",
       composition: [{ subtest: "TIU", count: 15 }],
       questionIds: takeTIU(15),
     });
   }
 
-  // 11. Practice TKP (1 paket, 11 soal — sisa pool TKP)
-  packages.push({
-    title: `Practice TKP — Set Bonus`,
-    slug: `practice-tkp-bonus`,
-    description: `Latihan bonus TKP dari sisa pool master: Pelayanan Publik, Integritas, Profesionalisme, Jejaring Kerja. Scoring 1-5 per opsi. 11 soal, durasi 15 menit.`,
-    mode: "practice",
-    durationMinutes: 15,
-    difficulty: "medium",
-    categorySlug: "tkp",
-    composition: [{ subtest: "TKP", count: 11 }],
-    questionIds: takeTKP(11),
-  });
+  // 11+. Practice TKP — gunakan max sisa TKP, batasi maksimal 20 paket
+  const tkpPracticeCount = Math.min(20, Math.floor((TKP.length - tkpCursor) / 15));
+  for (let i = 1; i <= tkpPracticeCount; i++) {
+    packages.push({
+      title: `Practice TKP — Set ${i}`,
+      slug: `practice-tkp-${i}`,
+      description: `Latihan fokus TKP: Pelayanan Publik, Integritas, Profesionalisme, Jejaring Kerja, Sosbud, IT, Anti Radikalisme. Scoring 1-5 per opsi. 15 soal, durasi 20 menit.`,
+      mode: "practice",
+      durationMinutes: 20,
+      difficulty: i <= 4 ? "easy" : i <= 8 ? "medium" : "hard",
+      categorySlug: "tkp",
+      composition: [{ subtest: "TKP", count: 15 }],
+      questionIds: takeTKP(15),
+    });
+  }
 
   console.log(`  · prepared ${packages.length} packages`);
   console.log(`    used: TWK ${twkCursor}/${TWK.length}, TIU ${tiuCursor}/${TIU.length}, TKP ${tkpCursor}/${TKP.length}`);

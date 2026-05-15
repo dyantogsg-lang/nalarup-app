@@ -1,15 +1,29 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { questions, questionOptions } from "@/lib/db/schema";
+import { questions, questionOptions, packageQuestions } from "@/lib/db/schema";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { PACKAGE_CONTENT_CACHE_TAG } from "@/lib/exam/packageContent";
 import {
   getAdminQuestionById,
   validateQuestionForPublish,
 } from "@/lib/admin/questionQueries";
+
+/**
+ * Opt #4 — invalidate exam cache untuk semua paket yang memuat question ini.
+ * Dipakai setiap kali isi soal/options/status berubah.
+ * Pakai updateTag (Next 16) supaya read-your-own-writes dari server action.
+ */
+async function invalidatePackagesContainingQuestion(questionId: string) {
+  const rows = await db
+    .select({ packageId: packageQuestions.packageId })
+    .from(packageQuestions)
+    .where(eq(packageQuestions.questionId, questionId));
+  for (const r of rows) updateTag(PACKAGE_CONTENT_CACHE_TAG(r.packageId));
+}
 
 export interface QuestionFormInput {
   id?: string;
@@ -99,6 +113,8 @@ export async function upsertQuestion(
 
       revalidatePath("/admin/questions");
       revalidatePath(`/admin/questions/${input.id}/edit`);
+      // Opt #4 — bust cache di semua paket yang mengandung soal ini.
+      await invalidatePackagesContainingQuestion(input.id);
       return { ok: true, id: input.id };
     }
 
@@ -146,6 +162,8 @@ export async function upsertQuestion(
 
 export async function deleteQuestion(id: string): Promise<never> {
   await requireAdmin();
+  // Opt #4 — invalidate paket sebelum hapus, supaya tag list masih bisa di-resolve.
+  await invalidatePackagesContainingQuestion(id);
   await db.delete(questions).where(eq(questions.id, id));
   revalidatePath("/admin/questions");
   redirect("/admin/questions");
@@ -171,5 +189,7 @@ export async function setQuestionStatus(
 
   revalidatePath("/admin/questions");
   revalidatePath(`/admin/questions/${id}/edit`);
+  // Opt #4 — status berubah (publish/archive) → bust cache paket.
+  await invalidatePackagesContainingQuestion(id);
   return { ok: true };
 }

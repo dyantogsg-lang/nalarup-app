@@ -64,6 +64,22 @@ export function ExamRoom({
   >(new Map());
   const seqRef = useRef(0);
   const flushingRef = useRef(false);
+  /**
+   * Opt #3b — Debounce timer ref.
+   * Tiap perubahan ditahan 500 ms; klik beruntun (A→B→C) hanya hasilkan
+   * satu network roundtrip dengan payload final. Cancel saat user pindah
+   * soal supaya nothing bocor antar halaman.
+   */
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const SAVE_DEBOUNCE_MS = 500;
+
+  /**
+   * Opt #5 — Outbox persistence di localStorage.
+   * Kunci per attempt id; isi: { qid: { selectedOptionId, isMarkedDoubtful } }.
+   * Recover saat mount kalau ada save yang gagal di sesi sebelumnya
+   * (mis. user tutup tab di tengah pengerjaan, koneksi flaky).
+   */
+  const outboxKey = `nalarup:outbox:${attempt.id}`;
 
   // ─── Timer ────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -156,6 +172,23 @@ export function ExamRoom({
           }
           break;
         }
+        // Opt #5 — sukses sync: hapus dari outbox per-question.
+        try {
+          if (typeof localStorage !== "undefined") {
+            const raw = localStorage.getItem(outboxKey);
+            if (raw) {
+              const obj = JSON.parse(raw);
+              delete obj[qid];
+              if (Object.keys(obj).length === 0) {
+                localStorage.removeItem(outboxKey);
+              } else {
+                localStorage.setItem(outboxKey, JSON.stringify(obj));
+              }
+            }
+          }
+        } catch {
+          // ignore
+        }
       }
       if (pendingRef.current.size === 0) setSaveState("saved");
     } catch {
@@ -179,12 +212,92 @@ export function ExamRoom({
       isMarkedDoubtful,
       seq: seqRef.current,
     });
-    if (typeof navigator === "undefined" || navigator.onLine) {
-      void flushPending();
-    } else {
-      setSaveState("error");
+
+    // Opt #5 — persist outbox ke localStorage segera, sebelum network call.
+    // Kalau browser/tab crash sekarang, save tetap recoverable saat reload.
+    try {
+      if (typeof localStorage !== "undefined") {
+        const raw = localStorage.getItem(outboxKey);
+        const obj = raw ? JSON.parse(raw) : {};
+        obj[qid] = { selectedOptionId, isMarkedDoubtful };
+        localStorage.setItem(outboxKey, JSON.stringify(obj));
+      }
+    } catch {
+      // localStorage penuh / disabled — non-fatal.
     }
+
+    setSaveState("saving"); // immediate UI feedback while debounce holds
+
+    // Opt #3b — debounce: batalkan timer pending lalu reschedule.
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      // Offline: tetap buffer di pendingRef + outbox, flushPending akan jalan saat online.
+      setSaveState("error");
+      return;
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      debounceTimerRef.current = null;
+      void flushPending();
+    }, SAVE_DEBOUNCE_MS);
   }
+
+  // Opt #5 — Recover outbox saat mount: replay save yang belum ter-sync.
+  useEffect(() => {
+    if (typeof localStorage === "undefined") return;
+    try {
+      const raw = localStorage.getItem(outboxKey);
+      if (!raw) return;
+      const obj = JSON.parse(raw) as Record<
+        string,
+        { selectedOptionId: string | null; isMarkedDoubtful: boolean }
+      >;
+      let recovered = 0;
+      for (const [qid, payload] of Object.entries(obj)) {
+        if (!pendingRef.current.has(qid)) {
+          pendingRef.current.set(qid, { ...payload, seq: ++seqRef.current });
+          recovered++;
+        }
+      }
+      if (recovered > 0) void flushPending();
+    } catch {
+      // ignore corrupt outbox
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Opt #5 — Flush saat tab hidden / pagehide (mobile back, switch app).
+  // Pakai keepalive supaya request selesai walau halaman ditutup.
+  useEffect(() => {
+    function flushOnHide() {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+      if (pendingRef.current.size > 0) void flushPending();
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") flushOnHide();
+    });
+    window.addEventListener("pagehide", flushOnHide);
+    return () => {
+      window.removeEventListener("pagehide", flushOnHide);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Flush pending immediately when component unmounts (route change).
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+        if (pendingRef.current.size > 0) void flushPending();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
   function selectOption(optionId: string) {
@@ -212,6 +325,13 @@ export function ExamRoom({
   }
 
   function goTo(idx: number) {
+    // Opt #3b — flush pending sebelum pindah soal supaya tidak ada
+    // race condition / lost write antar question.
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+      if (pendingRef.current.size > 0) void flushPending();
+    }
     setCurrentIndex(Math.max(0, Math.min(questions.length - 1, idx)));
     setDrawerOpen(false);
   }

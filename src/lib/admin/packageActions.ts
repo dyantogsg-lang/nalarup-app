@@ -1,7 +1,7 @@
 "use server";
 
 import { and, eq, ne } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import {
@@ -10,6 +10,7 @@ import {
   packageQuestions,
 } from "@/lib/db/schema";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { PACKAGE_CONTENT_CACHE_TAG } from "@/lib/exam/packageContent";
 import {
   getAdminPackageById,
   validatePackageForPublish,
@@ -237,6 +238,8 @@ export async function assignQuestionToPackage(
       })
       .onConflictDoNothing();
     revalidatePath(`/admin/packages/${packageId}/edit`);
+    // Opt #4 — komposisi paket berubah, bust cache.
+    updateTag(PACKAGE_CONTENT_CACHE_TAG(packageId));
     return { ok: true };
   } catch (e) {
     console.error("assignQuestionToPackage failed:", e);
@@ -272,4 +275,6 @@ export async function removeQuestionFromPackage(
     }
   }
   revalidatePath(`/admin/packages/${packageId}/edit`);
+  // Opt #4 — komposisi paket berubah, bust cache.
+  updateTag(PACKAGE_CONTENT_CACHE_TAG(packageId));
 }

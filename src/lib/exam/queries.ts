@@ -1,13 +1,11 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   attempts,
   attemptAnswers,
-  packageQuestions,
-  questionOptions,
-  questions,
   tryoutPackages,
 } from "@/lib/db/schema";
+import { getPackageContent } from "@/lib/exam/packageContent";
 
 export interface ExamAttempt {
   id: string;
@@ -80,48 +78,19 @@ export async function loadExam(
 
   if (!att) return null;
 
-  const qRows = await db
-    .select({
-      id: questions.id,
-      subtest: questions.subtest,
-      questionText: questions.questionText,
-      scoringType: questions.scoringType,
-      orderNumber: packageQuestions.orderNumber,
-    })
-    .from(packageQuestions)
-    .innerJoin(questions, eq(packageQuestions.questionId, questions.id))
-    .where(eq(packageQuestions.packageId, att.packageId))
-    .orderBy(asc(packageQuestions.orderNumber));
-
-  const optRows = await db
-    .select({
-      id: questionOptions.id,
-      questionId: questionOptions.questionId,
-      optionLabel: questionOptions.optionLabel,
-      optionText: questionOptions.optionText,
-      sortOrder: questionOptions.sortOrder,
-    })
-    .from(questionOptions)
-    .innerJoin(questions, eq(questionOptions.questionId, questions.id))
-    .innerJoin(packageQuestions, eq(packageQuestions.questionId, questions.id))
-    .where(eq(packageQuestions.packageId, att.packageId))
-    .orderBy(asc(questionOptions.sortOrder));
-
-  const optsByQ = new Map<string, ExamQuestion["options"]>();
-  for (const o of optRows) {
-    const list = optsByQ.get(o.questionId) ?? [];
-    list.push({ id: o.id, label: o.optionLabel, text: o.optionText });
-    optsByQ.set(o.questionId, list);
-  }
-
-  const ansRows = await db
-    .select({
-      questionId: attemptAnswers.questionId,
-      selectedOptionId: attemptAnswers.selectedOptionId,
-      isMarkedDoubtful: attemptAnswers.isMarkedDoubtful,
-    })
-    .from(attemptAnswers)
-    .where(eq(attemptAnswers.attemptId, att.id));
+  // Opt #4 — questions + options dari cache (revalidate per package).
+  // Loaded paralel dengan answers user supaya tidak nambah waktu.
+  const [examQuestions, ansRows] = await Promise.all([
+    getPackageContent(att.packageId),
+    db
+      .select({
+        questionId: attemptAnswers.questionId,
+        selectedOptionId: attemptAnswers.selectedOptionId,
+        isMarkedDoubtful: attemptAnswers.isMarkedDoubtful,
+      })
+      .from(attemptAnswers)
+      .where(eq(attemptAnswers.attemptId, att.id)),
+  ]);
 
   return {
     attempt: {
@@ -139,14 +108,7 @@ export async function loadExam(
       passingGradeTotal: att.passingGradeTotal,
       durationMinutes: att.durationMinutes,
     },
-    questions: qRows.map((q) => ({
-      id: q.id,
-      orderNumber: q.orderNumber,
-      subtest: q.subtest,
-      questionText: q.questionText,
-      scoringType: q.scoringType,
-      options: optsByQ.get(q.id) ?? [],
-    })),
+    questions: examQuestions,
     answers: ansRows.map((a) => ({
       questionId: a.questionId,
       selectedOptionId: a.selectedOptionId,
