@@ -1,6 +1,7 @@
 import { eq, and, desc, sql, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { questions, questionOptions, profiles, topics } from "@/lib/db/schema";
+import { analyzeQuality, type QualityFlag } from "./qualityCheck";
 
 export interface ReviewQueueItem {
   id: string;
@@ -25,6 +26,7 @@ export interface ReviewQueueItem {
     isCorrect: boolean;
     scoreValue: number;
   }[];
+  qualityFlag: QualityFlag;
 }
 
 export interface ReviewQueueStats {
@@ -146,28 +148,39 @@ export async function listReviewQueue(filters: {
   const reviewerMap = new Map(reviewers.map((r) => [r.id, r.fullName]));
   const topicMap = new Map(topicRows.map((t) => [t.id, t.name]));
 
-  return rows.map((r) => ({
-    id: r.id,
-    questionText: r.questionText,
-    subtest: r.subtest,
-    scoringType: r.scoringType,
-    difficulty: r.difficulty,
-    explanation: r.explanation,
-    explanationShort: r.explanationShort,
-    sourceNote: r.sourceNote,
-    status: r.status,
-    verified: r.verified,
-    reviewedAt: r.reviewedAt,
-    reviewedByName: r.reviewedById ? reviewerMap.get(r.reviewedById) ?? null : null,
-    reviewNotes: r.reviewNotes,
-    topicName: r.topicId ? topicMap.get(r.topicId) ?? null : null,
-    createdAt: r.createdAt,
-    options: (optsByQ.get(r.id) ?? []).map((o) => ({
+  return rows.map((r) => {
+    const options = (optsByQ.get(r.id) ?? []).map((o) => ({
       id: o.id,
       label: o.optionLabel,
       text: o.optionText,
       isCorrect: o.isCorrect,
       scoreValue: o.scoreValue,
-    })),
-  }));
+    }));
+    const qualityFlag = analyzeQuality({
+      questionText: r.questionText,
+      subtest: r.subtest,
+      scoringType: r.scoringType,
+      explanation: r.explanation,
+      options,
+    });
+    return {
+      id: r.id,
+      questionText: r.questionText,
+      subtest: r.subtest,
+      scoringType: r.scoringType,
+      difficulty: r.difficulty,
+      explanation: r.explanation,
+      explanationShort: r.explanationShort,
+      sourceNote: r.sourceNote,
+      status: r.status,
+      verified: r.verified,
+      reviewedAt: r.reviewedAt,
+      reviewedByName: r.reviewedById ? reviewerMap.get(r.reviewedById) ?? null : null,
+      reviewNotes: r.reviewNotes,
+      topicName: r.topicId ? topicMap.get(r.topicId) ?? null : null,
+      createdAt: r.createdAt,
+      options,
+      qualityFlag,
+    };
+  });
 }

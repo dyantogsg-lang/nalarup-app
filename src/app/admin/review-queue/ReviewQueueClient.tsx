@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { ReviewQueueItem } from "@/lib/admin/reviewQueries";
@@ -48,6 +48,99 @@ export function ReviewQueueClient({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [focusedIdx, setFocusedIdx] = useState(0);
+  const [showHelp, setShowHelp] = useState(false);
+  const [filterQuality, setFilterQuality] = useState<"all" | "danger" | "warning">("all");
+
+  // Filter items by quality flag (client-side)
+  const visibleItems = useMemo(() => {
+    if (filterQuality === "all") return items;
+    if (filterQuality === "danger")
+      return items.filter((i) => i.qualityFlag.level === "danger");
+    return items.filter((i) => i.qualityFlag.level !== "ok");
+  }, [items, filterQuality]);
+
+  // Stats: count danger/warning
+  const qualityStats = useMemo(() => {
+    return {
+      danger: items.filter((i) => i.qualityFlag.level === "danger").length,
+      warning: items.filter((i) => i.qualityFlag.level === "warning").length,
+      ok: items.filter((i) => i.qualityFlag.level === "ok").length,
+    };
+  }, [items]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      // Skip if typing in an input/textarea
+      const target = e.target as HTMLElement;
+      const isTyping =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable;
+      if (isTyping) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      const focused = visibleItems[focusedIdx];
+      if (!focused) return;
+
+      switch (e.key.toLowerCase()) {
+        case "?":
+          setShowHelp((s) => !s);
+          break;
+        case "j":
+          e.preventDefault();
+          setFocusedIdx((i) => Math.min(visibleItems.length - 1, i + 1));
+          break;
+        case "k":
+          e.preventDefault();
+          setFocusedIdx((i) => Math.max(0, i - 1));
+          break;
+        case "a":
+          if (!focused.verified && !editing) {
+            e.preventDefault();
+            handleApprove(focused.id);
+          }
+          break;
+        case "r":
+          if (!focused.verified && !editing) {
+            e.preventDefault();
+            handleReject(focused.id);
+          }
+          break;
+        case "e":
+          if (!focused.verified) {
+            e.preventDefault();
+            setEditing(editing === focused.id ? null : focused.id);
+          }
+          break;
+        case " ":
+          e.preventDefault();
+          toggleSelect(focused.id);
+          break;
+        case "enter":
+          if (e.shiftKey && selected.size > 0) {
+            e.preventDefault();
+            handleBulkApprove();
+          }
+          break;
+        case "escape":
+          if (editing) setEditing(null);
+          if (showHelp) setShowHelp(false);
+          break;
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusedIdx, visibleItems, selected, editing, showHelp]);
+
+  // Scroll focused into view
+  useEffect(() => {
+    const el = document.querySelector(`[data-q-idx="${focusedIdx}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [focusedIdx]);
 
   function navigate(params: Record<string, string | undefined>) {
     const usp = new URLSearchParams();
@@ -144,7 +237,37 @@ export function ReviewQueueClient({
           ]}
           onChange={(v) => navigate({ subtest: currentSubtest, verified: v, page: "1" })}
         />
+        <div style={{ display: "flex", gap: "0.3rem" }}>
+          <QualityChip
+            label="Semua"
+            active={filterQuality === "all"}
+            onClick={() => setFilterQuality("all")}
+          />
+          <QualityChip
+            label={`🚩 Danger ${qualityStats.danger}`}
+            active={filterQuality === "danger"}
+            onClick={() => setFilterQuality("danger")}
+            color="#FCA5A5"
+            bg="rgba(239,68,68,0.1)"
+          />
+          <QualityChip
+            label={`⚠️ Warning ${qualityStats.warning}`}
+            active={filterQuality === "warning"}
+            onClick={() => setFilterQuality("warning")}
+            color="#FBBF24"
+            bg="rgba(251,191,36,0.1)"
+          />
+        </div>
         <div style={{ flex: 1 }} />
+        <button
+          type="button"
+          onClick={() => setShowHelp(true)}
+          className="btn-ghost"
+          style={{ padding: "0.4rem 0.7rem", fontSize: "0.75rem", cursor: "pointer" }}
+          title="Tampilkan keyboard shortcuts (?)"
+        >
+          ⌨️ Shortcuts
+        </button>
         {selected.size > 0 && (
           <button
             type="button"
@@ -198,7 +321,6 @@ export function ReviewQueueClient({
         <span>{selected.size} dipilih dari {items.length} soal</span>
       </div>
 
-      {/* List */}
       {items.length === 0 ? (
         <div
           className="glass-card"
@@ -206,27 +328,37 @@ export function ReviewQueueClient({
         >
           Tidak ada soal yang cocok filter ini.
         </div>
+      ) : visibleItems.length === 0 ? (
+        <div
+          className="glass-card"
+          style={{ padding: "2rem", textAlign: "center", color: "#64748B", fontSize: "0.85rem" }}
+        >
+          Filter quality "{filterQuality}" tidak match. Total {items.length} soal di halaman ini.
+        </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-          {items.map((q) => (
-            <QuestionCard
-              key={q.id}
-              q={q}
-              selected={selected.has(q.id)}
-              onToggle={() => toggleSelect(q.id)}
-              isEditing={editing === q.id}
-              onEdit={() => setEditing(editing === q.id ? null : q.id)}
-              onApprove={() => handleApprove(q.id)}
-              onReject={() => handleReject(q.id)}
-              editApproveAction={editApproveAction}
-              onEditDone={() => {
-                setEditing(null);
-                setFeedback("✓ Soal di-edit & disetujui");
-                router.refresh();
-              }}
-              pending={pending}
-              startTransition={start}
-            />
+          {visibleItems.map((q, idx) => (
+            <div key={q.id} data-q-idx={idx}>
+              <QuestionCard
+                q={q}
+                isFocused={idx === focusedIdx}
+                selected={selected.has(q.id)}
+                onToggle={() => toggleSelect(q.id)}
+                isEditing={editing === q.id}
+                onEdit={() => setEditing(editing === q.id ? null : q.id)}
+                onApprove={() => handleApprove(q.id)}
+                onReject={() => handleReject(q.id)}
+                onClick={() => setFocusedIdx(idx)}
+                editApproveAction={editApproveAction}
+                onEditDone={() => {
+                  setEditing(null);
+                  setFeedback("✓ Soal di-edit & disetujui");
+                  router.refresh();
+                }}
+                pending={pending}
+                startTransition={start}
+              />
+            </div>
           ))}
         </div>
       )}
@@ -252,7 +384,109 @@ export function ReviewQueueClient({
           </Link>
         </div>
       )}
+
+      {/* Help Modal */}
+      {showHelp && (
+        <div
+          onClick={() => setShowHelp(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(10,15,30,0.85)",
+            backdropFilter: "blur(8px)",
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="glass-card"
+            style={{ maxWidth: 480, width: "100%", padding: "1.5rem 1.75rem" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#F1F5F9" }}>
+                ⌨️ Keyboard Shortcuts
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowHelp(false)}
+                style={{
+                  padding: "0.3rem 0.6rem",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "#94A3B8",
+                  borderRadius: "0.3rem",
+                  fontSize: "0.78rem",
+                  cursor: "pointer",
+                }}
+              >
+                ✕ Tutup
+              </button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.85rem" }}>
+              <ShortcutRow keys={["J"]} desc="Soal berikutnya" />
+              <ShortcutRow keys={["K"]} desc="Soal sebelumnya" />
+              <ShortcutRow keys={["A"]} desc="Approve soal yang difokus" color="#6EE7B7" />
+              <ShortcutRow keys={["E"]} desc="Edit & Approve" color="#BFDBFE" />
+              <ShortcutRow keys={["R"]} desc="Reject (perlu alasan)" color="#FCA5A5" />
+              <ShortcutRow keys={["Space"]} desc="Toggle select untuk bulk approve" />
+              <ShortcutRow keys={["Shift", "+", "Enter"]} desc="Bulk approve yang dipilih" color="#6EE7B7" />
+              <ShortcutRow keys={["Esc"]} desc="Batal edit / tutup help" />
+              <ShortcutRow keys={["?"]} desc="Toggle help ini" />
+            </div>
+            <div
+              style={{
+                marginTop: "1rem",
+                padding: "0.6rem 0.8rem",
+                background: "rgba(96,165,250,0.06)",
+                border: "1px solid rgba(96,165,250,0.2)",
+                borderRadius: "0.3rem",
+                fontSize: "0.75rem",
+                color: "#BFDBFE",
+              }}
+            >
+              💡 Tips: Pakai filter <strong>🚩 Danger</strong> untuk fokus ke soal yang otomatis di-flag bermasalah dulu, lalu Bulk Approve sisanya.
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function QualityChip({
+  label,
+  active,
+  onClick,
+  color = "#94A3B8",
+  bg = "rgba(255,255,255,0.04)",
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  color?: string;
+  bg?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        padding: "0.35rem 0.7rem",
+        background: active ? bg.replace("0.1", "0.18").replace("0.04", "0.12") : bg,
+        border: `1px solid ${active ? color : "rgba(255,255,255,0.08)"}`,
+        color: active ? color : "#94A3B8",
+        borderRadius: "0.35rem",
+        fontSize: "0.74rem",
+        cursor: "pointer",
+        fontWeight: active ? 600 : 500,
+      }}
+    >
+      {label}
+    </button>
   );
 }
 
@@ -296,6 +530,8 @@ function Select({
 function QuestionCard({
   q,
   selected,
+  isFocused,
+  onClick,
   onToggle,
   isEditing,
   onEdit,
@@ -308,6 +544,8 @@ function QuestionCard({
 }: {
   q: ReviewQueueItem;
   selected: boolean;
+  isFocused: boolean;
+  onClick: () => void;
   onToggle: () => void;
   isEditing: boolean;
   onEdit: () => void;
@@ -346,9 +584,20 @@ function QuestionCard({
   return (
     <div
       className="glass-card"
+      onClick={onClick}
       style={{
         padding: "1rem 1.15rem",
-        borderColor: q.verified ? "rgba(52,211,153,0.3)" : undefined,
+        borderColor: isFocused
+          ? "rgba(96,165,250,0.5)"
+          : q.qualityFlag.level === "danger"
+          ? "rgba(239,68,68,0.4)"
+          : q.qualityFlag.level === "warning"
+          ? "rgba(251,191,36,0.3)"
+          : q.verified
+          ? "rgba(52,211,153,0.3)"
+          : undefined,
+        boxShadow: isFocused ? "0 0 0 2px rgba(96,165,250,0.25)" : undefined,
+        cursor: "pointer",
       }}
     >
       <div style={{ display: "flex", gap: "0.7rem", alignItems: "flex-start" }}>
@@ -365,6 +614,12 @@ function QuestionCard({
             ) : (
               <Badge color="#FBBF24" bg="rgba(251,191,36,0.12)">unverified</Badge>
             )}
+            {q.qualityFlag.level === "danger" && (
+              <Badge color="#FCA5A5" bg="rgba(239,68,68,0.12)">🚩 danger</Badge>
+            )}
+            {q.qualityFlag.level === "warning" && (
+              <Badge color="#FBBF24" bg="rgba(251,191,36,0.12)">⚠ warning</Badge>
+            )}
             {q.topicName && <Badge color="#A78BFA" bg="rgba(167,139,250,0.1)">{q.topicName}</Badge>}
             {q.sourceNote && (
               <span style={{ fontSize: "0.7rem", color: "#64748B", marginLeft: "auto" }}>
@@ -372,6 +627,30 @@ function QuestionCard({
               </span>
             )}
           </div>
+
+          {q.qualityFlag.reasons.length > 0 && (
+            <div
+              style={{
+                padding: "0.5rem 0.7rem",
+                background:
+                  q.qualityFlag.level === "danger"
+                    ? "rgba(239,68,68,0.06)"
+                    : "rgba(251,191,36,0.06)",
+                border: `1px solid ${
+                  q.qualityFlag.level === "danger"
+                    ? "rgba(239,68,68,0.2)"
+                    : "rgba(251,191,36,0.2)"
+                }`,
+                borderRadius: "0.3rem",
+                fontSize: "0.74rem",
+                color: q.qualityFlag.level === "danger" ? "#FCA5A5" : "#FBBF24",
+                lineHeight: 1.5,
+                marginBottom: "0.6rem",
+              }}
+            >
+              <strong>Auto-flag:</strong> {q.qualityFlag.reasons.join(" · ")}
+            </div>
+          )}
 
           {isEditing ? (
             <textarea
@@ -631,6 +910,34 @@ function QuestionCard({
             </a>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ShortcutRow({ keys, desc, color = "#CBD5E1" }: { keys: string[]; desc: string; color?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.3rem 0" }}>
+      <span style={{ color }}>{desc}</span>
+      <div style={{ display: "flex", gap: "0.25rem" }}>
+        {keys.map((k, i) => (
+          <kbd
+            key={i}
+            style={{
+              padding: "0.15rem 0.45rem",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: "0.25rem",
+              fontFamily: "ui-monospace, SF Mono, Monaco, monospace",
+              fontSize: "0.72rem",
+              color: "#F1F5F9",
+              minWidth: 22,
+              textAlign: "center",
+            }}
+          >
+            {k}
+          </kbd>
+        ))}
       </div>
     </div>
   );
