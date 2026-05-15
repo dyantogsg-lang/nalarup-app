@@ -340,6 +340,14 @@ export function ExamRoom({
     startSubmitTransition(async () => {
       // Flush outstanding saves first
       await flushPending();
+      // Opt #5 — outbox sudah dibersihkan flushPending; pastikan key juga gone.
+      try {
+        if (typeof localStorage !== "undefined") {
+          localStorage.removeItem(outboxKey);
+        }
+      } catch {
+        // ignore
+      }
       await onSubmit(attempt.id, "user");
     });
   }
