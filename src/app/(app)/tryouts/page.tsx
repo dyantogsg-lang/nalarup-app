@@ -39,10 +39,10 @@ export default async function TryoutsPage({ searchParams }: Props) {
   const totalSoal = packages.reduce((sum, p) => sum + p.totalQuestions, 0);
   const totalKategori = cats.length;
 
-  // Featured package (SKD Simulasi Penuh pertama)
-  const featuredIdx = packages.findIndex((p) => p.mode === "simulation" && p.totalQuestions >= 100);
-  const featured = featuredIdx >= 0 ? packages[featuredIdx] : null;
-  const regularPackages = packages.filter((_, i) => i !== featuredIdx);
+  // Featured: SKD Simulasi Penuh Paket 1, hanya jika user belum pernah mengerjakan
+  const featuredIdx = packages.findIndex((p) => p.slug === "skd-simulasi-penuh-1");
+  const featured = featuredIdx >= 0 && packages[featuredIdx].attemptCount === 0 ? packages[featuredIdx] : null;
+  const regularPackages = featured ? packages.filter((_, i) => i !== featuredIdx) : packages;
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 1rem" }}>
