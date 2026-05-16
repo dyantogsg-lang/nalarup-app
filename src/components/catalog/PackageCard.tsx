@@ -21,7 +21,8 @@ const IconTarget = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
 );
 
-function getCategoryAccent(categoryName: string | null): string {
+function getCategoryAccent(categoryName: string | null, mode: string): string {
+  if (mode === "simulation") return "var(--danger)";
   if (!categoryName) return "var(--blue)";
   const lower = categoryName.toLowerCase();
   if (lower.includes("twk")) return "var(--blue)";
@@ -35,7 +36,7 @@ export function PackageCard({ pkg, featured = false }: { pkg: CatalogPackage; fe
   const diffC = difficultyColor(pkg.difficulty);
   const cta = ctaForAttemptStatus(pkg.lastAttemptStatus);
   const hasAttempt = pkg.attemptCount > 0;
-  const accent = getCategoryAccent(pkg.categoryName);
+  const accent = getCategoryAccent(pkg.categoryName, pkg.mode);
 
   if (featured) {
     return (
