@@ -86,7 +86,7 @@ export function ReviewClient({
       <div style={{ marginBottom: "1rem" }}>
         <Link
           href={ROUTES.result(attempt.id)}
-          style={{ color: "var(--blue)", fontSize: "0.82rem", textDecoration: "none" }}
+          style={{ color: "#60A5FA", fontSize: "0.82rem", textDecoration: "none" }}
         >
           ← Kembali ke Hasil
         </Link>
@@ -94,7 +94,7 @@ export function ReviewClient({
           style={{
             fontSize: "1.3rem",
             fontWeight: 600,
-            color: "var(--text-primary)",
+            color: "#F1F5F9",
             marginTop: "0.35rem",
           }}
         >
@@ -108,10 +108,10 @@ export function ReviewClient({
           display: "flex",
           gap: "0.4rem",
           marginBottom: "0.85rem",
-          background: "var(--bg-card2)",
+          background: "rgba(255,255,255,0.03)",
           padding: "0.25rem",
           borderRadius: "0.55rem",
-          border: "1px solid var(--border)",
+          border: "1px solid rgba(255,255,255,0.06)",
           width: "fit-content",
         }}
       >
@@ -151,7 +151,7 @@ export function ReviewClient({
       {/* List */}
       {filtered.length === 0 ? (
         <div className="glass-card" style={{ padding: "2rem", textAlign: "center" }}>
-          <p style={{ color: "var(--text-dim)", fontSize: "0.85rem" }}>
+          <p style={{ color: "#64748B", fontSize: "0.85rem" }}>
             Tidak ada soal yang cocok filter ini.
           </p>
         </div>
@@ -223,11 +223,11 @@ function FilterChip({
         borderRadius: "999px",
         border: active
           ? `1px solid ${color}`
-          : "1px solid var(--border)",
+          : "1px solid rgba(255,255,255,0.08)",
         background: active
           ? `${color}22`
-          : "var(--bg-card2)",
-        color: active ? color : "var(--text-dim)",
+          : "rgba(255,255,255,0.02)",
+        color: active ? color : "#94A3B8",
         fontSize: "0.78rem",
         fontWeight: active ? 600 : 400,
         cursor: "pointer",
@@ -295,18 +295,18 @@ function ReviewCard({
             padding: "0.15rem 0.5rem",
             borderRadius: "0.3rem",
             background: "rgba(96,165,250,0.1)",
-            color: "var(--blue)",
+            color: "#93C5FD",
             fontSize: "0.7rem",
             fontWeight: 600,
           }}
         >
           {q.subtest}
         </span>
-        <span style={{ color: "var(--text-dim)", fontSize: "0.72rem" }}>Soal #{q.orderNumber}</span>
+        <span style={{ color: "#64748B", fontSize: "0.72rem" }}>Soal #{q.orderNumber}</span>
         {q.topicName && (
           <span
             style={{
-              color: "var(--violet)",
+              color: "#A78BFA",
               fontSize: "0.7rem",
               padding: "0.15rem 0.5rem",
               background: "rgba(167,139,250,0.1)",
@@ -319,7 +319,7 @@ function ReviewCard({
         {q.isMarkedDoubtful && (
           <span
             style={{
-              color: "var(--amber)",
+              color: "#FBBF24",
               fontSize: "0.7rem",
               padding: "0.15rem 0.5rem",
               background: "rgba(245,158,11,0.1)",
@@ -344,7 +344,7 @@ function ReviewCard({
               color: q.isSaved ? "#C4B5FD" : "#94A3B8",
               border: q.isSaved
                 ? "1px solid rgba(196,181,253,0.3)"
-                : "1px solid var(--border)",
+                : "1px solid rgba(255,255,255,0.08)",
               borderRadius: "0.35rem",
               fontSize: "0.72rem",
               cursor: "pointer",
@@ -357,9 +357,9 @@ function ReviewCard({
             title="Laporkan soal"
             style={{
               padding: "0.28rem 0.55rem",
-              background: "var(--bg-card2)",
-              color: "var(--text-dim)",
-              border: "1px solid var(--border)",
+              background: "rgba(255,255,255,0.03)",
+              color: "#94A3B8",
+              border: "1px solid rgba(255,255,255,0.08)",
               borderRadius: "0.35rem",
               fontSize: "0.72rem",
               cursor: "pointer",
@@ -373,7 +373,7 @@ function ReviewCard({
       {mode === "learn" && (
         <p
           style={{
-            color: "var(--text-primary)",
+            color: "#F1F5F9",
             fontSize: "0.92rem",
             lineHeight: 1.6,
             marginBottom: "1rem",
@@ -391,7 +391,7 @@ function ReviewCard({
             const isUser = o.id === q.userSelectedOptionId;
             const isCorrect = o.isCorrect;
             let bg = "rgba(255,255,255,0.03)";
-            let border = "1px solid var(--border)";
+            let border = "1px solid rgba(255,255,255,0.06)";
             let label = "";
             if (isCorrect && isUser) {
               bg = "rgba(16,185,129,0.15)";
@@ -428,26 +428,26 @@ function ReviewCard({
                     minWidth: 22,
                     height: 22,
                     borderRadius: "50%",
-                    background: "var(--bg-card2)",
+                    background: "rgba(255,255,255,0.05)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: "0.7rem",
                     fontWeight: 700,
-                    color: "var(--text-primary)",
+                    color: "#CBD5E1",
                   }}
                 >
                   {o.label}
                 </span>
-                <span style={{ flex: 1, color: "var(--text-primary)", fontSize: "0.82rem", lineHeight: 1.5 }}>
+                <span style={{ flex: 1, color: "#CBD5E1", fontSize: "0.82rem", lineHeight: 1.5 }}>
                   {o.text}
                 </span>
                 {q.scoringType === "weighted_options" && (
                   <span
                     style={{
-                      color: "var(--text-dim)",
+                      color: "#94A3B8",
                       fontSize: "0.7rem",
-                      background: "var(--bg-card2)",
+                      background: "rgba(255,255,255,0.04)",
                       padding: "0.1rem 0.45rem",
                       borderRadius: "0.3rem",
                       alignSelf: "center",
@@ -489,7 +489,7 @@ function ReviewCard({
         >
           <div
             style={{
-              color: "var(--blue)",
+              color: "#93C5FD",
               fontSize: "0.72rem",
               fontWeight: 700,
               textTransform: "uppercase",
@@ -499,7 +499,7 @@ function ReviewCard({
           >
             Pembahasan
           </div>
-          <p style={{ color: "var(--text-primary)", fontSize: "0.82rem", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+          <p style={{ color: "#CBD5E1", fontSize: "0.82rem", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
             {mode === "quick" && q.explanationShort
               ? q.explanationShort
               : q.explanation ?? q.explanationShort}
@@ -547,14 +547,14 @@ function QuickModeBody({ q }: { q: ReviewQuestion }) {
         <div
           style={{
             fontSize: "0.7rem",
-            color: "var(--danger)",
+            color: "#FCA5A5",
             fontWeight: 600,
             marginBottom: "0.3rem",
           }}
         >
           Jawabanmu
         </div>
-        <div style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>
+        <div style={{ fontSize: "0.82rem", color: "#F1F5F9" }}>
           {user ? `${user.label}. ${user.text}` : "(Kosong)"}
         </div>
       </div>
@@ -569,14 +569,14 @@ function QuickModeBody({ q }: { q: ReviewQuestion }) {
         <div
           style={{
             fontSize: "0.7rem",
-            color: "var(--green)",
+            color: "#6EE7B7",
             fontWeight: 600,
             marginBottom: "0.3rem",
           }}
         >
           {q.scoringType === "weighted_options" ? "Skor maks" : "Jawaban benar"}
         </div>
-        <div style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>
+        <div style={{ fontSize: "0.82rem", color: "#F1F5F9" }}>
           {correct ? `${correct.label}. ${correct.text}` : "-"}
         </div>
       </div>
@@ -653,7 +653,7 @@ function ReportDialog({
           style={{
             fontSize: "1rem",
             fontWeight: 700,
-            color: "var(--text-primary)",
+            color: "#F1F5F9",
             marginBottom: "0.75rem",
           }}
         >
@@ -667,7 +667,7 @@ function ReportDialog({
               background: "rgba(16,185,129,0.1)",
               border: "1px solid rgba(16,185,129,0.3)",
               borderRadius: "0.5rem",
-              color: "var(--green)",
+              color: "#6EE7B7",
               fontSize: "0.85rem",
               textAlign: "center",
             }}
@@ -680,7 +680,7 @@ function ReportDialog({
               style={{
                 display: "block",
                 fontSize: "0.75rem",
-                color: "var(--text-dim)",
+                color: "#94A3B8",
                 marginBottom: "0.35rem",
               }}
             >
@@ -692,9 +692,9 @@ function ReportDialog({
               style={{
                 width: "100%",
                 padding: "0.55rem 0.75rem",
-                background: "var(--bg-card2)",
-                border: "1px solid var(--border)",
-                color: "var(--text-primary)",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "#F1F5F9",
                 borderRadius: "0.45rem",
                 marginBottom: "0.9rem",
                 fontSize: "0.85rem",
@@ -710,7 +710,7 @@ function ReportDialog({
               style={{
                 display: "block",
                 fontSize: "0.75rem",
-                color: "var(--text-dim)",
+                color: "#94A3B8",
                 marginBottom: "0.35rem",
               }}
             >
@@ -724,9 +724,9 @@ function ReportDialog({
               style={{
                 width: "100%",
                 padding: "0.55rem 0.75rem",
-                background: "var(--bg-card2)",
-                border: "1px solid var(--border)",
-                color: "var(--text-primary)",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "#F1F5F9",
                 borderRadius: "0.45rem",
                 resize: "vertical",
                 fontSize: "0.85rem",
@@ -734,7 +734,7 @@ function ReportDialog({
               }}
             />
             {err && (
-              <div style={{ color: "var(--danger)", fontSize: "0.8rem", marginBottom: "0.5rem" }}>
+              <div style={{ color: "#FCA5A5", fontSize: "0.8rem", marginBottom: "0.5rem" }}>
                 Gagal mengirim: {err}
               </div>
             )}
@@ -748,7 +748,7 @@ function ReportDialog({
                   background: "transparent",
                   border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: "0.5rem",
-                  color: "var(--text-dim)",
+                  color: "#94A3B8",
                   fontSize: "0.85rem",
                   cursor: pending ? "not-allowed" : "pointer",
                 }}
