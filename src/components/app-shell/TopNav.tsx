@@ -42,7 +42,16 @@ export function TopNav({ fullName }: { fullName: string }) {
         {/* Logo */}
         <Link href="/dashboard" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <img src="/logo-icon.png" alt="NalarUp" width={28} height={28} style={{ borderRadius: 6 }} />
-          <img src="/logo-text.png" alt="NalarUp" height={18} style={{ display: "block" }} />
+          <span
+            className="gradient-text"
+            style={{
+              fontWeight: 800,
+              fontSize: "1.15rem",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            NalarUp
+          </span>
         </Link>
 
         {/* Nav links — sejajar logo */}
