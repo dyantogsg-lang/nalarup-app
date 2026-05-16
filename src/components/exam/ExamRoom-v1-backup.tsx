@@ -375,163 +375,108 @@ export function ExamRoom({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "0.875rem",
+          gap: "1rem",
           padding: "0.75rem 1.25rem",
           borderBottom: "1px solid var(--border)",
-          background: remainingSec <= 300 ? "linear-gradient(135deg, rgba(239,68,68,0.04), var(--bg-card))" : "var(--bg-card)",
+          background: "var(--bg-card)",
           backdropFilter: "blur(8px)",
           position: "sticky",
           top: 0,
           zIndex: 30,
-          transition: "background 500ms ease",
         }}
       >
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            marginBottom: "0.15rem",
-          }}>
-            <span style={{
-              fontSize: "0.65rem",
-              fontWeight: 700,
-              padding: "0.15rem 0.5rem",
-              borderRadius: "999px",
-              background: current?.subtest?.includes("TWK") ? "rgba(37,99,235,0.1)" : current?.subtest?.includes("TIU") ? "rgba(124,58,237,0.1)" : "rgba(34,197,94,0.1)",
-              color: current?.subtest?.includes("TWK") ? "var(--blue)" : current?.subtest?.includes("TIU") ? "var(--violet)" : "var(--green)",
-              border: `1px solid ${current?.subtest?.includes("TWK") ? "rgba(37,99,235,0.2)" : current?.subtest?.includes("TIU") ? "rgba(124,58,237,0.2)" : "rgba(34,197,94,0.2)"}`,
+          <div
+            style={{
+              fontSize: "0.7rem",
+              color: "var(--text-muted)",
               textTransform: "uppercase",
-              letterSpacing: "0.04em",
-            }}>
-              {current?.subtest ?? "—"}
-            </span>
-            <span style={{ fontSize: "0.68rem", color: "var(--text-dim)" }}>
-              Soal {currentIndex + 1}/{questions.length}
-            </span>
+              letterSpacing: "0.05em",
+            }}
+          >
+            Ujian
           </div>
-          <div style={{
-            color: "var(--text-primary)",
-            fontSize: "0.88rem",
-            fontWeight: 600,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}>
+          <div
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             {attempt.packageTitle}
           </div>
         </div>
 
-        {/* Save indicator — compact */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }} title={!isOnline ? "Offline — jawaban tersimpan lokal" : saveState === "saving" ? "Menyimpan..." : saveState === "error" ? "Gagal sinkron" : saveState === "saved" ? "Tersimpan" : "Siap"}>
+        {/* Save indicator */}
+        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "0.4rem" }}>
           <StatusDot state={isOnline ? saveState : "error"} />
-          <span style={{ fontSize: "0.7rem", color: "var(--text-dim)" }}>
-            {!isOnline ? "Offline" : saveState === "saving" ? "Saving..." : saveState === "error" ? "Error" : saveState === "saved" ? "Saved" : ""}
+          <span>
+            {!isOnline
+              ? "Offline — jawaban tersimpan lokal"
+              : saveState === "saving"
+              ? "Menyimpan..."
+              : saveState === "error"
+              ? "Gagal sinkron"
+              : saveState === "saved"
+              ? "Tersimpan"
+              : "Siap"}
           </span>
         </div>
 
-        {/* Progress ring mini + Timer */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
-          {/* Mini progress ring */}
-          <div style={{ position: "relative", width: 32, height: 32 }} title={`${summary.answered}/${summary.total} terjawab`}>
-            <svg width="32" height="32" viewBox="0 0 32 32" style={{ transform: "rotate(-90deg)" }}>
-              <circle cx="16" cy="16" r="13" fill="none" strokeWidth="3" stroke="var(--border)" />
-              <circle cx="16" cy="16" r="13" fill="none" strokeWidth="3" stroke="var(--green)"
-                strokeDasharray={`${2 * Math.PI * 13}`}
-                strokeDashoffset={`${2 * Math.PI * 13 * (1 - summary.answered / summary.total)}`}
-                strokeLinecap="round"
-              />
-            </svg>
-            <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.55rem", fontWeight: 700, color: "var(--text-muted)" }}>
-              {Math.round((summary.answered / summary.total) * 100)}%
-            </span>
-          </div>
-
-          {/* Timer with circular ring */}
-          <div style={{ position: "relative" }}>
-            <div
-              aria-live="polite"
-              className={timerPulse ? "timer-pulse" : ""}
-              style={{
-                fontVariantNumeric: "tabular-nums",
-                fontWeight: 700,
-                fontSize: "1.1rem",
-                color: timerColor,
-                background: "var(--bg-card2)",
-                border: `1px solid ${remainingSec <= 60 ? "rgba(239,68,68,0.3)" : remainingSec <= 300 ? "rgba(245,158,11,0.25)" : "var(--border)"}`,
-                padding: "0.4rem 0.85rem",
-                borderRadius: "0.625rem",
-                minWidth: 90,
-                textAlign: "center",
-                transition: "border-color 300ms ease",
-              }}
-            >
-              {timerText}
-            </div>
-          </div>
+        {/* Timer */}
+        <div
+          aria-live="polite"
+          className={timerPulse ? "timer-pulse" : ""}
+          style={{
+            fontVariantNumeric: "tabular-nums",
+            fontWeight: 700,
+            fontSize: "1.15rem",
+            color: timerColor,
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
+            padding: "0.4rem 0.8rem",
+            borderRadius: "0.5rem",
+            minWidth: 90,
+            textAlign: "center",
+          }}
+        >
+          {timerText}
         </div>
 
         <button
           onClick={() => setDrawerOpen(true)}
           style={{
-            padding: "0.5rem 0.9rem",
+            padding: "0.45rem 0.85rem",
             fontSize: "0.8rem",
             color: "var(--text-primary)",
             background: "var(--bg-card2)",
             border: "1px solid var(--border)",
-            borderRadius: "0.625rem",
+            borderRadius: "0.5rem",
             cursor: "pointer",
-            fontWeight: 500,
           }}
         >
           Daftar Soal
         </button>
       </header>
 
-      {/* Summary strip with progress bar */}
-      <div style={{ position: "relative" }}>
-        {/* Thin progress bar */}
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: "var(--border)",
-        }}>
-          <div style={{
-            height: "100%",
-            width: `${(summary.answered / summary.total) * 100}%`,
-            background: "var(--green)",
-            borderRadius: "0 2px 2px 0",
-            transition: "width 300ms ease",
-          }} />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            padding: "0.6rem 1.25rem",
-            borderBottom: "1px solid var(--border)",
-            fontSize: "0.72rem",
-            color: "var(--text-muted)",
-            background: "var(--bg-card2)",
-            paddingTop: "0.75rem",
-          }}
-        >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: "rgba(34,197,94,0.3)", border: "1px solid var(--green)" }} />
-            Terjawab {summary.answered}/{summary.total}
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)" }} />
-            Kosong {summary.empty}
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)" }} />
-            Ragu {summary.doubtful}
-          </span>
-        </div>
+      {/* Summary strip */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0.75rem",
+          padding: "0.55rem 1.25rem",
+          borderBottom: "1px solid var(--border)",
+          fontSize: "0.72rem",
+          color: "var(--text-muted)",
+          background: "var(--bg-card2)",
+        }}
+      >
+        <span>Terjawab {summary.answered}/{summary.total}</span>
+        <span>Kosong {summary.empty}</span>
+        <span>Ragu {summary.doubtful}</span>
       </div>
 
       {/* Main grid */}
@@ -580,7 +525,7 @@ export function ExamRoom({
           bottom: 0,
           left: 0,
           right: 0,
-          padding: "0.75rem 1.25rem",
+          padding: "0.75rem 1rem",
           background: "var(--bg-card)",
           borderTop: "1px solid var(--border)",
           display: "flex",
@@ -594,59 +539,48 @@ export function ExamRoom({
           onClick={() => goTo(currentIndex - 1)}
           disabled={currentIndex === 0}
           style={{
-            padding: "0.6rem 1.1rem",
+            padding: "0.55rem 1rem",
             background: "var(--bg-card2)",
             border: "1px solid var(--border)",
             color: "var(--text-primary)",
-            borderRadius: "0.625rem",
+            borderRadius: "0.5rem",
             fontSize: "0.82rem",
             cursor: currentIndex === 0 ? "not-allowed" : "pointer",
             opacity: currentIndex === 0 ? 0.5 : 1,
-            display: "flex",
-            alignItems: "center",
-            gap: "0.4rem",
           }}
         >
-          <span>←</span> Sebelumnya
-          <span style={{ fontSize: "0.6rem", color: "var(--text-dim)", marginLeft: "0.25rem", opacity: 0.7 }}>⌨</span>
+          ← Sebelumnya
         </button>
-        <div style={{ flex: 1, textAlign: "center", color: "var(--text-muted)", fontSize: "0.78rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.1rem" }}>
-          <span>Soal <strong style={{ color: "var(--text-primary)" }}>{currentIndex + 1}</strong> dari {questions.length}</span>
+        <div style={{ flex: 1, textAlign: "center", color: "var(--text-muted)", fontSize: "0.8rem" }}>
+          Soal {currentIndex + 1} dari {questions.length}
         </div>
         {currentIndex < questions.length - 1 ? (
           <button
             onClick={() => goTo(currentIndex + 1)}
             className="btn-primary"
             style={{
-              padding: "0.6rem 1.1rem",
+              padding: "0.55rem 1rem",
               fontSize: "0.82rem",
               fontWeight: 600,
-              borderRadius: "0.625rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
             }}
           >
-            Selanjutnya <span>→</span>
+            Selanjutnya →
           </button>
         ) : (
           <button
             onClick={() => setConfirmSubmit(true)}
             style={{
-              padding: "0.6rem 1.1rem",
+              padding: "0.55rem 1rem",
               fontSize: "0.82rem",
               fontWeight: 600,
-              background: "rgba(34,197,94,0.15)",
-              color: "var(--green)",
-              border: "1px solid rgba(34,197,94,0.25)",
-              borderRadius: "0.625rem",
+              background: "rgba(16,185,129,0.2)",
+              color: "#6EE7B7",
+              border: "1px solid rgba(16,185,129,0.3)",
+              borderRadius: "0.5rem",
               cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
             }}
           >
-            Submit Tryout ✓
+            Submit Tryout
           </button>
         )}
       </footer>
@@ -785,64 +719,57 @@ function QuestionCard({
   onToggleDoubtful: () => void;
 }) {
   return (
-    <article style={{
-      padding: "1.75rem",
-      background: "var(--bg-card)",
-      border: "1px solid var(--border)",
-      borderRadius: "1.25rem",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
+    <article className="glass-card" style={{ padding: "1.5rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
         <span
           style={{
-            padding: "0.2rem 0.6rem",
-            borderRadius: "0.4rem",
-            background: q.subtest?.includes("TWK") ? "rgba(37,99,235,0.1)" : q.subtest?.includes("TIU") ? "rgba(124,58,237,0.1)" : "rgba(34,197,94,0.1)",
-            color: q.subtest?.includes("TWK") ? "var(--blue)" : q.subtest?.includes("TIU") ? "var(--violet)" : "var(--green)",
-            fontSize: "0.72rem",
-            fontWeight: 700,
+            padding: "0.15rem 0.5rem",
+            borderRadius: "0.3rem",
+            background: "rgba(96,165,250,0.1)",
+            color: "#93C5FD",
+            fontSize: "0.7rem",
+            fontWeight: 600,
           }}
         >
           {q.subtest}
         </span>
-        <span style={{ color: "var(--text-dim)", fontSize: "0.75rem" }}>
+        <span style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
           Soal #{q.orderNumber}
         </span>
         <button
           onClick={onToggleDoubtful}
           style={{
             marginLeft: "auto",
-            padding: "0.3rem 0.75rem",
+            padding: "0.2rem 0.6rem",
             fontSize: "0.72rem",
             background: answer?.isMarkedDoubtful
-              ? "rgba(245,158,11,0.12)"
+              ? "rgba(245,158,11,0.15)"
               : "var(--bg-card2)",
-            color: answer?.isMarkedDoubtful ? "var(--amber)" : "var(--text-muted)",
+            color: answer?.isMarkedDoubtful ? "#FBBF24" : "var(--text-muted)",
             border: answer?.isMarkedDoubtful
-              ? "1px solid rgba(245,158,11,0.25)"
+              ? "1px solid rgba(245,158,11,0.3)"
               : "1px solid var(--border)",
-            borderRadius: "0.5rem",
+            borderRadius: "0.35rem",
             cursor: "pointer",
-            fontWeight: 500,
-            transition: "all 150ms ease",
           }}
         >
-          {answer?.isMarkedDoubtful ? "✓ Ragu" : "Tandai Ragu"}
+          {answer?.isMarkedDoubtful ? "✓ Ditandai Ragu" : "Tandai Ragu"}
         </button>
       </div>
 
       <p
         style={{
           color: "var(--text-primary)",
-          fontSize: "1.05rem",
-          lineHeight: 1.7,
-          marginBottom: "1.75rem",
+          fontSize: "1rem",
+          lineHeight: 1.65,
+          marginBottom: "1.5rem",
           whiteSpace: "pre-wrap",
         }}
       >
         {q.questionText}
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
         {q.options.map((o) => {
           const selected = answer?.selectedOptionId === o.id;
           return (
@@ -852,44 +779,42 @@ function QuestionCard({
               style={{
                 display: "flex",
                 alignItems: "flex-start",
-                gap: "0.875rem",
-                padding: "0.9rem 1.1rem",
+                gap: "0.75rem",
+                padding: "0.75rem 1rem",
                 background: selected
-                  ? "rgba(37,99,235,0.08)"
-                  : "rgba(255,255,255,0.02)",
+                  ? "rgba(96,165,250,0.12)"
+                  : "var(--bg-card2)",
                 border: selected
-                  ? "1px solid rgba(37,99,235,0.35)"
+                  ? "1px solid rgba(96,165,250,0.45)"
                   : "1px solid var(--border)",
-                borderRadius: "0.75rem",
+                borderRadius: "0.55rem",
                 color: "var(--text-primary)",
-                fontSize: "0.9rem",
+                fontSize: "0.88rem",
                 textAlign: "left",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
+                transition: "all 0.12s",
               }}
             >
               <span
                 style={{
-                  minWidth: 28,
-                  height: 28,
+                  minWidth: 24,
+                  height: 24,
                   borderRadius: "50%",
                   border: selected
-                    ? "2px solid var(--blue)"
-                    : "1.5px solid var(--border)",
-                  background: selected ? "rgba(37,99,235,0.15)" : "transparent",
+                    ? "2px solid #60A5FA"
+                    : "1px solid var(--border)",
+                  background: selected ? "rgba(96,165,250,0.25)" : "transparent",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "0.75rem",
+                  fontSize: "0.72rem",
                   fontWeight: 700,
-                  color: selected ? "var(--blue)" : "var(--text-muted)",
-                  flexShrink: 0,
-                  transition: "all 0.15s ease",
+                  color: selected ? "#BFDBFE" : "var(--text-muted)",
                 }}
               >
                 {o.label}
               </span>
-              <span style={{ flex: 1, lineHeight: 1.55, paddingTop: "0.15rem" }}>{o.text}</span>
+              <span style={{ flex: 1, lineHeight: 1.5 }}>{o.text}</span>
             </button>
           );
         })}
@@ -911,90 +836,56 @@ function Navigator({
   onGo: (i: number) => void;
   columns?: number;
 }) {
-  // Group questions by subtest
-  const groups: { subtest: string; items: { q: ExamQuestion; idx: number }[] }[] = [];
-  let currentGroup: typeof groups[0] | null = null;
-  questions.forEach((q, i) => {
-    if (!currentGroup || currentGroup.subtest !== q.subtest) {
-      currentGroup = { subtest: q.subtest, items: [] };
-      groups.push(currentGroup);
-    }
-    currentGroup.items.push({ q, idx: i });
-  });
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-      {groups.map((group) => {
-        const answered = group.items.filter((item) => answers[item.q.id]?.selectedOptionId).length;
-        const pct = Math.round((answered / group.items.length) * 100);
-        const color = group.subtest.includes("TWK") ? "var(--blue)" : group.subtest.includes("TIU") ? "var(--violet)" : "var(--green)";
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: "0.3rem",
+      }}
+    >
+      {questions.map((q, i) => {
+        const a = answers[q.id];
+        const isCurrent = i === currentIndex;
+        const status: "answered" | "doubt" | "empty" = a?.isMarkedDoubtful
+          ? "doubt"
+          : a?.selectedOptionId
+          ? "answered"
+          : "empty";
+        const bg =
+          status === "answered"
+            ? "rgba(16,185,129,0.12)"
+            : status === "doubt"
+            ? "rgba(245,158,11,0.15)"
+            : "rgba(255,255,255,0.03)";
+        const fg =
+          status === "answered"
+            ? "#6EE7B7"
+            : status === "doubt"
+            ? "#FBBF24"
+            : "#94A3B8";
+        const border = isCurrent
+          ? "1px solid #60A5FA"
+          : "1px solid var(--border)";
         return (
-          <div key={group.subtest}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
-              <span style={{ fontSize: "0.68rem", fontWeight: 700, color, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-                {group.subtest}
-              </span>
-              <span style={{ fontSize: "0.62rem", color: "var(--text-dim)" }}>
-                {answered}/{group.items.length}
-              </span>
-            </div>
-            {/* Mini progress bar */}
-            <div style={{ height: 3, borderRadius: 999, background: "var(--border)", marginBottom: "0.5rem", overflow: "hidden" }}>
-              <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: 999, transition: "width 300ms ease" }} />
-            </div>
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(${columns}, 1fr)`,
-              gap: "0.3rem",
-            }}>
-              {group.items.map(({ q, idx: i }) => {
-                const a = answers[q.id];
-                const isCurrent = i === currentIndex;
-                const status: "answered" | "doubt" | "empty" = a?.isMarkedDoubtful
-                  ? "doubt"
-                  : a?.selectedOptionId
-                  ? "answered"
-                  : "empty";
-                const bg =
-                  status === "answered"
-                    ? "rgba(34,197,94,0.1)"
-                    : status === "doubt"
-                    ? "rgba(245,158,11,0.12)"
-                    : "rgba(255,255,255,0.02)";
-                const fg =
-                  status === "answered"
-                    ? "var(--green)"
-                    : status === "doubt"
-                    ? "var(--amber)"
-                    : "var(--text-dim)";
-                const border = isCurrent
-                  ? "1.5px solid var(--blue)"
-                  : "1px solid var(--border)";
-                return (
-                  <button
-                    key={q.id}
-                    onClick={() => onGo(i)}
-                    style={{
-                      padding: "0.4rem 0",
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                      color: fg,
-                      background: bg,
-                      border,
-                      borderRadius: "0.4rem",
-                      cursor: "pointer",
-                      aspectRatio: "1 / 1",
-                      boxShadow: isCurrent ? "0 0 0 2px rgba(37,99,235,0.15)" : "none",
-                      transition: "all 100ms ease",
-                    }}
-                    title={`Soal ${q.orderNumber}`}
-                  >
-                    {q.orderNumber}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <button
+            key={q.id}
+            onClick={() => onGo(i)}
+            style={{
+              padding: "0.4rem 0",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              color: fg,
+              background: bg,
+              border,
+              borderRadius: "0.35rem",
+              cursor: "pointer",
+              aspectRatio: "1 / 1",
+            }}
+            title={`Soal ${q.orderNumber}`}
+          >
+            {q.orderNumber}
+          </button>
         );
       })}
     </div>
