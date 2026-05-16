@@ -194,7 +194,7 @@ body {
 .gradient-text {
   display: inline-block;
   padding-bottom: 0.06em;
-  background: linear-gradient(135deg, #60A5FA, #A78BFA);
+  background: linear-gradient(135deg, #2563EB, #0EA5E9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
