@@ -44,9 +44,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <img src="/logo-icon.png" alt="NalarUp" width={40} height={40} style={{ borderRadius: 10 }} />
           <div>
-            <span style={{ fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.02em" }} className="gradient-text">
-              NalarUp
-            </span>
+            <img src="/logo-text.png" alt="NalarUp" height={22} style={{ display: "block" }} />
             <p style={{ color: "var(--text-dim)", fontSize: "0.8rem", marginTop: "0.15rem" }}>
               Platform Tryout CASN
             </p>

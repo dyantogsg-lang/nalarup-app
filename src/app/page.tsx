@@ -205,7 +205,7 @@ export default async function LandingV2() {
               style={{ fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
               <img src="/logo-icon.png" alt="" width={26} height={26} style={{ borderRadius: 6 }} />
-              NalarUp
+              <img src="/logo-text.png" alt="NalarUp" height={16} style={{ display: "block" }} />
             </span>
             <div className="lv2-nav-links" style={{ display: "flex", gap: "1.75rem", alignItems: "center" }}>
               <Link href={ROUTES.tryouts} style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500 }}>
@@ -887,7 +887,7 @@ export default async function LandingV2() {
         >
           <span className="gradient-text" style={{ fontWeight: 800, fontSize: "1rem", letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: "0.4rem" }}>
             <img src="/logo-icon.png" alt="" width={22} height={22} style={{ borderRadius: 5 }} />
-            NalarUp
+            <img src="/logo-text.png" alt="NalarUp" height={14} style={{ display: "block" }} />
           </span>
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             <Link href={ROUTES.tryouts} style={{ color: "var(--text-dim)", textDecoration: "none", fontSize: "0.8rem" }}>Tryout</Link>
