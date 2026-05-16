@@ -267,7 +267,7 @@ export default async function ResultPage({ params }: Props) {
               return (
                 <div key={s.subtest} style={{
                   padding: "1.25rem",
-                  background: "rgba(255,255,255,0.02)",
+                  background: "var(--bg-card2)",
                   border: "1px solid var(--border)",
                   borderLeft: `3px solid ${color}`,
                   borderRadius: "0.875rem",

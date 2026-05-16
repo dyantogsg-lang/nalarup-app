@@ -121,11 +121,11 @@ export function ExamRoom({
   const remainingSec = Math.floor(remainingMs / 1000);
   const timerColor =
     remainingSec <= 60
-      ? "#FCA5A5"
+      ? "var(--danger)"
       : remainingSec <= 5 * 60
-      ? "#FCA5A5"
+      ? "var(--danger)"
       : remainingSec <= 15 * 60
-      ? "#FCD34D"
+      ? "var(--amber)"
       : "var(--text-primary)";
   const timerPulse = remainingSec <= 60;
   const hh = Math.floor(remainingSec / 3600);
@@ -575,7 +575,7 @@ export function ExamRoom({
             Terjawab {summary.answered}/{summary.total}
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)" }} />
+            <span style={{ width: 8, height: 8, borderRadius: 2, background: "var(--bg-card2)", border: "1px solid var(--border)" }} />
             Kosong {summary.empty}
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
@@ -748,8 +748,8 @@ export function ExamRoom({
                   flex: 1,
                   padding: "0.55rem 0.8rem",
                   background: "rgba(239,68,68,0.1)",
-                  color: "#FCA5A5",
-                  border: "1px solid rgba(239,68,68,0.25)",
+                  color: "var(--danger)",
+                  border: "1px solid rgba(239,68,68,0.2)",
                   borderRadius: "0.5rem",
                   fontSize: "0.8rem",
                   cursor: "pointer",
@@ -763,8 +763,8 @@ export function ExamRoom({
                   flex: 2,
                   padding: "0.55rem 0.8rem",
                   background: "rgba(16,185,129,0.2)",
-                  color: "#6EE7B7",
-                  border: "1px solid rgba(16,185,129,0.3)",
+                  color: "var(--green)",
+                  border: "1px solid rgba(34,197,94,0.25)",
                   borderRadius: "0.5rem",
                   fontSize: "0.82rem",
                   fontWeight: 600,
@@ -913,7 +913,7 @@ function QuestionCard({
                 padding: "0.9rem 1.1rem",
                 background: selected
                   ? "rgba(37,99,235,0.08)"
-                  : "rgba(255,255,255,0.02)",
+                  : "var(--bg-card2)",
                 border: selected
                   ? "1px solid rgba(37,99,235,0.35)"
                   : "1px solid var(--border)",
@@ -1045,7 +1045,7 @@ function Navigator({
                     ? "rgba(34,197,94,0.1)"
                     : status === "doubt"
                     ? "rgba(245,158,11,0.12)"
-                    : "rgba(255,255,255,0.02)";
+                    : "var(--bg-card2)";
                 const fg =
                   status === "answered"
                     ? "var(--green)"
@@ -1089,16 +1089,16 @@ function Navigator({
 function Legend() {
   return (
     <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem", fontSize: "0.7rem" }}>
-      <LegendChip color="#6EE7B7" bg="rgba(16,185,129,0.12)" label="Dijawab" />
-      <LegendChip color="#FBBF24" bg="rgba(245,158,11,0.15)" label="Ragu" />
-      <LegendChip color="#94A3B8" bg="rgba(255,255,255,0.03)" label="Kosong" />
+      <LegendChip color="var(--green)" bg="rgba(34,197,94,0.1)" label="Dijawab" />
+      <LegendChip color="var(--amber)" bg="rgba(245,158,11,0.12)" label="Ragu" />
+      <LegendChip color="var(--text-dim)" bg="var(--bg-card2)" label="Kosong" />
     </div>
   );
 }
 
 function LegendChip({ color, bg, label }: { color: string; bg: string; label: string }) {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", color: "#94A3B8" }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", color: "var(--text-dim)" }}>
       <span style={{ width: 10, height: 10, background: bg, border: `1px solid ${color}`, borderRadius: 2 }} />
       {label}
     </span>
@@ -1108,12 +1108,12 @@ function LegendChip({ color, bg, label }: { color: string; bg: string; label: st
 function StatusDot({ state }: { state: SaveState }) {
   const color =
     state === "saving"
-      ? "#FBBF24"
+      ? "var(--amber)"
       : state === "error"
-      ? "#FCA5A5"
+      ? "var(--danger)"
       : state === "saved"
-      ? "#6EE7B7"
-      : "#64748B";
+      ? "var(--green)"
+      : "var(--text-dim)";
   return (
     <span
       aria-hidden
@@ -1147,8 +1147,8 @@ function ConfirmDialog({
 }) {
   const toneColors =
     tone === "success"
-      ? { bg: "rgba(16,185,129,0.2)", fg: "#6EE7B7", border: "rgba(16,185,129,0.3)" }
-      : { bg: "rgba(239,68,68,0.15)", fg: "#FCA5A5", border: "rgba(239,68,68,0.3)" };
+      ? { bg: "rgba(34,197,94,0.15)", fg: "var(--green)", border: "rgba(34,197,94,0.25)" }
+      : { bg: "rgba(239,68,68,0.1)", fg: "var(--danger)", border: "rgba(239,68,68,0.2)" };
   return (
     <div
       onClick={onCancel}

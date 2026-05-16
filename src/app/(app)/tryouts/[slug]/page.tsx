@@ -268,7 +268,7 @@ export default async function TryoutDetailPage({ params }: Props) {
               return (
                 <div key={s.subtest} style={{
                   padding: "1rem 1.25rem",
-                  background: "rgba(255,255,255,0.02)",
+                  background: "var(--bg-card2)",
                   border: "1px solid var(--border)",
                   borderRadius: "0.875rem",
                 }}>
@@ -353,7 +353,7 @@ export default async function TryoutDetailPage({ params }: Props) {
                       justifyContent: "space-between",
                       alignItems: "center",
                       padding: "0.75rem 1rem",
-                      background: isBest ? "rgba(34,197,94,0.04)" : "rgba(255,255,255,0.02)",
+                      background: isBest ? "rgba(34,197,94,0.04)" : "var(--bg-card2)",
                       border: `1px solid ${isBest ? "rgba(34,197,94,0.15)" : "var(--border)"}`,
                       borderRadius: "0.75rem",
                       textDecoration: "none",

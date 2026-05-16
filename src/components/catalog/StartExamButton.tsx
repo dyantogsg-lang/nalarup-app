@@ -225,7 +225,7 @@ function Warn({ text }: { text: string }) {
         color: "var(--text-primary)",
       }}
     >
-      <span aria-hidden style={{ color: "#FBBF24" }}>
+      <span aria-hidden style={{ color: "var(--amber)" }}>
         !
       </span>
       <span>{text}</span>

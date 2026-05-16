@@ -230,7 +230,7 @@ export function SavedPageClient() {
                     width: 28,
                     height: 28,
                     borderRadius: "0.5rem",
-                    background: "rgba(255,255,255,0.02)",
+                    background: "var(--bg-card2)",
                     border: "1px solid var(--border)",
                     display: "flex",
                     alignItems: "center",
@@ -262,9 +262,9 @@ export function SavedPageClient() {
                         fontWeight: 600,
                         padding: "0.12rem 0.45rem",
                         borderRadius: "999px",
-                        background: `color-mix(in srgb, ${mode.color} 10%, transparent)`,
+                        background: mode.color === "var(--danger)" ? "rgba(239,68,68,0.1)" : "rgba(37,99,235,0.1)",
                         color: mode.color,
-                        border: `1px solid color-mix(in srgb, ${mode.color} 20%, transparent)`,
+                        border: `1px solid ${mode.color === "var(--danger)" ? "rgba(239,68,68,0.2)" : "rgba(37,99,235,0.2)"}`,
                       }}>
                         {mode.label}
                       </span>

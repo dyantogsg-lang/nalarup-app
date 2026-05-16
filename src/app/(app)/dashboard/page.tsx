@@ -692,7 +692,7 @@ function ReturningUserDashboard({
               const pct = Math.min(100, Math.round((subtest.score / subtest.target) * 100));
               return (
                 <div key={subtest.label} style={{
-                  background: "rgba(255,255,255,0.02)",
+                  background: "var(--bg-card2)",
                   border: "1px solid var(--border)",
                   borderRadius: "0.875rem",
                   padding: "1rem",
@@ -787,7 +787,7 @@ function ReturningUserDashboard({
                       justifyContent: "space-between",
                       alignItems: "center",
                       padding: "0.875rem 1rem",
-                      background: "rgba(255,255,255,0.02)",
+                      background: "var(--bg-card2)",
                       border: "1px solid var(--border)",
                       borderRadius: "0.875rem",
                       textDecoration: "none",

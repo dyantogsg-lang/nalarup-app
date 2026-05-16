@@ -277,7 +277,7 @@ export function PackageCard({ pkg, featured = false }: { pkg: CatalogPackage; fe
         <div style={{
           padding: "0.6rem 0.75rem",
           borderRadius: "0.625rem",
-          background: "rgba(255,255,255,0.02)",
+          background: "var(--bg-card2)",
           border: "1px solid var(--border)",
           fontSize: "0.75rem",
           display: "flex",
