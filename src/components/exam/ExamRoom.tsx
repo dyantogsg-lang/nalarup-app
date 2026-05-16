@@ -22,6 +22,12 @@ type AnswerMap = Record<
   { selectedOptionId: string | null; isMarkedDoubtful: boolean }
 >;
 
+/** Server-confirmed answers (only these count for scoring) */
+type SavedMap = Record<
+  string,
+  { selectedOptionId: string | null; isMarkedDoubtful: boolean }
+>;
+
 type SaveState = "idle" | "saving" | "saved" | "error";
 
 export function ExamRoom({
@@ -44,6 +50,7 @@ export function ExamRoom({
     typeof navigator !== "undefined" ? navigator.onLine : true
   );
 
+  // Local selection (unsaved — resets on navigation if not saved)
   const [answers, setAnswers] = useState<AnswerMap>(() => {
     const map: AnswerMap = {};
     for (const a of initialAnswers) {
@@ -54,6 +61,29 @@ export function ExamRoom({
     }
     return map;
   });
+
+  // Server-confirmed answers (only these count)
+  const [savedAnswers, setSavedAnswers] = useState<SavedMap>(() => {
+    const map: SavedMap = {};
+    for (const a of initialAnswers) {
+      map[a.questionId] = {
+        selectedOptionId: a.selectedOptionId,
+        isMarkedDoubtful: a.isMarkedDoubtful,
+      };
+    }
+    return map;
+  });
+
+  // Track if current question has unsaved changes
+  const currentHasUnsaved = (() => {
+    if (!questions[currentIndex]) return false;
+    const qid = questions[currentIndex].id;
+    const local = answers[qid];
+    const saved = savedAnswers[qid];
+    if (!local && !saved) return false;
+    if (!local || !saved) return true;
+    return local.selectedOptionId !== saved.selectedOptionId || local.isMarkedDoubtful !== saved.isMarkedDoubtful;
+  })();
 
   const [now, setNow] = useState(() => new Date());
   const endsAtMs = useMemo(() => new Date(attempt.endsAt).getTime(), [attempt.endsAt]);
@@ -141,13 +171,13 @@ export function ExamRoom({
     let answered = 0;
     let doubtful = 0;
     for (const q of questions) {
-      const a = answers[q.id];
+      const a = savedAnswers[q.id];
       if (a?.selectedOptionId) answered++;
       if (a?.isMarkedDoubtful) doubtful++;
     }
     const empty = questions.length - answered;
     return { answered, empty, doubtful, total: questions.length };
-  }, [answers, questions]);
+  }, [savedAnswers, questions]);
 
   // ─── Autosave ─────────────────────────────────────────────────────────────
   // React 19 + React Compiler handle memoization — plain functions are fine.
@@ -306,11 +336,11 @@ export function ExamRoom({
     const nextSelected =
       existing?.selectedOptionId === optionId ? null : optionId; // toggle off
     const nextDoubt = existing?.isMarkedDoubtful ?? false;
+    // Only update local state — NOT saved to server yet
     setAnswers((prev) => ({
       ...prev,
       [current.id]: { selectedOptionId: nextSelected, isMarkedDoubtful: nextDoubt },
     }));
-    queueSave(current.id, nextSelected, nextDoubt);
   }
 
   function toggleDoubtful() {
@@ -320,13 +350,34 @@ export function ExamRoom({
       selectedOptionId: existing?.selectedOptionId ?? null,
       isMarkedDoubtful: !(existing?.isMarkedDoubtful ?? false),
     };
+    // Only update local state
     setAnswers((prev) => ({ ...prev, [current.id]: next }));
-    queueSave(current.id, next.selectedOptionId, next.isMarkedDoubtful);
+  }
+
+  /** Explicit save — like CAT BKN "Simpan" button */
+  function saveCurrentAnswer() {
+    if (!current) return;
+    const local = answers[current.id];
+    if (!local) return;
+    queueSave(current.id, local.selectedOptionId, local.isMarkedDoubtful);
+    // Mark as saved locally immediately for responsive UI
+    setSavedAnswers((prev) => ({
+      ...prev,
+      [current.id]: { selectedOptionId: local.selectedOptionId, isMarkedDoubtful: local.isMarkedDoubtful },
+    }));
   }
 
   function goTo(idx: number) {
-    // Opt #3b — flush pending sebelum pindah soal supaya tidak ada
-    // race condition / lost write antar question.
+    // CAT BKN behavior: pindah soal tanpa simpan = jawaban hilang (reset ke saved state)
+    if (current) {
+      const saved = savedAnswers[current.id];
+      setAnswers((prev) => ({
+        ...prev,
+        [current.id]: saved ?? { selectedOptionId: null, isMarkedDoubtful: false },
+      }));
+    }
+
+    // Opt #3b — flush pending sebelum pindah soal
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
@@ -556,6 +607,8 @@ export function ExamRoom({
               answer={answerForCurrent}
               onSelect={selectOption}
               onToggleDoubtful={toggleDoubtful}
+              onSaveAnswer={saveCurrentAnswer}
+              hasUnsaved={currentHasUnsaved}
             />
           ) : (
             <div style={{ color: "var(--text-muted)" }}>Memuat soal...</div>
@@ -566,7 +619,7 @@ export function ExamRoom({
         <aside className="exam-sidebar">
           <Navigator
             questions={questions}
-            answers={answers}
+            answers={savedAnswers}
             currentIndex={currentIndex}
             onGo={goTo}
           />
@@ -683,7 +736,7 @@ export function ExamRoom({
             <Legend />
             <Navigator
               questions={questions}
-              answers={answers}
+              answers={savedAnswers}
               currentIndex={currentIndex}
               onGo={goTo}
               columns={6}
@@ -778,11 +831,15 @@ function QuestionCard({
   answer,
   onSelect,
   onToggleDoubtful,
+  onSaveAnswer,
+  hasUnsaved,
 }: {
   q: ExamQuestion;
   answer?: { selectedOptionId: string | null; isMarkedDoubtful: boolean };
   onSelect: (optionId: string) => void;
   onToggleDoubtful: () => void;
+  onSaveAnswer: () => void;
+  hasUnsaved: boolean;
 }) {
   return (
     <article style={{
@@ -893,6 +950,34 @@ function QuestionCard({
             </button>
           );
         })}
+      </div>
+
+      {/* ===== SIMPAN BUTTON — CAT BKN style ===== */}
+      <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "flex-end" }}>
+        <button
+          onClick={onSaveAnswer}
+          disabled={!hasUnsaved}
+          style={{
+            padding: "0.7rem 1.75rem",
+            fontSize: "0.88rem",
+            fontWeight: 700,
+            background: hasUnsaved ? "rgba(37,99,235,0.12)" : "var(--bg-card2)",
+            color: hasUnsaved ? "var(--blue)" : "var(--text-dim)",
+            border: hasUnsaved ? "1px solid rgba(37,99,235,0.3)" : "1px solid var(--border)",
+            borderRadius: "0.75rem",
+            cursor: hasUnsaved ? "pointer" : "not-allowed",
+            opacity: hasUnsaved ? 1 : 0.6,
+            transition: "all 150ms ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
+          {hasUnsaved ? "Simpan Jawaban" : "Tersimpan"}
+        </button>
       </div>
     </article>
   );
