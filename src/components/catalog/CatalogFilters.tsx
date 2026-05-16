@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 export interface FilterOptions {
   categories: { slug: string; name: string }[];
@@ -21,7 +21,6 @@ const DIFFICULTY_OPTIONS: { value: string; label: string }[] = [
 ];
 
 export function CatalogFilters({ categories }: FilterOptions) {
-  const router = useRouter();
   const params = useSearchParams();
 
   const [search, setSearch] = useState(params.get("q") ?? "");
@@ -29,29 +28,37 @@ export function CatalogFilters({ categories }: FilterOptions) {
   const mode = params.get("mode") ?? "all";
   const difficulty = params.get("diff") ?? "all";
 
-  // Debounce search updates to URL
+  // Full navigation to trigger server re-render
+  const navigate = useCallback((qs: string) => {
+    const base = window.location.pathname;
+    window.location.href = qs ? `${base}?${qs}` : base;
+  }, []);
+
+  // Debounce search — only navigate if value actually changed from URL
   useEffect(() => {
+    const currentQ = params.get("q") ?? "";
+    const trimmed = search.trim();
+    if (trimmed === currentQ) return;
     const t = setTimeout(() => {
       const next = new URLSearchParams(params.toString());
-      if (search.trim()) next.set("q", search.trim());
+      if (trimmed) next.set("q", trimmed);
       else next.delete("q");
-      const qs = next.toString();
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
-    }, 300);
+      navigate(next.toString());
+    }, 600);
     return () => clearTimeout(t);
-  }, [search, params, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const setParam = (key: string, value: string) => {
     const next = new URLSearchParams(params.toString());
     if (value === "all" || value === "") next.delete(key);
     else next.set(key, value);
-    const qs = next.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    navigate(next.toString());
   };
 
   const resetAll = () => {
     setSearch("");
-    router.replace("?", { scroll: false });
+    navigate("");
   };
 
   const hasActiveFilter =
