@@ -301,12 +301,20 @@ export async function getPackageBySlug(
   };
 }
 
+import { unstable_cache } from "next/cache";
+
 export async function listCategories() {
-  return db
+  return cachedListCategories();
+}
+
+const cachedListCategories = unstable_cache(
+  () => db
     .select({ slug: categories.slug, name: categories.name })
     .from(categories)
-    .orderBy(asc(categories.sortOrder));
-}
+    .orderBy(asc(categories.sortOrder)),
+  ["list-categories"],
+  { revalidate: 300 } // 5 minutes — categories rarely change
+);
 
 // Keep for potential future pagination; currently unused.
 export const COUNT_PACKAGES_SQL = sql<number>`count(*)::int`;
