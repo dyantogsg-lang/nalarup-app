@@ -34,7 +34,7 @@ export async function registerUser(
   await page.getByRole("button", { name: /Daftar Gratis/i }).click();
 
   await page.waitForURL("**/dashboard", { timeout: 15_000 });
-  await expect(page.getByRole("heading", { name: /Hei,/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Welcome,/ })).toBeVisible();
 
   return { email, password, fullName };
 }

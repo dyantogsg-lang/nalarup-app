@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:dribbble.com)",
+      "WebSearch",
+      "mcp__ide__getDiagnostics",
+      "Bash(npx tsc *)",
+      "Bash(wsl *)",
+      "Bash(wsl.exe *)"
+    ]
+  }
+}

@@ -17,9 +17,9 @@ test.describe("Landing & auth", () => {
   test("register → dashboard", async ({ page, registeredUser }) => {
     // Fixture already performed register; verify we're on dashboard.
     await expect(page).toHaveURL(/\/dashboard/);
-    // "Hei, <firstname>" heading rendered
+    // "Welcome, <firstname>" heading rendered
     await expect(
-      page.getByRole("heading", { name: new RegExp(`Hei, ${registeredUser.fullName.split(" ")[0]}`) })
+      page.getByRole("heading", { name: new RegExp(`Welcome, ${registeredUser.fullName.split(" ")[0]}`) })
     ).toBeVisible();
   });
 
