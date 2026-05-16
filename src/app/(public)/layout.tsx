@@ -41,13 +41,16 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         }} />
 
         {/* Logo */}
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <span style={{ fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.02em" }} className="gradient-text">
-            NalarUp
-          </span>
-          <p style={{ color: "var(--text-dim)", fontSize: "0.8rem", marginTop: "0.25rem" }}>
-            Platform Tryout CASN
-          </p>
+        <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <img src="/logo-icon.png" alt="NalarUp" width={40} height={40} style={{ borderRadius: 10 }} />
+          <div>
+            <span style={{ fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.02em" }} className="gradient-text">
+              NalarUp
+            </span>
+            <p style={{ color: "var(--text-dim)", fontSize: "0.8rem", marginTop: "0.15rem" }}>
+              Platform Tryout CASN
+            </p>
+          </div>
         </div>
 
         {/* Center content */}

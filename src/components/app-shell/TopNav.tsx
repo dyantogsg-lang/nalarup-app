@@ -40,7 +40,8 @@ export function TopNav({ fullName }: { fullName: string }) {
         }}
       >
         {/* Logo */}
-        <Link href="/dashboard" style={{ textDecoration: "none", flexShrink: 0 }}>
+        <Link href="/dashboard" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <img src="/logo-icon.png" alt="NalarUp" width={28} height={28} style={{ borderRadius: 6 }} />
           <span
             className="gradient-text"
             style={{

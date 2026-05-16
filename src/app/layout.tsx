@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "NalarUp — Platform Tryout CASN",
   description:
     "Naikkan skor sampai aman passing grade lewat simulasi tryout realistis, analisis kelemahan, dan latihan perbaikan terarah.",
+  icons: {
+    icon: "/logo-icon.png",
+    apple: "/logo-icon.png",
+  },
 };
 
 export default function RootLayout({
