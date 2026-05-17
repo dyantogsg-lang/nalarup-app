@@ -5,21 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { ROUTES } from "@/lib/constants/routes";
-
-function EyeIcon({ open }: { open: boolean }) {
-  return open ? (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-      <circle cx="12" cy="12" r="3"/>
-    </svg>
-  ) : (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-      <line x1="1" y1="1" x2="23" y2="23"/>
-    </svg>
-  );
-}
+import { AlertBox, EyeIcon } from "@/components/ui";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -52,24 +38,24 @@ export default function LoginForm() {
   }
 
   return (
-    <div style={{ width: "100%", maxWidth: 420 }}>
+    <div className="w-full max-w-[420px]">
       {/* Header */}
-      <div style={{ marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "0.375rem" }}>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold tracking-tight mb-1" style={{ color: "var(--text-primary)" }}>
           Selamat datang kembali
         </h1>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>
           Masuk untuk lanjutkan latihan
         </p>
       </div>
 
       {hasRedirect && (
-        <div className="glass-card" style={{ padding: "0.75rem 1rem", marginBottom: "1rem", borderColor: "rgba(37,99,235,0.25)", background: "var(--blue-subtle)", color: "var(--text-muted)", fontSize: "0.82rem", lineHeight: 1.55 }}>
+        <AlertBox variant="info" className="mb-4">
           Masuk dulu untuk melanjutkan tryout atau halaman yang kamu buka.
-        </div>
+        </AlertBox>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {/* Email */}
         <div className="float-label-wrap">
           <input
@@ -88,7 +74,7 @@ export default function LoginForm() {
         </div>
 
         {/* Password */}
-        <div style={{ position: "relative" }}>
+        <div className="relative">
           <div className="float-label-wrap">
             <input
               id="login-password"
@@ -98,8 +84,7 @@ export default function LoginForm() {
               required
               placeholder=" "
               autoComplete="current-password"
-              className="input-field"
-              style={{ paddingRight: "3rem" }}
+              className="input-field pr-12"
               aria-invalid={!!error}
               aria-describedby={error ? "login-error" : undefined}
             />
@@ -108,15 +93,8 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            style={{
-              position: "absolute", right: "0.875rem", top: "50%",
-              transform: "translateY(-50%)",
-              background: "none", border: "none",
-              color: "var(--text-dim)", cursor: "pointer",
-              display: "flex", alignItems: "center",
-              padding: "0.25rem",
-              transition: "color 150ms ease",
-            }}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center p-1 bg-transparent border-none cursor-pointer transition-colors duration-150"
+            style={{ color: "var(--text-dim)" }}
             aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
           >
             <EyeIcon open={showPassword} />
@@ -125,45 +103,32 @@ export default function LoginForm() {
 
         {/* Error */}
         {error && (
-          <div id="login-error" role="alert" style={{
-            background: "rgba(239,68,68,0.08)",
-            border: "1px solid rgba(239,68,68,0.25)",
-            borderRadius: "0.625rem",
-            padding: "0.75rem 1rem",
-            color: "#FCA5A5",
-            fontSize: "0.82rem",
-            display: "flex",
-            gap: "0.5rem",
-            alignItems: "flex-start",
-          }}>
-            <span aria-hidden="true" style={{ flexShrink: 0 }}>⚠</span>
+          <AlertBox variant="error" className="text-[0.82rem]">
             {error}
-          </div>
+          </AlertBox>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary"
-          style={{ width: "100%", padding: "0.8rem", fontSize: "0.95rem", marginTop: "0.25rem", opacity: loading ? 0.7 : 1 }}
+          className="btn-primary w-full py-3 text-[0.95rem] mt-1"
+          style={{ opacity: loading ? 0.7 : 1 }}
         >
           {loading ? (
-            <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
+            <span className="flex items-center justify-center gap-2">
+              <span className="animate-spin inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full" />
               Memproses...
             </span>
           ) : "Masuk"}
         </button>
       </form>
 
-      <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--text-dim)", fontSize: "0.82rem" }}>
+      <p className="text-center mt-6 text-[0.82rem]" style={{ color: "var(--text-dim)" }}>
         Belum punya akun?{" "}
-        <Link href={ROUTES.register} style={{ color: "#60A5FA", textDecoration: "none", fontWeight: 500 }}>
+        <Link href={ROUTES.register} className="font-medium no-underline hover:underline" style={{ color: "var(--blue-light)" }}>
           Daftar gratis
         </Link>
       </p>
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

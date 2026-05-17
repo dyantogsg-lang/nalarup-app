@@ -5,8 +5,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div style={{ width: "100%", maxWidth: 400, padding: "0 1.5rem" }}>
-          <div className="glass-card" style={{ padding: "2.5rem", textAlign: "center", color: "#64748B" }}>
+        <div className="w-full max-w-[400px] px-6">
+          <div className="glass-card p-10 text-center" style={{ color: "var(--text-muted)" }}>
             Memuat...
           </div>
         </div>

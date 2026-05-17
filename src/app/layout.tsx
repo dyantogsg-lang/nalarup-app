@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 
 export const metadata: Metadata = {
   title: "NalarUp — Platform Tryout CASN",
@@ -25,7 +26,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AnalyticsProvider>{children}</AnalyticsProvider>
+      </body>
     </html>
   );
 }
