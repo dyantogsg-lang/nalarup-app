@@ -13,12 +13,19 @@ import {
   modeColor,
   modeLabel,
 } from "@/lib/packages/format";
-import { PageHeader, StatCard, SectionCard, AlertBox } from "@/components/ui";
+import { GlassCard, ProgressRing, Button3D } from "@/components/ui";
 import { TryoutDetailSections } from "@/components/catalog/TryoutDetailSections";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+// Neon difficulty map
+const NEON_DIFFICULTY: Record<string, { bg: string; fg: string; glow: string }> = {
+  easy: { bg: "rgba(34,197,94,0.12)", fg: "#22c55e", glow: "0 0 8px rgba(34,197,94,0.4)" },
+  medium: { bg: "rgba(245,158,11,0.12)", fg: "#f59e0b", glow: "0 0 8px rgba(245,158,11,0.4)" },
+  hard: { bg: "rgba(239,68,68,0.12)", fg: "#ef4444", glow: "0 0 8px rgba(239,68,68,0.4)" },
+};
 
 export default async function TryoutDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -28,7 +35,7 @@ export default async function TryoutDetailPage({ params }: Props) {
   if (!pkg) notFound();
 
   const modeC = modeColor(pkg.mode);
-  const diffC = difficultyColor(pkg.difficulty);
+  const diffC = NEON_DIFFICULTY[pkg.difficulty] || NEON_DIFFICULTY.easy;
   const isSimulation = pkg.mode === "simulation";
 
   const hasActiveAttempt = pkg.activeAttempt !== null;
@@ -56,11 +63,10 @@ export default async function TryoutDetailPage({ params }: Props) {
   return (
     <div className="max-w-[900px] mx-auto px-4 pb-28">
       {/* Breadcrumb */}
-      <nav className="mb-4 text-xs" aria-label="Breadcrumb">
+      <nav className="mb-5 text-xs" aria-label="Breadcrumb">
         <Link
           href={ROUTES.tryouts}
-          className="inline-flex items-center gap-1 font-medium transition-colors hover:opacity-80"
-          style={{ color: "var(--blue)", textDecoration: "none" }}
+          className="inline-flex items-center gap-1.5 font-medium transition-colors text-blue-400 hover:text-blue-300 no-underline"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polyline points="15 18 9 12 15 6" />
@@ -71,89 +77,94 @@ export default async function TryoutDetailPage({ params }: Props) {
 
       {/* Active attempt banner */}
       {hasActiveAttempt && (
-        <AlertBox variant="warning" className="mb-4">
+        <div className="mb-4 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm font-medium flex items-center gap-2">
+          <span className="text-lg">⚡</span>
           {COPY.activeAttempt.banner}
-        </AlertBox>
+        </div>
       )}
 
-      {/* Header card */}
-      <div
-        className="glass-card p-5 sm:p-8 mb-4 relative overflow-hidden"
-        style={{
-          background: isSimulation
-            ? "linear-gradient(135deg, rgba(239,68,68,0.05), rgba(239,68,68,0.02))"
-            : "linear-gradient(135deg, rgba(37,99,235,0.05), rgba(124,58,237,0.03))",
-          borderColor: isSimulation ? "rgba(239,68,68,0.12)" : undefined,
-        }}
+      {/* Header card — glass panel */}
+      <GlassCard
+        glow={isSimulation ? "orange" : "blue"}
+        className="!p-6 sm:!p-8 mb-5 relative overflow-hidden"
       >
-        {/* Decorative blob */}
+        {/* Decorative neon blob */}
         <div
-          className="absolute -top-8 -right-8 w-40 h-40 pointer-events-none"
+          className="absolute -top-12 -right-12 w-48 h-48 pointer-events-none opacity-40"
           style={{
             background: isSimulation
-              ? "radial-gradient(circle, rgba(239,68,68,0.06), transparent 70%)"
-              : "radial-gradient(circle, rgba(37,99,235,0.06), transparent 70%)",
+              ? "radial-gradient(circle, rgba(239,68,68,0.15), transparent 70%)"
+              : "radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%)",
           }}
           aria-hidden="true"
         />
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-2 mb-3 relative z-[1]">
+        <div className="flex flex-wrap gap-2 mb-4 relative z-[1]">
           {pkg.categoryName && (
-            <Badge bg="var(--bg-card2)" fg="var(--text-primary)" border="var(--border)">
+            <span className="text-[0.72rem] font-semibold px-3 py-1 rounded-full bg-white/[0.06] text-[var(--text-primary)] border border-white/10">
               {pkg.categoryName}
-            </Badge>
+            </span>
           )}
-          <Badge bg={modeC.bg} fg={modeC.fg} border={modeC.border}>
+          <span
+            className="text-[0.72rem] font-semibold px-3 py-1 rounded-full"
+            style={{
+              background: modeC.bg,
+              color: modeC.fg,
+              border: `1px solid ${modeC.border}`,
+            }}
+          >
             {modeLabel(pkg.mode)}
-          </Badge>
-          <Badge bg={diffC.bg} fg={diffC.fg}>
+          </span>
+          <span
+            className="text-[0.72rem] font-bold px-3 py-1 rounded-full"
+            style={{
+              background: diffC.bg,
+              color: diffC.fg,
+              boxShadow: diffC.glow,
+            }}
+          >
             {difficultyLabel(pkg.difficulty)}
-          </Badge>
+          </span>
         </div>
 
         {/* Title + description */}
-        <h1
-          className="text-xl sm:text-2xl font-extrabold leading-tight mb-2 relative z-[1]"
-          style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-        >
+        <h1 className="text-xl sm:text-2xl font-extrabold leading-tight mb-2 relative z-[1] text-[var(--text-primary)]" style={{ letterSpacing: "-0.02em" }}>
           {pkg.title}
         </h1>
-        <p
-          className="text-sm leading-relaxed relative z-[1] max-w-[520px]"
-          style={{ color: "var(--text-muted)" }}
-        >
+        <p className="text-sm leading-relaxed relative z-[1] max-w-[520px] text-[var(--text-muted)]">
           {pkg.description}
         </p>
-      </div>
+      </GlassCard>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-        <StatCard
+      {/* Stat cards — neon accents */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <StatCardV4
           label="Jumlah Soal"
-          value={pkg.totalQuestions}
+          value={String(pkg.totalQuestions)}
           sub="soal"
-          accent="blue"
+          color="#3b82f6"
           icon={<IconDoc />}
         />
-        <StatCard
+        <StatCardV4
           label="Durasi"
           value={formatDuration(pkg.durationMinutes)}
-          accent="amber"
+          color="#f59e0b"
           icon={<IconClock />}
         />
-        <StatCard
+        <StatCardV4
           label="Passing Grade"
-          value={pkg.passingGradeTotal != null ? pkg.passingGradeTotal : "-"}
-          accent="green"
+          value={pkg.passingGradeTotal != null ? String(pkg.passingGradeTotal) : "-"}
+          color="#22c55e"
           icon={<IconTarget />}
         />
-        <StatCard
+        <StatCardV4
           label="Skor Terbaik"
-          value={bestScore != null ? bestScore : "-"}
+          value={bestScore != null ? String(bestScore) : "-"}
           sub={submittedCount > 0 ? `${submittedCount}x dikerjakan` : undefined}
-          accent="violet"
+          color="#8b5cf6"
           icon={<IconBolt />}
+          ring={bestScore != null ? { value: bestScore, max: bestScore > 100 ? 1000 : 100 } : undefined}
         />
       </div>
 
@@ -166,29 +177,21 @@ export default async function TryoutDetailPage({ params }: Props) {
         rules={COPY.exam.rules}
       />
 
-      {/* Sticky CTA */}
+      {/* Sticky CTA — glass bar with 3D button */}
       <div
         className="fixed bottom-0 left-0 right-0 z-20 sm:sticky sm:bottom-0 sm:left-auto sm:right-auto"
         style={{
-          background: "linear-gradient(to top, var(--bg-base) 80%, transparent)",
+          background: "linear-gradient(to top, #0A0E1A 80%, transparent)",
         }}
       >
-        <div
-          className="max-w-[900px] mx-auto px-4 py-3"
-        >
-          <div
-            className="glass-card flex items-center justify-between gap-3 px-4 py-3 sm:px-5"
-            style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          >
+        <div className="max-w-[900px] mx-auto px-4 py-3">
+          <div className="relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl flex items-center justify-between gap-3 px-5 py-3.5">
             {/* Compact info - hidden on very small screens */}
-            <div
-              className="hidden sm:flex gap-4 items-center text-xs"
-              style={{ color: "var(--text-muted)" }}
-            >
-              <span className="inline-flex items-center gap-1">
+            <div className="hidden sm:flex gap-4 items-center text-xs text-[var(--text-dim)]">
+              <span className="inline-flex items-center gap-1.5">
                 <IconDoc /> {pkg.totalQuestions} soal
               </span>
-              <span className="inline-flex items-center gap-1">
+              <span className="inline-flex items-center gap-1.5">
                 <IconClock /> {formatDuration(pkg.durationMinutes)}
               </span>
             </div>
@@ -209,30 +212,57 @@ export default async function TryoutDetailPage({ params }: Props) {
   );
 }
 
-// ─── Presentational helpers ─────────────────────────────────────────────────
+// ─── StatCard V4 ────────────────────────────────────────────────────────────
 
-function Badge({
-  children,
-  bg,
-  fg,
-  border,
+function StatCardV4({
+  label,
+  value,
+  sub,
+  color,
+  icon,
+  ring,
 }: {
-  children: React.ReactNode;
-  bg: string;
-  fg: string;
-  border?: string;
+  label: string;
+  value: string;
+  sub?: string;
+  color: string;
+  icon: React.ReactNode;
+  ring?: { value: number; max: number };
 }) {
   return (
-    <span
-      className="text-[0.72rem] font-semibold px-2.5 py-1 rounded-full"
-      style={{
-        background: bg,
-        color: fg,
-        border: border ? `1px solid ${border}` : "none",
-      }}
+    <div
+      className="relative rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-4 flex flex-col gap-2 overflow-hidden transition-all hover:border-white/15 hover:bg-white/[0.05]"
     >
-      {children}
-    </span>
+      {/* Neon accent line at top */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(90deg, ${color}, transparent)` }}
+        aria-hidden="true"
+      />
+
+      <div className="flex items-center justify-between">
+        <span className="text-[var(--text-dim)]" style={{ color: `${color}99` }}>
+          {icon}
+        </span>
+        {ring && (
+          <ProgressRing
+            value={ring.value}
+            max={ring.max}
+            size={32}
+            strokeWidth={3}
+            color={color}
+          />
+        )}
+      </div>
+
+      <div>
+        <div className="text-lg font-bold num text-[var(--text-primary)]">{value}</div>
+        <div className="text-[0.68rem] text-[var(--text-dim)] mt-0.5">{label}</div>
+        {sub && (
+          <div className="text-[0.62rem] text-[var(--text-dim)] mt-0.5 opacity-70">{sub}</div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -240,7 +270,7 @@ function Badge({
 
 function IconDoc() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <polyline points="14 2 14 8 20 8" />
       <line x1="16" y1="13" x2="8" y2="13" />
@@ -251,7 +281,7 @@ function IconDoc() {
 
 function IconClock() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
     </svg>
@@ -260,7 +290,7 @@ function IconClock() {
 
 function IconTarget() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <circle cx="12" cy="12" r="6" />
       <circle cx="12" cy="12" r="2" />
@@ -270,7 +300,7 @@ function IconTarget() {
 
 function IconBolt() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
     </svg>
   );

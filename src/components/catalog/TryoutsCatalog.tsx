@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo, useTransition, useCallback } from "react";
-import Link from "next/link";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import type { CatalogPackage } from "@/lib/packages/queries";
 import {
   ctaForAttemptStatus,
@@ -14,7 +14,7 @@ import {
 } from "@/lib/packages/format";
 import { ROUTES } from "@/lib/constants/routes";
 import { COPY } from "@/lib/constants/copy";
-import { PageHeader, SectionCard, StatCard } from "@/components/ui";
+import { GlassCard, Button3D, ProgressRing, PageTransition } from "@/components/ui";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -43,6 +43,33 @@ const DIFFICULTY_OPTIONS = [
 
 const PAGE_SIZE = 12;
 
+// Neon difficulty colors
+const NEON_DIFFICULTY: Record<string, { bg: string; fg: string; glow: string }> = {
+  easy: { bg: "rgba(34,197,94,0.12)", fg: "#22c55e", glow: "0 0 8px rgba(34,197,94,0.4)" },
+  medium: { bg: "rgba(245,158,11,0.12)", fg: "#f59e0b", glow: "0 0 8px rgba(245,158,11,0.4)" },
+  hard: { bg: "rgba(239,68,68,0.12)", fg: "#ef4444", glow: "0 0 8px rgba(239,68,68,0.4)" },
+};
+
+// ─── Stagger animation variants ─────────────────────────────────────────────
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.1 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 300, damping: 24 },
+  },
+};
+
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function TryoutsCatalog({ categories, packages }: Props) {
@@ -55,6 +82,7 @@ export function TryoutsCatalog({ categories, packages }: Props) {
   const [difficulty, setDifficulty] = useState("all");
   const [page, setPage] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -127,38 +155,56 @@ export function TryoutsCatalog({ categories, packages }: Props) {
   };
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4">
+    <PageTransition className="max-w-[1100px] mx-auto px-4">
       {/* Header */}
-      <PageHeader
-        title="Katalog Tryout"
-        subtitle="Pilih paket tryout sesuai target latihan. Semua paket open access."
-      />
-
-      {/* Quick stats */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <StatCard label="Paket" value={packages.length} accent="blue" />
-        <StatCard
-          label="Total Soal"
-          value={totalSoal.toLocaleString("id-ID")}
-          accent="violet"
-        />
-        <StatCard label="Kategori" value={categories.length} accent="green" />
+      <div className="mb-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold gradient-text mb-2">
+          Katalog Tryout
+        </h1>
+        <p className="text-sm text-[var(--text-muted)]">
+          Pilih paket tryout sesuai target latihan. Semua paket open access.
+        </p>
       </div>
 
-      {/* Filters */}
-      <SectionCard padding="sm" className="mb-6">
-        {/* Search */}
-        <div className="relative mb-3">
+      {/* Quick stats — glass HUD */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <GlassCard glow="blue" className="!p-4 text-center">
+          <div className="text-2xl font-bold text-blue-400 num">{packages.length}</div>
+          <div className="text-[0.7rem] text-[var(--text-dim)] mt-1">Paket</div>
+        </GlassCard>
+        <GlassCard glow="purple" className="!p-4 text-center">
+          <div className="text-2xl font-bold text-violet-400 num">
+            {totalSoal.toLocaleString("id-ID")}
+          </div>
+          <div className="text-[0.7rem] text-[var(--text-dim)] mt-1">Total Soal</div>
+        </GlassCard>
+        <GlassCard glow="green" className="!p-4 text-center">
+          <div className="text-2xl font-bold text-emerald-400 num">{categories.length}</div>
+          <div className="text-[0.7rem] text-[var(--text-dim)] mt-1">Kategori</div>
+        </GlassCard>
+      </div>
+
+      {/* Filters — glass panel */}
+      <GlassCard className="!p-4 sm:!p-5 mb-6">
+        {/* Search with glow focus */}
+        <div
+          className="relative mb-4 rounded-xl transition-shadow duration-300"
+          style={{
+            boxShadow: searchFocused
+              ? "0 0 20px rgba(59,130,246,0.25), inset 0 0 0 1px rgba(59,130,246,0.4)"
+              : "none",
+          }}
+        >
           <svg
             width="16"
             height="16"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="var(--text-dim)"
+            stroke={searchFocused ? "#3b82f6" : "var(--text-dim)"}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none transition-colors"
             aria-hidden="true"
           >
             <circle cx="11" cy="11" r="8" />
@@ -166,11 +212,11 @@ export function TryoutsCatalog({ categories, packages }: Props) {
           </svg>
           {isSearching && (
             <div
-              className="absolute right-3 top-1/2 -translate-y-1/2"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2"
               aria-label="Mencari..."
               role="status"
             >
-              <div className="w-4 h-4 border-2 border-[var(--text-dim)] border-t-[var(--blue)] rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-white/20 border-t-blue-400 rounded-full animate-spin" />
             </div>
           )}
           <input
@@ -178,18 +224,15 @@ export function TryoutsCatalog({ categories, packages }: Props) {
             placeholder="Cari paket tryout…"
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             aria-label="Cari paket tryout"
-            className="w-full py-3 pl-10 pr-10 rounded-xl text-sm outline-none transition-colors"
-            style={{
-              background: "var(--bg-base)",
-              border: "1px solid var(--border)",
-              color: "var(--text-primary)",
-            }}
+            className="w-full py-3 pl-11 pr-10 rounded-xl text-sm outline-none transition-all bg-white/[0.04] border border-white/10 text-[var(--text-primary)] placeholder:text-[var(--text-dim)] focus:bg-white/[0.06]"
           />
         </div>
 
-        {/* Category chips */}
-        <div className="flex flex-wrap gap-2 mb-3" role="group" aria-label="Filter kategori">
+        {/* Category chips — glass style */}
+        <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filter kategori">
           <FilterChip
             label="Semua"
             active={category === "all"}
@@ -222,28 +265,22 @@ export function TryoutsCatalog({ categories, packages }: Props) {
           {hasActiveFilter && (
             <button
               onClick={resetAll}
-              className="ml-auto px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer"
-              style={{
-                background: "transparent",
-                border: "1px solid var(--border)",
-                color: "var(--text-muted)",
-              }}
+              className="ml-auto px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer bg-white/[0.05] border border-white/10 text-[var(--text-muted)] hover:bg-white/[0.1] hover:text-white"
             >
               ✕ Reset filter
             </button>
           )}
         </div>
-      </SectionCard>
+      </GlassCard>
 
       {/* Result count */}
       <div
-        className="text-xs mb-4 font-medium"
-        style={{ color: "var(--text-muted)" }}
+        className="text-xs mb-4 font-medium text-[var(--text-muted)]"
         aria-live="polite"
         aria-atomic="true"
       >
         {filtered.length} paket ditemukan
-        {hasActiveFilter && ` · filter aktif`}
+        {hasActiveFilter && " · filter aktif"}
       </div>
 
       {/* Grid */}
@@ -251,79 +288,64 @@ export function TryoutsCatalog({ categories, packages }: Props) {
         <EmptyState hasFilter={hasActiveFilter} />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            key={`${category}-${mode}-${difficulty}-${debouncedSearch}-${page}`}
+          >
             {paginated.map((pkg) => (
-              <PackageCardRedesigned key={pkg.id} pkg={pkg} />
+              <motion.div key={pkg.id} variants={cardVariants}>
+                <PackageCardV4 pkg={pkg} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Pagination */}
+          {/* Pagination — 3D ghost buttons */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-6 mb-4">
-              <button
+            <div className="flex items-center justify-center gap-3 mt-8 mb-4">
+              <Button3D
+                variant="ghost"
+                size="sm"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-                style={{
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text-primary)",
-                }}
-                aria-label="Halaman sebelumnya"
               >
-                ←
-              </button>
-              <span
-                className="text-xs font-medium px-3"
-                style={{ color: "var(--text-muted)" }}
-              >
+                ← Prev
+              </Button3D>
+              <span className="text-xs font-bold text-[var(--text-muted)] px-3 num">
                 {page} / {totalPages}
               </span>
-              <button
+              <Button3D
+                variant="ghost"
+                size="sm"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-                style={{
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text-primary)",
-                }}
-                aria-label="Halaman berikutnya"
               >
-                →
-              </button>
+                Next →
+              </Button3D>
             </div>
           )}
         </>
       )}
-    </div>
+    </PageTransition>
   );
 }
 
-// ─── PackageCard (no button inside Link) ────────────────────────────────────
+// ─── PackageCard V4 ─────────────────────────────────────────────────────────
 
-function PackageCardRedesigned({ pkg }: { pkg: CatalogPackage }) {
+function PackageCardV4({ pkg }: { pkg: CatalogPackage }) {
   const router = useRouter();
-  const modeC = modeColor(pkg.mode);
-  const diffC = difficultyColor(pkg.difficulty);
+  const diffC = NEON_DIFFICULTY[pkg.difficulty] || NEON_DIFFICULTY.easy;
   const cta = ctaForAttemptStatus(pkg.lastAttemptStatus);
   const hasAttempt = pkg.attemptCount > 0;
 
-  const accent =
-    pkg.mode === "simulation"
-      ? "var(--danger)"
-      : pkg.categoryName?.toLowerCase().includes("twk")
-      ? "var(--blue)"
-      : pkg.categoryName?.toLowerCase().includes("tiu")
-      ? "var(--violet)"
-      : pkg.categoryName?.toLowerCase().includes("tkp")
-      ? "var(--green)"
-      : "var(--blue)";
+  // Best score for mini ring
+  const bestScore = pkg.lastAttemptStatus === "submitted" ? pkg.lastAttemptScore : null;
 
   return (
     <article
-      className="glass-card flex flex-col gap-3 p-4 sm:p-5 transition-all hover:border-[var(--blue)] cursor-pointer"
-      style={{ borderLeft: `3px solid ${accent}` }}
+      className="group relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 flex flex-col gap-3 transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:bg-white/[0.06] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]"
       onClick={() => router.push(ROUTES.tryoutDetail(pkg.slug))}
       role="link"
       aria-label={`Tryout: ${pkg.title}`}
@@ -335,77 +357,88 @@ function PackageCardRedesigned({ pkg }: { pkg: CatalogPackage }) {
         }
       }}
     >
-      {/* Badges */}
-      <div className="flex flex-wrap gap-1.5 items-center">
-        {pkg.categoryName && (
-          <Badge bg="var(--bg-card2)" fg="var(--text-primary)" border="var(--border)">
-            {pkg.categoryName}
-          </Badge>
+      {/* Gradient overlay on hover */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background: "linear-gradient(135deg, rgba(59,130,246,0.05) 0%, transparent 60%)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Top row: badges + mini score ring */}
+      <div className="flex items-start justify-between gap-2 relative z-10">
+        <div className="flex flex-wrap gap-1.5 items-center">
+          {pkg.categoryName && (
+            <span className="text-[0.68rem] font-semibold px-2.5 py-1 rounded-full bg-white/[0.06] text-[var(--text-primary)] border border-white/10">
+              {pkg.categoryName}
+            </span>
+          )}
+          <span
+            className="text-[0.68rem] font-bold px-2.5 py-1 rounded-full"
+            style={{
+              background: diffC.bg,
+              color: diffC.fg,
+              boxShadow: diffC.glow,
+            }}
+          >
+            {difficultyLabel(pkg.difficulty)}
+          </span>
+        </div>
+
+        {/* Mini score ring */}
+        {bestScore != null && (
+          <ProgressRing
+            value={bestScore}
+            max={bestScore > 100 ? 1000 : 100}
+            size={36}
+            strokeWidth={3}
+            color={pkg.lastAttemptIsPassed ? "#22c55e" : "#3b82f6"}
+          />
         )}
-        <Badge bg={modeC.bg} fg={modeC.fg} border={modeC.border}>
-          {modeLabel(pkg.mode)}
-        </Badge>
-        <Badge bg={diffC.bg} fg={diffC.fg}>
-          {difficultyLabel(pkg.difficulty)}
-        </Badge>
       </div>
 
       {/* Title + description */}
-      <div className="flex-1">
-        <h3
-          className="text-[0.95rem] font-bold leading-snug mb-1"
-          style={{ color: "var(--text-primary)" }}
-        >
+      <div className="flex-1 relative z-10">
+        <h3 className="text-[0.95rem] font-bold leading-snug mb-1 text-[var(--text-primary)] group-hover:text-white transition-colors">
           {pkg.title}
         </h3>
-        <p
-          className="text-xs leading-relaxed line-clamp-2"
-          style={{ color: "var(--text-muted)" }}
-        >
+        <p className="text-xs leading-relaxed line-clamp-2 text-[var(--text-muted)]">
           {pkg.description}
         </p>
       </div>
 
       {/* Stats row */}
-      <div
-        className="flex flex-wrap gap-3 items-center text-xs"
-        style={{ color: "var(--text-muted)" }}
-      >
+      <div className="flex flex-wrap gap-3 items-center text-xs text-[var(--text-dim)] relative z-10">
         <span className="inline-flex items-center gap-1">
           <IconDoc /> {pkg.totalQuestions} soal
         </span>
         <span className="inline-flex items-center gap-1">
           <IconClock /> {formatDuration(pkg.durationMinutes)}
         </span>
-        {pkg.passingGradeTotal != null && (
-          <span className="inline-flex items-center gap-1">
-            <IconTarget /> PG {pkg.passingGradeTotal}
+        {pkg.mode === "simulation" && (
+          <span className="inline-flex items-center gap-1 text-red-400">
+            ⚡ Simulasi
           </span>
         )}
       </div>
 
-      {/* User status */}
+      {/* User status bar */}
       {hasAttempt && (
-        <div
-          className="flex items-center justify-between px-3 py-2 rounded-lg text-xs"
-          style={{
-            background: "var(--bg-card2)",
-            border: "1px solid var(--border)",
-          }}
-        >
-          <span style={{ color: "var(--text-muted)" }}>
+        <div className="flex items-center justify-between px-3 py-2 rounded-lg text-xs bg-white/[0.04] border border-white/[0.06] relative z-10">
+          <span className="text-[var(--text-dim)]">
             {pkg.lastAttemptStatus === "in_progress"
               ? "Sedang berjalan"
               : "Skor terakhir"}
           </span>
           {pkg.lastAttemptStatus === "submitted" && (
             <span
-              className="font-semibold px-2 py-0.5 rounded"
+              className="font-bold px-2 py-0.5 rounded"
               style={{
                 background: pkg.lastAttemptIsPassed
-                  ? "rgba(34,197,94,0.12)"
-                  : "rgba(239,68,68,0.1)",
-                color: pkg.lastAttemptIsPassed ? "var(--green)" : "var(--danger)",
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(239,68,68,0.12)",
+                color: pkg.lastAttemptIsPassed ? "#22c55e" : "#ef4444",
               }}
             >
               {pkg.lastAttemptScore ?? "-"}
@@ -413,32 +446,22 @@ function PackageCardRedesigned({ pkg }: { pkg: CatalogPackage }) {
             </span>
           )}
           {pkg.lastAttemptStatus === "in_progress" && (
-            <span style={{ color: "var(--amber)" }} className="font-semibold">
-              ⏳
-            </span>
+            <span className="font-semibold text-amber-400">⏳</span>
           )}
         </div>
       )}
 
-      {/* CTA - using a span styled as button, NOT a button inside Link */}
-      <span
-        className={`mt-auto text-center py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors ${
-          cta.variant === "primary" ? "btn-primary" : ""
+      {/* CTA indicator */}
+      <div
+        className={`mt-auto text-center py-2.5 px-4 rounded-xl text-sm font-semibold relative z-10 transition-all ${
+          cta.variant === "primary"
+            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 group-hover:bg-emerald-500/25 group-hover:shadow-[0_0_12px_rgba(34,197,94,0.2)]"
+            : "bg-white/[0.05] text-[var(--text-primary)] border border-white/10 group-hover:bg-white/[0.1]"
         }`}
-        style={
-          cta.variant === "ghost"
-            ? {
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                color: "var(--text-primary)",
-                display: "block",
-              }
-            : { display: "block" }
-        }
         aria-hidden="true"
       >
         {cta.label}
-      </span>
+      </div>
     </article>
   );
 }
@@ -447,37 +470,31 @@ function PackageCardRedesigned({ pkg }: { pkg: CatalogPackage }) {
 
 function EmptyState({ hasFilter }: { hasFilter: boolean }) {
   return (
-    <div
-      className="glass-card flex flex-col items-center justify-center py-16 px-6 text-center"
-    >
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="var(--text-dim)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="opacity-50 mb-4"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
-      <h3
-        className="text-base font-bold mb-2"
-        style={{ color: "var(--text-primary)" }}
-      >
+    <GlassCard className="flex flex-col items-center justify-center py-16 px-6 text-center">
+      <div className="w-16 h-16 rounded-full bg-white/[0.05] flex items-center justify-center mb-4">
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--text-dim)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="opacity-60"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      </div>
+      <h3 className="text-base font-bold mb-2 text-[var(--text-primary)]">
         {hasFilter ? COPY.empty.filterResult : COPY.empty.catalog}
       </h3>
-      <p
-        className="text-sm max-w-[360px]"
-        style={{ color: "var(--text-muted)" }}
-      >
+      <p className="text-sm max-w-[360px] text-[var(--text-muted)]">
         {hasFilter ? COPY.empty.filterResultSub : COPY.empty.catalogSub}
       </p>
-    </div>
+    </GlassCard>
   );
 }
 
@@ -495,15 +512,11 @@ function FilterChip({
   return (
     <button
       onClick={onClick}
-      className="px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer"
-      style={{
-        border: active
-          ? "1px solid rgba(37,99,235,0.4)"
-          : "1px solid var(--border)",
-        background: active ? "rgba(37,99,235,0.1)" : "var(--bg-base)",
-        color: active ? "var(--blue)" : "var(--text-muted)",
-        fontWeight: active ? 700 : 500,
-      }}
+      className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
+        active
+          ? "bg-blue-500/15 border-blue-500/40 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.2)]"
+          : "bg-white/[0.04] border-white/10 text-[var(--text-muted)] hover:bg-white/[0.08] hover:border-white/20"
+      }`}
       aria-pressed={active}
     >
       {label}
@@ -524,18 +537,13 @@ function FilterSelect({
 }) {
   return (
     <label className="inline-flex items-center gap-2 text-xs">
-      <span className="font-medium" style={{ color: "var(--text-dim)" }}>
+      <span className="font-medium text-[var(--text-dim)]">
         {label}:
       </span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="py-1.5 px-2.5 rounded-lg text-xs outline-none cursor-pointer"
-        style={{
-          background: "var(--bg-base)",
-          border: "1px solid var(--border)",
-          color: "var(--text-primary)",
-        }}
+        className="py-1.5 px-2.5 rounded-lg text-xs outline-none cursor-pointer bg-white/[0.04] border border-white/10 text-[var(--text-primary)] focus:border-blue-500/40 transition-colors"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -544,31 +552,6 @@ function FilterSelect({
         ))}
       </select>
     </label>
-  );
-}
-
-function Badge({
-  children,
-  bg,
-  fg,
-  border,
-}: {
-  children: React.ReactNode;
-  bg: string;
-  fg: string;
-  border?: string;
-}) {
-  return (
-    <span
-      className="text-[0.68rem] font-semibold px-2 py-0.5 rounded-full"
-      style={{
-        background: bg,
-        color: fg,
-        border: border ? `1px solid ${border}` : "none",
-      }}
-    >
-      {children}
-    </span>
   );
 }
 
@@ -590,16 +573,6 @@ function IconClock() {
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-function IconTarget() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="6" />
-      <circle cx="12" cy="12" r="2" />
     </svg>
   );
 }
