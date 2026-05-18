@@ -292,6 +292,7 @@ function ReturningUserDashboard({
     : null;
 
   return (
+    <>
     <div className="flex flex-col gap-4">
       {/* Main grid: Score ring dominant + Stats secondary */}
       <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4">
@@ -390,9 +391,6 @@ function ReturningUserDashboard({
           />
         </div>
       </div>
-
-      {/* Motivasi Harian */}
-      <MotivationCarousel />
 
       {/* Subtest performance — only show if real data available */}
       {subtestScores && (subtestScores.twk != null || subtestScores.tiu != null || subtestScores.tkp != null) && (
@@ -531,5 +529,9 @@ function ReturningUserDashboard({
         )}
       </SectionCard>
     </div>
+
+    {/* Motivasi Harian */}
+    <MotivationCarousel />
+    </>
   );
 }
