@@ -1,49 +1,38 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useInView, useMotionValue, useTransform, animate } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
-interface AnimatedNumberProps {
-  value: number;
-  formatOptions?: Intl.NumberFormatOptions;
-  locale?: string;
-  className?: string;
-}
-
-export default function AnimatedNumber({
-  value,
-  formatOptions,
-  locale = "id-ID",
-  className,
-}: AnimatedNumberProps) {
+export default function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const motionValue = useMotionValue(0);
+  const [display, setDisplay] = useState("0");
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    if (!isInView) return;
-    const controls = animate(motionValue, value, {
-      duration: 1.5,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    });
-    return () => controls.stop();
-  }, [isInView, value, motionValue]);
+    const el = ref.current;
+    if (!el) return;
 
-  useEffect(() => {
-    const unsubscribe = motionValue.on("change", (latest) => {
-      if (ref.current) {
-        const rounded = Math.round(latest);
-        ref.current.textContent = formatOptions
-          ? rounded.toLocaleString(locale, formatOptions)
-          : rounded.toLocaleString(locale);
-      }
-    });
-    return unsubscribe;
-  }, [motionValue, formatOptions, locale]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          const duration = 1500;
+          const start = performance.now();
+          const animate = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+            const current = Math.round(eased * value);
+            setDisplay(current.toLocaleString("id-ID"));
+            if (progress < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.3 }
+    );
 
-  return (
-    <span ref={ref} className={className}>
-      0
-    </span>
-  );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value, hasAnimated]);
+
+  return <span ref={ref}>{display}{suffix}</span>;
 }
