@@ -97,22 +97,19 @@ const HOW_STEPS = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    name: "Rina S.",
-    role: "Lolos CPNS 2025 — Kemenkeu",
-    text: "Awalnya skor TWK saya di bawah passing grade. Setelah 3 minggu pakai NalarUp, gap-nya hilang dan saya lolos di attempt kedua.",
-  },
-  {
-    name: "Andi P.",
-    role: "Lolos CPNS 2025 — Kemendikbud",
-    text: "Fitur analisis kelemahan sangat membantu. Saya jadi tahu harus fokus di mana tanpa buang waktu di materi yang sudah dikuasai.",
-  },
-  {
-    name: "Dian M.",
-    role: "Lolos PPPK 2025 — Guru",
-    text: "Simulasinya realistis banget, mirip CAT BKN asli. Pas hari H saya sudah terbiasa dengan tekanan timer dan navigasi soal.",
-  },
+const QUOTES = [
+  { text: "Kesuksesan adalah hasil dari persiapan, kerja keras, dan belajar dari kegagalan.", author: "Colin Powell" },
+  { text: "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan kamu bisa mengubah dunia.", author: "Nelson Mandela" },
+  { text: "Masa depan milik mereka yang percaya pada keindahan mimpi-mimpi mereka.", author: "Eleanor Roosevelt" },
+  { text: "Tidak ada jalan pintas menuju tempat yang layak dituju.", author: "Beverly Sills" },
+  { text: "Satu-satunya cara untuk melakukan pekerjaan hebat adalah mencintai apa yang kamu lakukan.", author: "Steve Jobs" },
+  { text: "Jangan biarkan apa yang tidak bisa kamu lakukan menghalangi apa yang bisa kamu lakukan.", author: "John Wooden" },
+  { text: "Belajar tanpa berpikir itu sia-sia. Berpikir tanpa belajar itu berbahaya.", author: "Konfusius" },
+  { text: "Kegagalan adalah bumbu yang memberi rasa pada kesuksesan.", author: "Truman Capote" },
+  { text: "Orang yang berhenti belajar akan menjadi pemilik masa lalu. Orang yang terus belajar akan menjadi pemilik masa depan.", author: "Mario Teguh" },
+  { text: "Disiplin adalah jembatan antara tujuan dan pencapaian.", author: "Jim Rohn" },
+  { text: "Kamu tidak harus hebat untuk memulai, tapi kamu harus memulai untuk menjadi hebat.", author: "Zig Ziglar" },
+  { text: "Investasi terbaik yang bisa kamu lakukan adalah investasi pada dirimu sendiri.", author: "Warren Buffett" },
 ];
 
 function FeatureIcon({ type, className }: { type: string; className?: string }) {
@@ -169,8 +166,8 @@ export default async function LandingPage() {
             <a href="#statistik" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-medium no-underline transition-colors">
               Statistik
             </a>
-            <a href="#testimoni" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-medium no-underline transition-colors">
-              Testimoni
+            <a href="#motivasi" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-medium no-underline transition-colors">
+              Motivasi
             </a>
             <a href="#faq" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm font-medium no-underline transition-colors">
               FAQ
@@ -374,37 +371,36 @@ export default async function LandingPage() {
         </section>
         </RevealOnScroll>
 
-        {/* ===== TESTIMONIALS ===== */}
+        {/* ===== QUOTES MOTIVASI ===== */}
         <RevealOnScroll>
-        <section id="testimoni" className="max-w-[1200px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
+        <section id="motivasi" className="max-w-[1200px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
           <div className="text-center mb-12">
             <span className="text-xs text-[var(--green)] font-bold tracking-[0.1em] uppercase block mb-3">
-              Testimoni
+              Motivasi
             </span>
             <h2 className="text-[clamp(1.75rem,4vw,2.75rem)] font-extrabold text-[var(--text-primary)] tracking-tight leading-tight mb-4">
-              Cerita mereka yang sudah <span className="gradient-text-green">berhasil</span>
+              Kata-kata dari mereka yang <span className="gradient-text-green">menginspirasi</span>
             </h2>
             <p className="text-[var(--text-muted)] text-base max-w-[540px] mx-auto leading-relaxed">
-              Ribuan peserta sudah merasakan manfaat latihan terarah dengan NalarUp.
+              Perjalanan menuju ASN butuh ketekunan. Biarkan kata-kata ini menyemangati langkahmu.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {TESTIMONIALS.map((t) => (
+            {QUOTES.slice(0, 6).map((q) => (
               <blockquote
-                key={t.name}
+                key={q.author}
                 className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 flex flex-col gap-4 m-0"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--blue-subtle)" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--green-subtle)" aria-hidden="true">
                   <path d="M11 7H7a4 4 0 0 0-4 4v1a3 3 0 0 0 3 3h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H6a1 1 0 0 0 0 2h1a4 4 0 0 0 4-4v-9zm10 0h-4a4 4 0 0 0-4 4v1a3 3 0 0 0 3 3h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a1 1 0 0 0 0 2h1a4 4 0 0 0 4-4v-9z" />
                 </svg>
-                <p className="text-sm text-[var(--text-muted)] leading-relaxed flex-1 m-0">
-                  {t.text}
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed flex-1 m-0 italic">
+                  &ldquo;{q.text}&rdquo;
                 </p>
                 <footer className="border-t border-[var(--border)] pt-4">
                   <cite className="not-italic">
-                    <span className="block font-semibold text-sm text-[var(--text-primary)]">{t.name}</span>
-                    <span className="block text-xs text-[var(--text-dim)] mt-0.5">{t.role}</span>
+                    <span className="block font-semibold text-sm text-[var(--text-primary)]">{q.author}</span>
                   </cite>
                 </footer>
               </blockquote>
