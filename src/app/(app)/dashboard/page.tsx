@@ -9,6 +9,7 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { PageHeader, StatCard, SectionCard, AlertBox } from "@/components/ui";
 import { ProgressRing } from "@/components/ui";
 import DailyMotivationBanner from "@/components/motivation/DailyMotivationBanner";
+import MotivationCarousel from "@/components/landing/MotivationCarousel";
 
 /* ===== CONSTANTS ===== */
 const PASSING_GRADE = { twk: 65, tiu: 80, tkp: 166, total: 311 };
@@ -389,6 +390,9 @@ function ReturningUserDashboard({
           />
         </div>
       </div>
+
+      {/* Motivasi Harian */}
+      <MotivationCarousel />
 
       {/* Subtest performance — only show if real data available */}
       {subtestScores && (subtestScores.twk != null || subtestScores.tiu != null || subtestScores.tkp != null) && (

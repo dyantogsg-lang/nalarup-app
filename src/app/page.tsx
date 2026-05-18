@@ -3,7 +3,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 import MobileNav from "@/components/landing/MobileNav";
 import FAQAccordion from "@/components/landing/FAQ";
-import MotivationCarousel from "@/components/landing/MotivationCarousel";
+
 import HeroExamMockup from "@/components/landing/HeroExamMockup";
 import { getLandingStats, type LandingStats } from "@/lib/landing/stats";
 import AnimatedNumber from "@/components/landing/AnimatedNumber";
@@ -408,9 +408,6 @@ export default async function LandingPage() {
           </div>
         </section>
         </RevealOnScroll>
-
-        {/* ===== MOTIVATION CAROUSEL ===== */}
-        <MotivationCarousel />
 
         {/* ===== FAQ ===== */}
         <RevealOnScroll>
