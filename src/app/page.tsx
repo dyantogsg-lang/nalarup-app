@@ -3,8 +3,12 @@ import { ROUTES } from "@/lib/constants/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 import MobileNav from "@/components/landing/MobileNav";
 import FAQAccordion from "@/components/landing/FAQ";
+import MotivationCarousel from "@/components/landing/MotivationCarousel";
 import HeroExamMockup from "@/components/landing/HeroExamMockup";
 import { getLandingStats, type LandingStats } from "@/lib/landing/stats";
+import AnimatedNumber from "@/components/landing/AnimatedNumber";
+import RevealOnScroll from "@/components/landing/RevealOnScroll";
+import ScrollProgress from "@/components/landing/ScrollProgress";
 
 export const revalidate = 60;
 
@@ -136,6 +140,7 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] overflow-x-hidden">
+      <ScrollProgress />
       {/* Skip to content */}
       <a
         href="#konten-utama"
@@ -259,15 +264,15 @@ export default async function LandingPage() {
         <section id="statistik" className="border-y border-[var(--border)] bg-[var(--bg-card)]" aria-label="Statistik platform">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {[
-              { value: stats.totalPackages.toString(), label: "Paket Tryout" },
-              { value: stats.totalQuestions.toLocaleString("id-ID"), label: "Total Soal" },
-              { value: stats.twkCount.toString(), label: "Soal TWK" },
-              { value: stats.tiuCount.toString(), label: "Soal TIU" },
-              { value: stats.tkpCount.toString(), label: "Soal TKP" },
+              { value: stats.totalPackages, label: "Paket Tryout" },
+              { value: stats.totalQuestions, label: "Total Soal" },
+              { value: stats.twkCount, label: "Soal TWK" },
+              { value: stats.tiuCount, label: "Soal TIU" },
+              { value: stats.tkpCount, label: "Soal TKP" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="num text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold text-[var(--text-primary)] tracking-tight leading-none">
-                  {s.value}
+                  <AnimatedNumber value={s.value} />
                 </div>
                 <div className="text-xs text-[var(--text-dim)] mt-2 uppercase tracking-widest font-semibold">
                   {s.label}
@@ -278,6 +283,7 @@ export default async function LandingPage() {
         </section>
 
         {/* ===== HOW IT WORKS ===== */}
+        <RevealOnScroll>
         <section id="cara-kerja" className="max-w-[1200px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
           <div className="max-w-[720px] mb-12">
             <span className="text-xs text-[var(--blue)] font-bold tracking-[0.1em] uppercase block mb-3">
@@ -319,8 +325,10 @@ export default async function LandingPage() {
             ))}
           </div>
         </section>
+        </RevealOnScroll>
 
         {/* ===== FEATURES ===== */}
+        <RevealOnScroll>
         <section id="fitur" className="bg-[var(--bg-card)] border-y border-[var(--border)]">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-12">
@@ -342,7 +350,7 @@ export default async function LandingPage() {
               {FEATURES.map((f) => (
                 <div
                   key={f.title}
-                  className="bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl p-5 flex flex-col gap-4 hover:border-[var(--border-focus)] transition-colors"
+                  className={`feature-card feature-card-${f.color} bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl p-5 flex flex-col gap-4 hover:border-[var(--border-focus)]`}
                   style={{ borderLeftWidth: 3, borderLeftColor: `var(--${f.color})` }}
                 >
                   <div
@@ -364,8 +372,10 @@ export default async function LandingPage() {
             </div>
           </div>
         </section>
+        </RevealOnScroll>
 
         {/* ===== TESTIMONIALS ===== */}
+        <RevealOnScroll>
         <section id="testimoni" className="max-w-[1200px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
           <div className="text-center mb-12">
             <span className="text-xs text-[var(--green)] font-bold tracking-[0.1em] uppercase block mb-3">
@@ -401,8 +411,13 @@ export default async function LandingPage() {
             ))}
           </div>
         </section>
+        </RevealOnScroll>
+
+        {/* ===== MOTIVATION CAROUSEL ===== */}
+        <MotivationCarousel />
 
         {/* ===== FAQ ===== */}
+        <RevealOnScroll>
         <section id="faq" className="bg-[var(--bg-card)] border-y border-[var(--border)]">
           <div className="max-w-[720px] mx-auto px-4 sm:px-6 py-20 sm:py-24">
             <div className="text-center mb-12">
@@ -419,8 +434,10 @@ export default async function LandingPage() {
             <FAQAccordion />
           </div>
         </section>
+        </RevealOnScroll>
 
         {/* ===== CTA FINAL ===== */}
+        <RevealOnScroll>
         <section className="relative max-w-[720px] mx-auto px-4 sm:px-6 py-24 sm:py-32 text-center">
           <div className="glow-blob w-[460px] h-[340px] bg-[radial-gradient(circle,var(--violet),transparent)] top-[10%] left-1/2 -translate-x-1/2" aria-hidden="true" />
           <div className="glow-blob w-[320px] h-[240px] bg-[radial-gradient(circle,var(--green),transparent)] top-[35%] left-[20%]" style={{ animationDelay: "5s" }} aria-hidden="true" />
@@ -446,6 +463,7 @@ export default async function LandingPage() {
             </p>
           </div>
         </section>
+        </RevealOnScroll>
       </main>
 
       {/* ===== FOOTER ===== */}
